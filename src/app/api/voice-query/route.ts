@@ -1,41 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { cleanJsonString, generateContentWithFallback } from '@/lib/geminiHelper';
+import { buildVoiceQueryFallback, normalizeAudioMimeType } from '@/lib/apiFallbackHelper';
 import { detectQueryLanguage } from '@/lib/speechService';
-
-function getVoiceFallback(location: any, weather: any, language: string = 'hi', userText?: string) {
-  const isDevanagari = userText ? /[\u0900-\u097F]/.test(userText) : false;
-  const isHinglish = userText ? detectQueryLanguage(userText) === 'hi' : false;
-  const isHi = isDevanagari || isHinglish || language === 'hi';
-  const isEn = !isHi;
-
-  const locName = location?.name || 'Indore, MP';
-  const locNameHi = location?.nameHi || 'इन्दौर';
-
-  const textEn = `Atmospheric telemetry for ${locName} shows baseline conditions with ambient temperature around ${weather?.temperature ?? 31}°C and relative humidity at ${weather?.relativeHumidity ?? 75}%. Field operations and spraying can proceed during morning hours before afternoon convective squall windows.`;
-  const textHi = `${locNameHi} में वर्तमान तापमान ${weather?.temperature ?? 31}°C एवं नमी ${weather?.relativeHumidity ?? 75}% है। दोपहर बाद तेज हवा या बारिश की संभावना को देखते हुए कीटनाशक या खाद का कार्य सुबह 11 बजे से पूर्व सुरक्षित रूप से निपटा लें।`;
-
-  const verdictTitleEn = 'Stable Morning Field Windows';
-  const verdictTitleHi = 'मौसम स्थिति सामान्य - सुबह कार्य अनुकूल';
-  const verdictDescEn = 'Morning hours until 11:30 AM optimal before afternoon precipitation risk.';
-  const verdictDescHi = 'दोपहर बाद वर्षा से पहले सुबह 11 बजे तक कीटनाशक या खाद का कार्य सुरक्षित है।';
-
-  return {
-    detectedLanguage: isEn ? 'en' : 'hi',
-    transcription: isEn ? (userText || 'Weather & Crop Advisory') : (userText || 'मौसम व फसल परामर्श'),
-    spokenResponse: isEn ? textEn : textHi,
-    text: textEn,
-    textHi: textHi,
-    consensusScore: 96.0,
-    verdictTitle: isEn ? verdictTitleEn : verdictTitleHi,
-    verdictTitleEn,
-    verdictTitleHi,
-    verdictDesc: isEn ? verdictDescEn : verdictDescHi,
-    verdictDescEn,
-    verdictDescHi,
-    verdictType: 'info',
-  };
-}
 
 export async function POST(req: NextRequest) {
   let body: any = {};
@@ -48,22 +15,17 @@ export async function POST(req: NextRequest) {
   const { audioBase64, mimeType = 'audio/webm', location, weather, language = 'hi' } = body;
 
   if (!audioBase64 || typeof audioBase64 !== 'string') {
-    return NextResponse.json(getVoiceFallback(location, weather, language));
+    return NextResponse.json(buildVoiceQueryFallback(location, weather, language));
   }
 
   const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   if (!apiKey) {
-    return NextResponse.json(getVoiceFallback(location, weather, language));
+    return NextResponse.json(buildVoiceQueryFallback(location, weather, language));
   }
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
-
-    // Normalize MIME type
-    let normalizedMime = mimeType.split(';')[0].trim();
-    if (!normalizedMime || normalizedMime === 'audio/*') {
-      normalizedMime = 'audio/webm';
-    }
+    const normalizedMime = normalizeAudioMimeType(mimeType);
 
     const systemGrounding = `You are Mausam Vaani (मौसम-वाणी) Climate Copilot & Senior Agronomist AI for Central India.
 Current Location: ${location?.name || 'Indore, MP'} (${location?.lat || 22.7196}°N, ${location?.lng || 75.8577}°E).
@@ -171,6 +133,6 @@ Respond ONLY with a valid JSON object matching:
     }
   } catch (error: any) {
     console.warn('Gemini voice query route caught error, serving domain fallback:', error?.message || error);
-    return NextResponse.json(getVoiceFallback(location, weather, language));
+    return NextResponse.json(buildVoiceQueryFallback(location, weather, language));
   }
 }

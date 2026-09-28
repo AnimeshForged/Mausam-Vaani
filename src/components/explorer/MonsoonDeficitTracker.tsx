@@ -347,7 +347,7 @@ export default function MonsoonDeficitTracker() {
           <div className="flex flex-wrap items-center gap-space-md font-semibold">
             <span className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-full bg-primary"></span>
-              <span>Recorded 2026</span>
+              <span>Recorded {new Date().getFullYear()}</span>
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-3 h-0.5 border-b-2 border-dashed border-outline"></span>

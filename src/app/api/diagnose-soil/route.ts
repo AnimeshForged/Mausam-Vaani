@@ -1,18 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { cleanJsonString, generateContentWithFallback } from '@/lib/geminiHelper';
-
-const DEFAULT_SOIL_RESPONSE = {
-  identifiedType: 'Deep Black Cotton Soil (Regur Vertisol)',
-  identifiedTypeHi: 'काली कपासिया मिट्टी (रेगुर)',
-  textureDescription: 'Dark basaltic clay crumb aggregates with optimal pore spaces.',
-  textureDescriptionHi: 'गहरे काले रंग की भुरभुरी चिकनी मिट्टी, जिसमें जल रोकने की प्राकृतिक क्षमता अधिक है।',
-  moistureEstimate: '64% - 68% (पर्याप्त नमी)',
-  organicEstimate: 'उच्च जैविक कार्बन (High Organic Carbon >0.75%)',
-  phEstimate: 7.4,
-  recommendationNote: 'सोयाबीन और मक्का बुवाई के लिए उत्तम समय।',
-  isApproximate: true,
-};
+import { DEFAULT_SOIL_RESPONSE } from '@/lib/apiFallbackHelper';
 
 export async function POST(req: NextRequest) {
   try {

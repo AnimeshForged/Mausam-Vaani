@@ -362,7 +362,7 @@ export default function ExplorerClimateAnalytics() {
                   onChange={(e) => setShowHistoricalComparison(e.target.checked)}
                   className="rounded text-primary"
                 />
-                <span className="font-semibold text-on-surface-variant">vs Last Year (2025)</span>
+                <span className="font-semibold text-on-surface-variant">vs Last Year ({new Date().getFullYear() - 1})</span>
               </label>
             </div>
           </div>
@@ -378,7 +378,7 @@ export default function ExplorerClimateAnalytics() {
               {showHistoricalComparison && (
                 <span className="flex items-center gap-1.5">
                   <span className="w-3 h-0.5 border-b-2 border-dashed border-outline"></span>
-                  <span>2025 Historical Mean</span>
+                  <span>{new Date().getFullYear() - 1} Historical Mean</span>
                 </span>
               )}
               <span className="flex items-center gap-1.5">

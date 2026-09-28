@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { translations } from '@/lib/translations';
+import EarlyWarningSimulatorModal from './EarlyWarningSimulatorModal';
 
 export default function ExplorerAlertsCenter() {
   const { alerts, language, location } = useApp();
@@ -12,6 +13,8 @@ export default function ExplorerAlertsCenter() {
   const [selectedThreat, setSelectedThreat] = useState<string | null>(null);
   const [acknowledgedAlerts, setAcknowledgedAlerts] = useState<string[]>([]);
   const [simulatedBroadcastNotice, setSimulatedBroadcastNotice] = useState<string | null>(null);
+  const [showSimulatorModal, setShowSimulatorModal] = useState(false);
+  const [simulatorAlertId, setSimulatorAlertId] = useState<string | null>(null);
 
   const toggleAcknowledge = (id: string) => {
     setAcknowledgedAlerts(prev =>
@@ -53,12 +56,11 @@ export default function ExplorerAlertsCenter() {
     URL.revokeObjectURL(url);
   };
 
-  const simulateBroadcast = () => {
-    setSimulatedBroadcastNotice('Transmitting CAP 1.2 emergency dispatch payload to state telecom gateway & rural cell towers...');
-    setTimeout(() => {
-      setSimulatedBroadcastNotice(`Broadcast successfully confirmed across local BTS cell sectors (${location.district || location.name}).`);
-      setTimeout(() => setSimulatedBroadcastNotice(null), 4000);
-    }, 1500);
+  const simulateBroadcast = (alertId?: string) => {
+    if (alertId) {
+      setSimulatorAlertId(alertId);
+    }
+    setShowSimulatorModal(true);
   };
 
   const filteredAlerts = alerts.filter(a => {
@@ -279,14 +281,32 @@ export default function ExplorerAlertsCenter() {
                     <span>{acknowledgedAlerts.includes(alert.id) ? 'Acknowledged' : 'Acknowledge'}</span>
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={() => exportCapXml(alert)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary font-bold transition-all active:scale-95 cursor-pointer"
-                  >
-                    <span className="material-symbols-outlined text-[1rem]">code</span>
-                    <span>Export CAP XML</span>
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => simulateBroadcast(alert.id)}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition-all active:scale-95 cursor-pointer ${
+                        alert.severity === 'red'
+                          ? 'bg-red-500/10 hover:bg-red-500/20 text-red-700 border border-red-200'
+                          : alert.severity === 'orange'
+                          ? 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 border border-amber-200'
+                          : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
+                      }`}
+                      title="Simulate Emergency Cell Broadcast & Farmer SMS"
+                    >
+                      <span className="material-symbols-outlined text-[1rem]">cell_tower</span>
+                      <span>Simulate EWS</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => exportCapXml(alert)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-primary font-bold transition-all active:scale-95 cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-[1rem]">code</span>
+                      <span>Export CAP XML</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -369,7 +389,7 @@ export default function ExplorerAlertsCenter() {
             </div>
             <button
               type="button"
-              onClick={simulateBroadcast}
+              onClick={() => simulateBroadcast()}
               className="px-3 py-1.5 rounded-xl bg-secondary text-on-secondary font-bold text-xs hover:bg-secondary-container transition-all active:scale-95 cursor-pointer shrink-0 shadow-xs"
             >
               Simulate Broadcast
@@ -377,6 +397,15 @@ export default function ExplorerAlertsCenter() {
           </div>
         </div>
       </div>
+
+      {/* Early Warning System (EWS) SMS / Push Simulator Modal */}
+      <EarlyWarningSimulatorModal
+        isOpen={showSimulatorModal}
+        onClose={() => setShowSimulatorModal(false)}
+        alerts={alerts}
+        initialAlertId={simulatorAlertId}
+        location={location}
+      />
     </div>
   );
 }

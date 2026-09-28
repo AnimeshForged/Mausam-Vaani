@@ -53,34 +53,44 @@ export default function ExplorerClimateAI() {
     URL.revokeObjectURL(url);
   };
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'msg-1',
-      sender: 'user',
-      timestamp: '10:14 AM',
-      text: 'Evaluate the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in Depalpur block. Are there safe flight windows for ultra-low volume (ULV) fungicide broadcast over JS 20-34 soybean?',
-    },
-    {
-      id: 'msg-2',
-      sender: 'assistant',
-      timestamp: '10:14:42 AM',
-      text: 'Evaluating the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in Depalpur block. High squall shear (>45 km/h), deep convection, and hail risk develop rapidly post-11:30 IST across Depalpur and Sanwer corridors due to intense thermodynamic loading. The marginal drone window is early morning Wednesday 06:00 – 09:30 IST.',
-      textHi: 'देपालपुर ब्लॉक में कल दोपहर 11:30 के बाद 45 किमी/घंटा से अधिक तेज आंधी व ओलों की संभावना है। ड्रोन छिड़काव हेतु कल सुबह 6:00 से 9:30 बजे का समय ही सुरक्षित रहेगा।',
-      consensusScore: 96.4,
-      modelBadge: 'ECMWF-IFS v48r1 • IMD Doppler MP-04',
-      sources: ['IMD Doppler Radar Station IND-042', 'Copernicus CDS ERA5 Boundary Layer'],
-      verdictCallout: {
-        type: 'warning',
-        title: 'Executive Flight Status: Constrained Window',
-        description: 'Marginal Drone Window: Wednesday 06:00 – 09:30 IST. Postpone afternoon flight schedules.',
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dayNameEn = tomorrow.toLocaleDateString('en-US', { weekday: 'long' });
+    const dayNameHi = tomorrow.toLocaleDateString('hi-IN', { weekday: 'long' });
+    const now = new Date();
+    const timeUser = new Date(now.getTime() - 2 * 60000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    const timeBot = new Date(now.getTime() - 90000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+    return [
+      {
+        id: 'msg-1',
+        sender: 'user',
+        timestamp: timeUser,
+        text: 'Evaluate the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in Depalpur block. Are there safe flight windows for ultra-low volume (ULV) fungicide broadcast over JS 20-34 soybean?',
       },
-      tableData: [
-        { 'Time Block': '06:00 - 09:30 IST', 'Gust Field': '8-14 km/h', 'Precip Prob': '15%', 'Stability (CAPE)': '450 J/kg', 'UAV Feasibility': 'Favorable (Safe)' },
-        { '09:30 - 12:00 IST': '18-28 km/h', 'Precip Prob': '35%', 'Stability (CAPE)': '1,200 J/kg', 'UAV Feasibility': 'Marginal (Caution)' },
-        { '12:00 - 18:00 IST': '45-65 km/h', 'Precip Prob': '75%', 'Stability (CAPE)': '2,600 J/kg', 'UAV Feasibility': 'Unsafe (Aborted)' },
-      ],
-    },
-  ]);
+      {
+        id: 'msg-2',
+        sender: 'assistant',
+        timestamp: timeBot,
+        text: `Evaluating the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in Depalpur block. High squall shear (>45 km/h), deep convection, and hail risk develop rapidly post-11:30 IST across Depalpur and Sanwer corridors due to intense thermodynamic loading. The marginal drone window is early morning ${dayNameEn} 06:00 – 09:30 IST.`,
+        textHi: `देपालपुर ब्लॉक में कल दोपहर 11:30 के बाद 45 किमी/घंटा से अधिक तेज आंधी व ओलों की संभावना है। ड्रोन छिड़काव हेतु कल (${dayNameHi}) सुबह 6:00 से 9:30 बजे का समय ही सुरक्षित रहेगा।`,
+        consensusScore: 96.4,
+        modelBadge: 'ECMWF-IFS v48r1 • IMD Doppler MP-04',
+        sources: ['IMD Doppler Radar Station IND-042', 'Copernicus CDS ERA5 Boundary Layer'],
+        verdictCallout: {
+          type: 'warning',
+          title: 'Executive Flight Status: Constrained Window',
+          description: `Marginal Drone Window: ${dayNameEn} 06:00 – 09:30 IST. Postpone afternoon flight schedules.`,
+        },
+        tableData: [
+          { 'Time Block': '06:00 - 09:30 IST', 'Gust Field': '8-14 km/h', 'Precip Prob': '15%', 'Stability (CAPE)': '450 J/kg', 'UAV Feasibility': 'Favorable (Safe)' },
+          { 'Time Block': '09:30 - 12:00 IST', 'Gust Field': '18-28 km/h', 'Precip Prob': '35%', 'Stability (CAPE)': '1,200 J/kg', 'UAV Feasibility': 'Marginal (Caution)' },
+          { 'Time Block': '12:00 - 18:00 IST', 'Gust Field': '45-65 km/h', 'Precip Prob': '75%', 'Stability (CAPE)': '2,600 J/kg', 'UAV Feasibility': 'Unsafe (Aborted)' },
+        ],
+      },
+    ];
+  });
 
   const handleSend = async (queryText?: string) => {
     const q = (queryText || inputQuery).trim();
