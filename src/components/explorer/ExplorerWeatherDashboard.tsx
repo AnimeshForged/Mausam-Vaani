@@ -339,6 +339,157 @@ export default function ExplorerWeatherDashboard() {
         </div>
       </div>
 
+      {/* Air Quality Index (AQI) & Stubble Burning / Dust Telemetry Panel (FR-AQI) */}
+      {weather.airQuality && (
+        <section className="bg-surface-container-lowest rounded-3xl p-space-md md:p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-md">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-sm border-b border-surface-container-high">
+            <div className="flex items-center gap-space-xs">
+              <span className="material-symbols-outlined text-primary text-[1.5rem]">airwave</span>
+              <div>
+                <h2 className="font-headline-sm text-base sm:text-lg font-bold text-on-surface">
+                  {language === 'hi' ? 'राष्ट्रीय वायु गुणवत्ता सूचकांक (AQI) व पराली धुआं निगरानी' : 'National Air Quality Index (AQI) & Stubble/Dust Monitor'}
+                </h2>
+                <p className="font-body-sm text-xs text-on-surface-variant">
+                  {language === 'hi'
+                    ? 'CPCB मानक • PM2.5, PM10, खनिज धूल एवं पराली/बायोमास धुआं स्तर'
+                    : 'CPCB Guidelines • PM2.5, PM10, Mineral Dust & Agricultural Biomass Smoke'}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span
+                style={{ backgroundColor: `${weather.airQuality.color}22`, color: weather.airQuality.color }}
+                className="px-3 py-1 rounded-full text-xs font-bold border"
+              >
+                {language === 'hi' ? weather.airQuality.categoryHi : weather.airQuality.categoryEn} (AQI: {weather.airQuality.aqi})
+              </span>
+              <span className="text-xs text-on-surface-variant hidden md:inline">
+                Open-Meteo Air Quality Mesh
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-center">
+            {/* Left 4 Cols: Big AQI Gauge & CPCB Scale */}
+            <div className="lg:col-span-4 bg-surface-container-low p-space-md rounded-2xl flex flex-col justify-between border border-outline-variant/30">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-outline uppercase tracking-wider">
+                  {language === 'hi' ? 'समग्र वायु गुणवत्ता' : 'Overall Air Quality'}
+                </span>
+                <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-surface-container-high text-on-surface">
+                  NAQI / CPCB
+                </span>
+              </div>
+
+              <div className="flex items-baseline gap-2 my-space-sm">
+                <span
+                  style={{ color: weather.airQuality.color }}
+                  className="font-display-lg text-4xl sm:text-5xl font-extrabold tracking-tight"
+                >
+                  {weather.airQuality.aqi}
+                </span>
+                <div className="flex flex-col">
+                  <span className="font-bold text-sm text-on-surface">
+                    {language === 'hi' ? weather.airQuality.categoryHi : weather.airQuality.categoryEn}
+                  </span>
+                  <span className="text-[0.7rem] text-on-surface-variant">
+                    {weather.airQuality.aqi <= 100 ? (language === 'hi' ? 'सुरक्षित सीमा' : 'Within Safe Limit') : (language === 'hi' ? 'चेतावनी स्तर' : 'Caution Level')}
+                  </span>
+                </div>
+              </div>
+
+              {/* AQI Range Visual Progress Bar */}
+              <div className="w-full">
+                <div className="flex justify-between text-[0.65rem] text-outline font-semibold mb-1">
+                  <span>0 (Good)</span>
+                  <span>100</span>
+                  <span>200</span>
+                  <span>300</span>
+                  <span>500+ (Severe)</span>
+                </div>
+                <div className="w-full h-2 rounded-full overflow-hidden bg-surface-container-highest relative flex">
+                  <div className="h-full bg-emerald-500 w-[20%]"></div>
+                  <div className="h-full bg-lime-500 w-[20%]"></div>
+                  <div className="h-full bg-yellow-500 w-[20%]"></div>
+                  <div className="h-full bg-orange-500 w-[20%]"></div>
+                  <div className="h-full bg-red-600 w-[20%]"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Middle 5 Cols: Pollutant Sensors Matrix */}
+            <div className="lg:col-span-5 grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="bg-surface-container-low p-2.5 rounded-xl border border-outline-variant/30 flex flex-col justify-between">
+                <span className="text-[0.68rem] text-outline font-bold uppercase">PM 2.5</span>
+                <div className="my-1">
+                  <span className="text-lg font-bold text-on-surface">{weather.airQuality.pm25}</span>
+                  <span className="text-[0.65rem] text-on-surface-variant ml-1">μg/m³</span>
+                </div>
+                <span className="text-[0.65rem] text-on-surface-variant font-medium">Fine Smoke</span>
+              </div>
+
+              <div className="bg-surface-container-low p-2.5 rounded-xl border border-outline-variant/30 flex flex-col justify-between">
+                <span className="text-[0.68rem] text-outline font-bold uppercase">PM 10</span>
+                <div className="my-1">
+                  <span className="text-lg font-bold text-on-surface">{weather.airQuality.pm10}</span>
+                  <span className="text-[0.65rem] text-on-surface-variant ml-1">μg/m³</span>
+                </div>
+                <span className="text-[0.65rem] text-on-surface-variant font-medium">Inhalable Dust</span>
+              </div>
+
+              <div className="bg-surface-container-low p-2.5 rounded-xl border border-outline-variant/30 flex flex-col justify-between">
+                <span className="text-[0.68rem] text-outline font-bold uppercase">Dust Field</span>
+                <div className="my-1">
+                  <span className="text-lg font-bold text-primary">{weather.airQuality.dust}</span>
+                  <span className="text-[0.65rem] text-on-surface-variant ml-1">μg/m³</span>
+                </div>
+                <span className="text-[0.65rem] text-on-surface-variant font-medium">Surface Soil</span>
+              </div>
+
+              <div className="bg-surface-container-low p-2.5 rounded-xl border border-outline-variant/30 flex flex-col justify-between">
+                <span className="text-[0.68rem] text-outline font-bold uppercase">NO₂ / CO</span>
+                <div className="my-1">
+                  <span className="text-sm font-bold text-on-surface">{weather.airQuality.nitrogenDioxide}</span>
+                  <span className="text-[0.65rem] text-on-surface-variant ml-1">ppb</span>
+                </div>
+                <span className="text-[0.65rem] text-on-surface-variant font-medium">Combustion</span>
+              </div>
+            </div>
+
+            {/* Right 3 Cols: Stubble Burning / Agricultural Smoke Advisory */}
+            <div className="lg:col-span-3 bg-surface-container-low p-space-md rounded-2xl border border-outline-variant/30 flex flex-col justify-between">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-outline uppercase tracking-wider flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[1rem] text-secondary">local_fire_department</span>
+                  <span>{language === 'hi' ? 'पराली / धुआं जोखिम' : 'Stubble Smoke Risk'}</span>
+                </span>
+                <span className={`text-[0.7rem] px-2 py-0.5 rounded-full font-bold ${
+                  weather.airQuality.stubbleSmokeRisk === 'Severe'
+                    ? 'bg-red-600 text-white animate-pulse'
+                    : weather.airQuality.stubbleSmokeRisk === 'High'
+                    ? 'bg-orange-500 text-white'
+                    : weather.airQuality.stubbleSmokeRisk === 'Moderate'
+                    ? 'bg-amber-100 text-amber-800'
+                    : 'bg-emerald-100 text-emerald-800'
+                }`}>
+                  {language === 'hi' ? weather.airQuality.stubbleSmokeRiskHi : weather.airQuality.stubbleSmokeRisk}
+                </span>
+              </div>
+
+              <p className="text-xs text-on-surface mt-2 font-medium leading-relaxed">
+                {language === 'hi' ? weather.airQuality.healthAdvisoryHi : weather.airQuality.healthAdvisoryEn}
+              </p>
+
+              <div className="mt-2 pt-2 border-t border-outline-variant/30 flex items-center justify-between text-[0.68rem] text-on-surface-variant">
+                <span>Field Tillage: {weather.airQuality.aqi > 250 ? 'Postpone' : 'Safe'}</span>
+                <span>Drone Spray: {weather.airQuality.dust > 30 ? 'Caution' : 'Optimal'}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Live Interactive Doppler Radar & Wind Streamlines Map */}
       <section className="flex flex-col gap-space-sm">
         <div className="flex flex-wrap items-center justify-between gap-space-xs">

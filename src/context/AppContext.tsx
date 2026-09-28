@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { AppMode, ConsensusInfo, CropRecommendation, GovernmentAlert, Language, LocationInfo, NetworkMode, SoilConfig, WeatherCurrent, WeatherDaily, WeatherHourly } from '@/types';
+import { AirQualityInfo, AppMode, ConsensusInfo, CropRecommendation, GovernmentAlert, Language, LocationInfo, NetworkMode, SoilConfig, WeatherCurrent, WeatherDaily, WeatherData, WeatherHourly } from '@/types';
 import { DEFAULT_LOCATION, fetchWeatherData, getFallbackWeatherData } from '@/lib/weatherService';
 import { ACTIVE_GOVERNMENT_ALERTS, getAlertsForLocation } from '@/lib/alertService';
 import { getCropRecommendations, STANDARD_SOIL_TYPES } from '@/lib/cropAdvisorService';
@@ -27,12 +27,7 @@ interface AppContextType {
   toggleNetworkMode: () => void;
   soilConfig: SoilConfig;
   setSoilConfig: React.Dispatch<React.SetStateAction<SoilConfig>>;
-  weather: {
-    current: WeatherCurrent;
-    hourly: WeatherHourly[];
-    daily: WeatherDaily[];
-    consensus: ConsensusInfo;
-  };
+  weather: WeatherData;
   alerts: GovernmentAlert[];
   cropRecommendations: CropRecommendation[];
   refreshWeather: () => Promise<void>;

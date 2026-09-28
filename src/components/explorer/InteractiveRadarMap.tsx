@@ -500,9 +500,20 @@ export default function InteractiveRadarMap() {
                 {currentFrameTimeStr} IST
               </span>
             </div>
-            <span className="text-[0.68rem] text-on-surface-variant font-medium">
-              RainViewer DWR Mesh • {location.district || location.name}
-            </span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[0.68rem] text-on-surface-variant font-medium">
+                RainViewer DWR Mesh • {location.district || location.name}
+              </span>
+              {weather.airQuality && (
+                <span
+                  style={{ backgroundColor: `${weather.airQuality.color}25`, color: weather.airQuality.color }}
+                  className="px-1.5 py-0.5 rounded text-[0.62rem] font-bold"
+                  title={`PM2.5: ${weather.airQuality.pm25} μg/m³ | Dust: ${weather.airQuality.dust} μg/m³`}
+                >
+                  AQI {weather.airQuality.aqi}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

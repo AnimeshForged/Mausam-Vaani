@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { useApp } from '@/context/AppContext';
 import { translations } from '@/lib/translations';
 import MonsoonDeficitTracker from './MonsoonDeficitTracker';
+import AgrometBulletinModal from './AgrometBulletinModal';
+import { downloadTextBulletin } from '@/lib/agrometBulletinGenerator';
 
 export default function ExplorerClimateAnalytics() {
   const { weather, location, language } = useApp();
@@ -11,6 +13,7 @@ export default function ExplorerClimateAnalytics() {
 
   const [timeHorizon, setTimeHorizon] = useState<'24h' | '7d' | '30d' | 'monsoon'>('7d');
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [showBulletinModal, setShowBulletinModal] = useState(false);
   const [showHistoricalComparison, setShowHistoricalComparison] = useState(true);
 
   // Dynamic SVG Chart data points mapped from live daily forecast
@@ -35,6 +38,18 @@ export default function ExplorerClimateAnalytics() {
 
   const exportDataset = (format: string) => {
     setShowExportMenu(false);
+
+    if (format.includes('PDF')) {
+      setShowBulletinModal(true);
+      return;
+    }
+
+    if (format.includes('TXT') || format.includes('Text')) {
+      downloadTextBulletin(location, weather);
+      setExportNotice('Exported Agromet Bulletin (.txt)');
+      setTimeout(() => setExportNotice(null), 3500);
+      return;
+    }
 
     const baseSlug = (location.district || location.name).toLowerCase().replace(/[^a-z0-9]/g, '_');
     let content = '';
@@ -70,26 +85,6 @@ export default function ExplorerClimateAnalytics() {
         null,
         2
       );
-    } else {
-      fileName = `mausam_vaani_bulletin_${Date.now()}.txt`;
-      mimeType = 'text/plain';
-      content = `=====================================================
-MAUSAM-VAANI METEOROLOGICAL EXECUTIVE BULLETIN
-Sector: ${location.district || location.name} Agro-Climatic Zone (${location.state})
-Station: ${location.name} (${location.lat}°N, ${location.lng}°E)
-Elevation: ${location.elevation} m MSL
-Generated: ${new Date().toLocaleString('en-IN')}
-=====================================================
-Current Temperature: ${weather.current.temperature}°C
-Relative Humidity: ${weather.current.relativeHumidity}%
-Surface Wind: ${weather.current.windSpeed} km/h (${weather.current.windCompass})
-Multi-Source Consensus: ${weather.consensus.primarySource} + ${weather.consensus.secondarySource} (${weather.consensus.confidenceScore}%)
-Soil Moisture: ${weather.current.soilMoisture}%
-Solar Irradiance: ${weather.current.solarIrradiance} W/m²
-Evapotranspiration: ${weather.current.evapotranspiration} mm/day
-VPD: ${weather.current.vaporPressureDeficit} kPa
-Synoptic Assessment: Atmospheric corridor actively tracked across ${location.district || location.name} basin.
-=====================================================`;
     }
 
     try {
@@ -160,13 +155,27 @@ Synoptic Assessment: Atmospheric corridor actively tracked across ${location.dis
             </button>
 
             {showExportMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-surface-container-lowest rounded-2xl shadow-xl z-30 py-2 border border-surface-container-high animate-fadeIn">
+              <div className="absolute right-0 mt-2 w-60 bg-surface-container-lowest rounded-2xl shadow-xl z-30 py-2 border border-surface-container-high animate-fadeIn">
+                <button
+                  onClick={() => exportDataset('Official Agromet PDF Bulletin')}
+                  className="w-full text-left flex items-start gap-2.5 px-4 py-2.5 text-on-surface hover:bg-surface-container-low transition-colors active:scale-95 cursor-pointer border-b border-surface-container"
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-primary text-[1.25rem] mt-0.5">picture_as_pdf</span>
+                  <div>
+                    <div className="font-bold text-xs text-primary flex items-center gap-1.5">
+                      <span>Official PDF Bulletin</span>
+                      <span className="px-1.5 py-0.2 rounded-full bg-primary/10 text-primary text-[9px] font-extrabold">IMD/GKMS</span>
+                    </div>
+                    <div className="text-[10px] text-on-surface-variant leading-tight mt-0.5">Printable A4 bulletin with synoptic & AQI tables</div>
+                  </div>
+                </button>
                 <button
                   onClick={() => exportDataset('CSV (Aggregated 15m)')}
                   className="w-full text-left flex items-center gap-2 px-4 py-2 text-on-surface text-xs hover:bg-surface-container-low transition-colors active:scale-95 cursor-pointer"
                   type="button"
                 >
-                  <span className="material-symbols-outlined text-primary text-[1rem]">table_view</span>
+                  <span className="material-symbols-outlined text-secondary text-[1rem]">table_view</span>
                   <span>CSV (Aggregated 15m)</span>
                 </button>
                 <button
@@ -178,12 +187,12 @@ Synoptic Assessment: Atmospheric corridor actively tracked across ${location.dis
                   <span>GeoJSON Boundary Grid</span>
                 </button>
                 <button
-                  onClick={() => exportDataset('Executive Bulletin PDF')}
+                  onClick={() => exportDataset('Raw Meteorological Text Bulletin')}
                   className="w-full text-left flex items-center gap-2 px-4 py-2 text-on-surface text-xs hover:bg-surface-container-low transition-colors active:scale-95 cursor-pointer"
                   type="button"
                 >
-                  <span className="material-symbols-outlined text-outline text-[1rem]">picture_as_pdf</span>
-                  <span>Executive Bulletin PDF</span>
+                  <span className="material-symbols-outlined text-outline text-[1rem]">description</span>
+                  <span>Raw Text Bulletin (.TXT)</span>
                 </button>
               </div>
             )}
@@ -471,6 +480,12 @@ Synoptic Assessment: Atmospheric corridor actively tracked across ${location.dis
 
       {/* Historical Climate Comparison & 30-Year IMD Monsoon Deficit Tracker */}
       <MonsoonDeficitTracker />
+
+      {/* Official Agromet Bulletin PDF Export & Preview Modal */}
+      <AgrometBulletinModal
+        isOpen={showBulletinModal}
+        onClose={() => setShowBulletinModal(false)}
+      />
     </div>
   );
 }

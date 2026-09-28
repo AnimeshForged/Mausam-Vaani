@@ -1,4 +1,4 @@
-import { ConsensusInfo, LocationInfo, WeatherCurrent, WeatherDaily, WeatherHourly } from '@/types';
+import { AirQualityInfo, ConsensusInfo, LocationInfo, WeatherCurrent, WeatherDaily, WeatherHourly } from '@/types';
 
 // WMO Weather code mapping
 export function getWeatherCondition(code: number, lang: 'en' | 'hi' = 'en') {
@@ -33,6 +33,80 @@ function getWindDirectionCompass(degrees: number): string {
   return directions[index % 16];
 }
 
+export function calculateAqiDetails(
+  rawAqi: number,
+  pm25: number = 35,
+  pm10: number = 65,
+  dust: number = 10,
+  co: number = 450,
+  no2: number = 28
+): AirQualityInfo {
+  const aqi = Math.round(rawAqi || (pm25 * 2.1) || 68);
+  let categoryEn = 'Good';
+  let categoryHi = 'अच्छा';
+  let color = '#10b981';
+  let stubbleSmokeRisk: 'Low' | 'Moderate' | 'High' | 'Severe' = 'Low';
+  let stubbleSmokeRiskHi = 'कम (सामान्य)';
+  let healthAdvisoryEn = 'Air quality is satisfactory. Favorable for outdoor farming and manual field labor.';
+  let healthAdvisoryHi = 'हवा की गुणवत्ता अच्छी है। खेत में काम करने और बुवाई/कटाई के लिए पूरी तरह सुरक्षित।';
+
+  if (aqi > 400) {
+    categoryEn = 'Severe';
+    categoryHi = 'अति गंभीर';
+    color = '#7f1d1d';
+    stubbleSmokeRisk = 'Severe';
+    stubbleSmokeRiskHi = 'अत्यधिक गंभीर (धुआं व पराली प्रदूषण)';
+    healthAdvisoryEn = 'Hazardous air quality! Stubble burning smoke and dense particulates detected. Wear N95 masks.';
+    healthAdvisoryHi = 'गंभीर वायु प्रदूषण! पराली का धुआं और धूल कण अत्यधिक हैं। N95 मास्क पहनें और खुले में भारी काम से बचें।';
+  } else if (aqi > 300) {
+    categoryEn = 'Very Poor';
+    categoryHi = 'बहुत खराब';
+    color = '#ef4444';
+    stubbleSmokeRisk = 'High';
+    stubbleSmokeRiskHi = 'उच्च जोखिम (धुआं व सूक्ष्म कण)';
+    healthAdvisoryEn = 'Respiratory illness hazard. High fine particulate loading (PM2.5). Avoid prolonged tractor field work.';
+    healthAdvisoryHi = 'श्वसन संबंधी परेशानी का खतरा। PM2.5 कण अधिक हैं। लंबे समय तक खेत में जुताई या भारी काम न करें।';
+  } else if (aqi > 200) {
+    categoryEn = 'Poor';
+    categoryHi = 'खराब';
+    color = '#f97316';
+    stubbleSmokeRisk = dust > 25 || pm25 > 60 ? 'Moderate' : 'Low';
+    stubbleSmokeRiskHi = stubbleSmokeRisk === 'Moderate' ? 'मध्यम धुआं' : 'कम जोखिम';
+    healthAdvisoryEn = 'Breathing discomfort to sensitive individuals. Children and elderly should remain sheltered.';
+    healthAdvisoryHi = 'सांस के मरीजों व बुजुर्गों को परेशानी हो सकती है। सुबह-शाम खुली हवा में अधिक देर न रहें।';
+  } else if (aqi > 100) {
+    categoryEn = 'Moderate';
+    categoryHi = 'मध्यम';
+    color = '#eab308';
+    stubbleSmokeRisk = dust > 35 ? 'Moderate' : 'Low';
+    stubbleSmokeRiskHi = 'सामान्य';
+    healthAdvisoryEn = 'Acceptable air quality with minor particulate accumulation. Normal farming can proceed.';
+    healthAdvisoryHi = 'वायु गुणवत्ता सामान्य है। कृषि कार्य सुचारू रूप से किए जा सकते हैं।';
+  } else if (aqi > 50) {
+    categoryEn = 'Satisfactory';
+    categoryHi = 'संतोषजनक';
+    color = '#84cc16';
+    healthAdvisoryEn = 'Minor breathing discomfort to highly sensitive people. Overall safe atmospheric conditions.';
+    healthAdvisoryHi = 'हवा संतोषजनक है। खेती और शारीरिक गतिविधियों के लिए सुरक्षित।';
+  }
+
+  return {
+    aqi,
+    categoryEn,
+    categoryHi,
+    color,
+    pm25: Number((pm25 || 25).toFixed(1)),
+    pm10: Number((pm10 || 45).toFixed(1)),
+    carbonMonoxide: Math.round(co || 400),
+    nitrogenDioxide: Number((no2 || 25).toFixed(1)),
+    dust: Number((dust || 8).toFixed(1)),
+    stubbleSmokeRisk,
+    stubbleSmokeRiskHi,
+    healthAdvisoryEn,
+    healthAdvisoryHi,
+  };
+}
+
 export const DEFAULT_LOCATION: LocationInfo = {
   name: 'Indore, Madhya Pradesh',
   nameHi: 'इंदौर, मध्य प्रदेश',
@@ -48,14 +122,17 @@ export async function fetchWeatherData(lat: number, lng: number): Promise<{
   hourly: WeatherHourly[];
   daily: WeatherDaily[];
   consensus: ConsensusInfo;
+  airQuality: AirQualityInfo;
 }> {
   try {
     const mainForecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,shortwave_radiation,et0_fao_evapotranspiration,vapour_pressure_deficit&hourly=temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,weather_code,uv_index,wind_speed_10m,soil_temperature_0cm,soil_moisture_0_to_1cm&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,uv_index_max&timezone=auto`;
     const multiModelUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,precipitation_probability&models=ecmwf_ifs025,gfs_seamless&timezone=auto`;
+    const airQualityUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&current=european_aqi,us_aqi,pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,dust&timezone=auto`;
 
-    const [mainRes, multiModelRes] = await Promise.all([
+    const [mainRes, multiModelRes, aqiRes] = await Promise.all([
       fetch(mainForecastUrl, { next: { revalidate: 300 } }),
       fetch(multiModelUrl, { next: { revalidate: 300 } }).catch(() => null),
+      fetch(airQualityUrl, { next: { revalidate: 300 } }).catch(() => null),
     ]);
 
     if (!mainRes.ok) throw new Error('Failed to fetch from Open-Meteo');
@@ -172,7 +249,27 @@ export async function fetchWeatherData(lat: number, lng: number): Promise<{
       });
     }
 
-    return { current, hourly, daily, consensus };
+    let airQuality: AirQualityInfo;
+    if (aqiRes && aqiRes.ok) {
+      try {
+        const aqiData = await aqiRes.json();
+        const aqiCurr = aqiData.current || {};
+        airQuality = calculateAqiDetails(
+          aqiCurr.us_aqi ?? aqiCurr.european_aqi ?? 65,
+          aqiCurr.pm2_5 ?? 32,
+          aqiCurr.pm10 ?? 58,
+          aqiCurr.dust ?? 10,
+          aqiCurr.carbon_monoxide ?? 450,
+          aqiCurr.nitrogen_dioxide ?? 28
+        );
+      } catch {
+        airQuality = calculateAqiDetails(65, 30, 55, 8, 420, 24);
+      }
+    } else {
+      airQuality = calculateAqiDetails(65, 30, 55, 8, 420, 24);
+    }
+
+    return { current, hourly, daily, consensus, airQuality };
   } catch (err) {
     console.warn('Using resilient weather fallback:', err);
     return getFallbackWeatherData();
@@ -184,6 +281,7 @@ export function getFallbackWeatherData(): {
   hourly: WeatherHourly[];
   daily: WeatherDaily[];
   consensus: ConsensusInfo;
+  airQuality: AirQualityInfo;
 } {
   const current: WeatherCurrent = {
     temperature: 31,
@@ -207,29 +305,58 @@ export function getFallbackWeatherData(): {
     updatedAt: `${new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })} IST (Offline Cached Baseline)`,
   };
 
-  const hours = ['14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00', '01:00'];
-  const hourly: WeatherHourly[] = hours.map((h, idx) => ({
-    time: `2026-09-08T${h}:00`,
-    hour: h,
-    temperature: 31 - Math.floor(idx / 2),
-    precipitationProbability: idx >= 3 && idx <= 6 ? 40 : 10,
-    precipitation: idx >= 3 && idx <= 6 ? 1.8 : 0,
-    weatherCode: idx >= 3 && idx <= 6 ? 61 : 2,
-    condition: idx >= 3 && idx <= 6 ? 'Light Rain' : 'Partly Cloudy',
-    icon: idx >= 3 && idx <= 6 ? 'rainy' : 'partly_cloudy_day',
-    uvIndex: idx < 4 ? 5.8 - idx : 0,
-    windSpeed: 14 + (idx % 4),
-  }));
+  const now = new Date();
+  const currentHour = now.getHours();
 
-  const daily: WeatherDaily[] = [
-    { date: '2026-09-08', dayNameEn: 'Today', dayNameHi: 'आज', tempMax: 33, tempMin: 22, precipitationProbability: 40, weatherCode: 2, conditionEn: 'Partly Cloudy', conditionHi: 'आंशिक बादल', icon: 'partly_cloudy_day' },
-    { date: '2026-09-09', dayNameEn: 'Wed', dayNameHi: 'बुध', tempMax: 30, tempMin: 21, precipitationProbability: 75, weatherCode: 95, conditionEn: 'Thunderstorm', conditionHi: 'गरज चमक', icon: 'thunderstorm' },
-    { date: '2026-09-10', dayNameEn: 'Thu', dayNameHi: 'गुरु', tempMax: 29, tempMin: 20, precipitationProbability: 60, weatherCode: 63, conditionEn: 'Moderate Rain', conditionHi: 'मध्यम बारिश', icon: 'rainy' },
-    { date: '2026-09-11', dayNameEn: 'Fri', dayNameHi: 'शुक्र', tempMax: 31, tempMin: 22, precipitationProbability: 25, weatherCode: 1, conditionEn: 'Mainly Clear', conditionHi: 'मुख्यतः साफ़', icon: 'wb_sunny' },
-    { date: '2026-09-12', dayNameEn: 'Sat', dayNameHi: 'शनि', tempMax: 32, tempMin: 23, precipitationProbability: 15, weatherCode: 0, conditionEn: 'Sunny', conditionHi: 'धूप', icon: 'wb_sunny' },
-    { date: '2026-09-13', dayNameEn: 'Sun', dayNameHi: 'रवि', tempMax: 33, tempMin: 23, precipitationProbability: 20, weatherCode: 1, conditionEn: 'Clear', conditionHi: 'साफ़', icon: 'wb_sunny' },
-    { date: '2026-09-14', dayNameEn: 'Mon', dayNameHi: 'सोम', tempMax: 32, tempMin: 22, precipitationProbability: 30, weatherCode: 2, conditionEn: 'Partly Cloudy', conditionHi: 'आंशिक बादल', icon: 'partly_cloudy_day' },
+  const hourly: WeatherHourly[] = [];
+  for (let i = 0; i < 24; i++) {
+    const slotDate = new Date(now.getTime() + i * 3600 * 1000);
+    const hourStr = slotDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const isRainy = i >= 3 && i <= 6;
+    hourly.push({
+      time: slotDate.toISOString(),
+      hour: hourStr,
+      temperature: Math.round(31 - (i / 4)),
+      precipitationProbability: isRainy ? 40 : 10,
+      precipitation: isRainy ? 1.8 : 0,
+      weatherCode: isRainy ? 61 : 2,
+      condition: isRainy ? 'Light Rain' : 'Partly Cloudy',
+      icon: isRainy ? 'rainy' : 'partly_cloudy_day',
+      uvIndex: i < 4 ? Math.max(0, Number((5.8 - i).toFixed(1))) : 0,
+      windSpeed: 14 + (i % 4),
+    });
+  }
+
+  const daily: WeatherDaily[] = [];
+  const dayNamesEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNamesHi = ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'];
+  const weatherVariations = [
+    { max: 33, min: 22, prob: 35, code: 2, condEn: 'Partly Cloudy', condHi: 'आंशिक बादल', icon: 'partly_cloudy_day' },
+    { max: 30, min: 21, prob: 70, code: 95, condEn: 'Thunderstorm', condHi: 'गरज चमक', icon: 'thunderstorm' },
+    { max: 29, min: 20, prob: 55, code: 63, condEn: 'Moderate Rain', condHi: 'मध्यम बारिश', icon: 'rainy' },
+    { max: 31, min: 22, prob: 25, code: 1, condEn: 'Mainly Clear', condHi: 'मुख्यतः साफ़', icon: 'wb_sunny' },
+    { max: 32, min: 23, prob: 15, code: 0, condEn: 'Sunny', condHi: 'धूप', icon: 'wb_sunny' },
+    { max: 33, min: 23, prob: 20, code: 1, condEn: 'Clear', condHi: 'साफ़', icon: 'wb_sunny' },
+    { max: 32, min: 22, prob: 30, code: 2, condEn: 'Partly Cloudy', condHi: 'आंशिक बादल', icon: 'partly_cloudy_day' },
   ];
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now.getTime() + i * 24 * 3600 * 1000);
+    const dateStr = d.toISOString().split('T')[0];
+    const v = weatherVariations[i];
+    daily.push({
+      date: dateStr,
+      dayNameEn: i === 0 ? 'Today' : dayNamesEn[d.getDay()],
+      dayNameHi: i === 0 ? 'आज' : dayNamesHi[d.getDay()],
+      tempMax: v.max,
+      tempMin: v.min,
+      precipitationProbability: v.prob,
+      weatherCode: v.code,
+      conditionEn: v.condEn,
+      conditionHi: v.condHi,
+      icon: v.icon,
+    });
+  }
 
   const consensus: ConsensusInfo = {
     confidenceScore: 97.8,
@@ -242,5 +369,7 @@ export function getFallbackWeatherData(): {
     statusTextHi: 'दोहरा मौसम मॉडल बेसलाइन (ऑफ़लाइन मोड)',
   };
 
-  return { current, hourly, daily, consensus };
+  const airQuality = calculateAqiDetails(68, 32, 58, 11, 460, 26);
+
+  return { current, hourly, daily, consensus, airQuality };
 }

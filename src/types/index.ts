@@ -59,6 +59,23 @@ export interface WeatherDaily {
   conditionEn: string;
   conditionHi: string;
   icon: string;
+  windSpeedMax?: number;
+}
+
+export interface AirQualityInfo {
+  aqi: number;
+  categoryEn: string;
+  categoryHi: string;
+  color: string;
+  pm25: number;
+  pm10: number;
+  carbonMonoxide: number;
+  nitrogenDioxide: number;
+  dust: number;
+  stubbleSmokeRisk: 'Low' | 'Moderate' | 'High' | 'Severe';
+  stubbleSmokeRiskHi: string;
+  healthAdvisoryEn: string;
+  healthAdvisoryHi: string;
 }
 
 export interface ConsensusInfo {
@@ -70,6 +87,14 @@ export interface ConsensusInfo {
   precipitationConsensus: boolean;
   statusTextEn: string;
   statusTextHi: string;
+}
+
+export interface WeatherData {
+  current: WeatherCurrent;
+  hourly: WeatherHourly[];
+  daily: WeatherDaily[];
+  consensus: ConsensusInfo;
+  airQuality?: AirQualityInfo;
 }
 
 export interface SoilConfig {
