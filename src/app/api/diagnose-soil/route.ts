@@ -21,13 +21,14 @@ export async function POST(req: NextRequest) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
 
-    const prompt = `You are a certified soil scientist for Central India (Malwa Plateau).
+    const locName = body.location?.name ? `${body.location.name}, ${body.location.state || 'India'}` : 'India';
+    const prompt = `You are a certified ICAR / Soil Health Card soil scientist and agronomist in India (Current Region: ${locName}).
 Analyze this soil photograph:
-1. Soil type classification (Deep Black Cotton / Regur Vertisol, Medium Loamy, Red Murrum, Sandy Loam)
+1. Soil type classification (e.g. Deep Black Cotton / Vertisol, Alluvial Soil, Medium Loamy, Red / Laterite, Sandy Loam)
 2. Granular aggregate texture & aeration
 3. Visual surface moisture percentage estimate
 4. Estimated pH range and organic carbon levels
-5. Primary recommended crops
+5. Primary recommended crops for this soil and region
 
 Return ONLY valid JSON matching this format:
 {

@@ -186,6 +186,7 @@ export interface GovernmentAlert {
     icon: string;
     urgency: 'immediate' | 'high' | 'precautionary';
     audioSnippetHi: string;
+    audioSnippetEn?: string;
   }>;
 }
 

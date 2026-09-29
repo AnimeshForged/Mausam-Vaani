@@ -1,7 +1,7 @@
 {
   "name": "mausam-vaani",
   "version": "1.0.0",
-  "description": "",
+  "description": "Mausam Vaani (मौसम वाणी) - Hyperlocal Multimodal Weather & Agricultural Advisory Platform for Indian Agriculture",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",

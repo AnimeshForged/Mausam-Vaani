@@ -225,7 +225,9 @@ export default function ExplorerClimateAnalytics() {
             <span className="font-label-sm text-xs text-primary font-bold">Consensus Validated</span>
           </div>
           <span className="font-body-sm text-xs text-on-surface-variant font-medium">
-            Cross-checked across IMD Doppler Radar (Bhopal/Indore), INSAT-3DR Radiometer & Copernicus Climate Model (ECMWF IFS-0.1°)
+            {language === 'hi'
+              ? `आईएमडी डॉप्लर रडार नेटवर्क (${location.name || 'क्षेत्रीय'}), इनसैट-3डीआर रेडियोमीटर और कोपरनिकस जलवायु मॉडल (ECMWF IFS-0.1°) से सत्यापित`
+              : `Cross-checked across IMD Doppler Radar (${location.name || 'Regional'}), INSAT-3DR Radiometer & Copernicus Climate Model (ECMWF IFS-0.1°)`}
           </span>
         </div>
         <div className="flex items-center gap-1 text-outline text-xs">

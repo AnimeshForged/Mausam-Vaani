@@ -110,7 +110,7 @@ export function calculateAqiDetails(
 export const DEFAULT_LOCATION: LocationInfo = {
   name: 'Indore, Madhya Pradesh',
   nameHi: 'इंदौर, मध्य प्रदेश',
-  district: 'Indore (Hatod / Depalpur)',
+  district: 'Indore',
   state: 'Madhya Pradesh',
   lat: 22.7196,
   lng: 75.8577,

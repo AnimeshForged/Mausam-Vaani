@@ -337,7 +337,9 @@ export default function KisanVoiceAssistant() {
                 </span>
               </div>
               <span className="font-body-sm text-xs text-on-surface-variant">
-                {language === 'hi' ? 'मध्य प्रदेश मौसम व फसल सहमति केंद्र • 100% नि:शुल्क ग्रामीण सेवा' : 'Central India Agrometeorology Voice Interface'}
+                {language === 'hi'
+                  ? `${location.state || 'राष्ट्रीय'} मौसम व फसल परामर्श केंद्र • 100% नि:शुल्क ग्रामीण सेवा`
+                  : `${location.state || 'National'} Agro-Meteorological Advisory Interface • 100% Free Rural Service`}
               </span>
             </div>
           </div>

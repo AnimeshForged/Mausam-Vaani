@@ -118,6 +118,7 @@ export function generateLivestockHeatAlert(
         icon: 'water_drop',
         urgency: 'immediate',
         audioSnippetHi: 'पशुओं को दोपहर में 3 बार ठंडे पानी से नहलाएं।',
+        audioSnippetEn: 'Shower dairy cattle with cool water 3 times during midday to prevent milk loss.',
       },
       {
         step: 2,
@@ -128,6 +129,7 @@ export function generateLivestockHeatAlert(
         icon: 'health_and_safety',
         urgency: 'high',
         audioSnippetHi: 'दोपहर में धूप में लगातार काम न करें, हर घंटे छांव में विश्राम करें।',
+        audioSnippetEn: 'Avoid working under harsh midday sun. Take shaded rest breaks every hour and drink fluids.',
       },
       {
         step: 3,
@@ -138,6 +140,7 @@ export function generateLivestockHeatAlert(
         icon: 'medication',
         urgency: 'high',
         audioSnippetHi: 'पशुओं के पानी में मीठा सोडा और खनिज मिश्रण मिलाएं।',
+        audioSnippetEn: 'Add electrolytes and mineral supplements to cattle drinking water.',
       },
       {
         step: 4,
@@ -148,6 +151,7 @@ export function generateLivestockHeatAlert(
         icon: 'roofing',
         urgency: 'precautionary',
         audioSnippetHi: 'टीन शेड की छत पर चूने का लेप करें ताकि गर्मी कम रहे।',
+        audioSnippetEn: 'Whitewash shed roofs or lay straw on top to reduce indoor heat.',
       },
     ],
   };
@@ -188,6 +192,7 @@ export function generateSevereThunderstormAlert(
         icon: 'shelves',
         urgency: 'immediate',
         audioSnippetHi: 'खेत में अकेले पेड़ के नीचे या ट्रैक्टर पर न रहें। तुरंत पक्के मकान में जाएं।',
+        audioSnippetEn: 'Do not stand under trees or on tractors. Seek shelter inside a pucca building immediately.',
       },
       {
         step: 2,
@@ -198,6 +203,7 @@ export function generateSevereThunderstormAlert(
         icon: 'warehouse',
         urgency: 'immediate',
         audioSnippetHi: 'खलिहान में रखी फसल को प्लास्टिक तिरपाल से ढककर पत्थरों से बांधें।',
+        audioSnippetEn: 'Cover harvested produce with tarpaulin and weigh it down with stones against heavy wind.',
       },
       {
         step: 3,
@@ -208,6 +214,7 @@ export function generateSevereThunderstormAlert(
         icon: 'power_off',
         urgency: 'high',
         audioSnippetHi: 'खेत की मोटर व ट्यूबवेल के स्टार्टर तुरंत बंद करें ताकि मोटर जलने से बचे।',
+        audioSnippetEn: 'Turn off electric submersible pump starters to protect motors from lightning surges.',
       },
       {
         step: 4,
@@ -218,6 +225,7 @@ export function generateSevereThunderstormAlert(
         icon: 'pets',
         urgency: 'high',
         audioSnippetHi: 'पशुओं को लोहे के तारों और पेड़ों से दूर पक्के बाड़े में सुरक्षित बांधें।',
+        audioSnippetEn: 'Keep livestock away from metal fences and trees; shelter them in pucca sheds.',
       },
     ],
   };
@@ -258,6 +266,7 @@ export function generateWashoutAndDrainageAlert(
         icon: 'cancel',
         urgency: 'high',
         audioSnippetHi: 'आज छिड़काव न करें, मौसम साफ़ होने पर ही करें।',
+        audioSnippetEn: 'Postpone pesticide spraying today until the rain risk passes.',
       },
       {
         step: 2,
@@ -268,6 +277,7 @@ export function generateWashoutAndDrainageAlert(
         icon: 'water',
         urgency: 'precautionary',
         audioSnippetHi: 'खेत की नालियों से पानी निकलने का रास्ता साफ़ कर दें।',
+        audioSnippetEn: 'Clear field drainage channels to prevent root-zone waterlogging.',
       },
     ],
   };
@@ -307,6 +317,7 @@ export function generateHighWindSquallAlert(
         icon: 'warehouse',
         urgency: 'immediate',
         audioSnippetHi: 'पॉलीहाउस के वेंट्स बंद करें और तिरपाल कसें।',
+        audioSnippetEn: 'Close greenhouse side vents and secure plastic tarpaulins.',
       },
       {
         step: 2,
@@ -317,6 +328,7 @@ export function generateHighWindSquallAlert(
         icon: 'local_shipping',
         urgency: 'high',
         audioSnippetHi: 'सब्जियों से भरे खुले वाहनों को सुरक्षित स्थान पर खड़ा करें।',
+        audioSnippetEn: 'Halt highway transport of open perishable farm produce during squalls.',
       },
       {
         step: 3,
@@ -327,6 +339,7 @@ export function generateHighWindSquallAlert(
         icon: 'park',
         urgency: 'high',
         audioSnippetHi: 'लंबी फसलों को गिरने से बचाने के लिए सहारा दें।',
+        audioSnippetEn: 'Stake tall crops like maize and sugarcane to prevent wind lodging.',
       },
     ],
   };
@@ -365,6 +378,7 @@ export function generateOptimalAgrometAdvisory(
         icon: 'check_circle',
         urgency: 'precautionary',
         audioSnippetHi: 'आज कीटनाशक का छिड़काव आसानी से कर सकते हैं।',
+        audioSnippetEn: 'Weather is favorable today for safe and effective pesticide spraying.',
       },
       {
         step: 2,
@@ -375,6 +389,7 @@ export function generateOptimalAgrometAdvisory(
         icon: 'agriculture',
         urgency: 'precautionary',
         audioSnippetHi: 'खेत में निराई-गुड़ाई का कार्य समय पर पूरा करें।',
+        audioSnippetEn: 'Proceed with weeding, inter-cultivation, and soil aeration today.',
       },
     ],
   };

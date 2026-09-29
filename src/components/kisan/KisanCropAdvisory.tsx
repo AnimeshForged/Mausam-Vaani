@@ -22,8 +22,14 @@ export default function KisanCropAdvisory() {
   const t = translations[language];
   const carouselRef = useRef<HTMLDivElement>(null);
   const [selectedCrop, setSelectedCrop] = useState<CropRecommendation | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<'all' | 'kharif' | 'lowWater' | 'cashCrop'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'seasonal' | 'lowWater' | 'cashCrop'>('all');
   const [playingCropId, setPlayingCropId] = useState<string | null>(null);
+
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const currentSeasonCode = (currentMonth >= 5 && currentMonth <= 9) ? 'kharif' : (currentMonth >= 3 && currentMonth <= 4) ? 'zaid' : 'rabi';
+  const seasonalLabelHi = currentSeasonCode === 'kharif' ? `खरीफ ${currentYear}` : currentSeasonCode === 'zaid' ? `जायद ${currentYear}` : `रबी ${currentYear}`;
+  const seasonalLabelEn = currentSeasonCode === 'kharif' ? `Kharif ${currentYear}` : currentSeasonCode === 'zaid' ? `Zaid ${currentYear}` : `Rabi ${currentYear}`;
 
   useEffect(() => {
     if (!isPlayingAudio) {
@@ -43,7 +49,9 @@ export default function KisanCropAdvisory() {
   }, []);
 
   const filteredCrops = cropRecommendations.filter(c => {
-    if (categoryFilter === 'kharif') return c.category === 'primary' || c.sowingWindowEn.toLowerCase().includes('june');
+    if (categoryFilter === 'seasonal') {
+      return c.category === 'primary' || c.sowingWindowEn.toLowerCase().includes(currentSeasonCode) || (currentSeasonCode === 'kharif' && c.sowingWindowEn.toLowerCase().includes('june'));
+    }
     if (categoryFilter === 'lowWater') return c.waterDemandLevel <= 2;
     if (categoryFilter === 'cashCrop') return c.id === 'cotton' || c.id === 'mustard' || c.id === 'soybean';
     return true;
@@ -280,7 +288,7 @@ export default function KisanCropAdvisory() {
             <div className="flex flex-wrap items-center gap-1.5 mt-2">
               {[
                 { id: 'all', hi: 'सभी फसलें', en: 'All Crops' },
-                { id: 'kharif', hi: 'खरीफ 2025', en: 'Kharif' },
+                { id: 'seasonal', hi: seasonalLabelHi, en: seasonalLabelEn },
                 { id: 'lowWater', hi: 'कम पानी वाली', en: 'Low Water' },
                 { id: 'cashCrop', hi: 'अधिक मुनाफा', en: 'High Profit' },
               ].map(f => (
@@ -566,9 +574,10 @@ export default function KisanCropAdvisory() {
 
                   <button
                     onClick={() => {
+                      const locStr = location.district || location.nameHi || location.name || '';
                       const shareText = language === 'hi'
-                        ? `🌾 *मौसम वाणी फसल सलाह: ${selectedCrop.nameHi} (${selectedCrop.variety})*\nअनुशंसित किस्म: ${selectedCrop.variety}\nअनुमानित उपज: ${selectedCrop.estimatedYieldHi}\nकारण: ${selectedCrop.rationaleHi}\n\nमौसम वाणी - मध्य प्रदेश मौसम व फसल केंद्र`
-                        : `🌾 *Mausam-Vaani Crop Advisory: ${selectedCrop.nameEn} (${selectedCrop.variety})*\nVariety: ${selectedCrop.variety}\nYield: ${selectedCrop.estimatedYieldEn}\nRationale: ${selectedCrop.rationaleEn}\n\nMausam-Vaani Agrometeorology`;
+                        ? `🌾 *मौसम वाणी फसल सलाह: ${selectedCrop.nameHi} (${selectedCrop.variety})*${locStr ? `\nस्थान: ${locStr}` : ''}\nअनुशंसित किस्म: ${selectedCrop.variety}\nअनुमानित उपज: ${selectedCrop.estimatedYieldHi}\nकारण: ${selectedCrop.rationaleHi}\n\nमौसम वाणी - राष्ट्रीय मौसम एवं कृषि परामर्श सेवा`
+                        : `🌾 *Mausam-Vaani Crop Advisory: ${selectedCrop.nameEn} (${selectedCrop.variety})*${locStr ? `\nLocation: ${locStr}` : ''}\nVariety: ${selectedCrop.variety}\nYield: ${selectedCrop.estimatedYieldEn}\nRationale: ${selectedCrop.rationaleEn}\n\nMausam-Vaani Agro-Meteorological Advisory`;
                       if (typeof window !== 'undefined') {
                         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
                       }

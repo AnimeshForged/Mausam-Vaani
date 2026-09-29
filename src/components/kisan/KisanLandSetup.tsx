@@ -24,6 +24,23 @@ export default function KisanLandSetup() {
   const [scanMessage, setScanMessage] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const isKharif = currentMonth >= 5 && currentMonth <= 9;
+  const isZaid = currentMonth >= 3 && currentMonth <= 4;
+
+  const seasonTitle = isKharif
+    ? (language === 'hi' ? `खरीफ सीज़न ${currentYear}` : `Kharif Season ${currentYear}`)
+    : isZaid
+    ? (language === 'hi' ? `जायद सीज़न ${currentYear}` : `Zaid (Summer) Season ${currentYear}`)
+    : (language === 'hi' ? `रबी सीज़न ${currentYear}` : `Rabi (Winter) Season ${currentYear}`);
+
+  const seasonDetail = isKharif
+    ? (language === 'hi' ? 'मानसून सक्रियता एवं फसल सुरक्षा' : 'Monsoon Crop Cycle & Protection')
+    : isZaid
+    ? (language === 'hi' ? 'ग्रीष्मकालीन सिंचाई एवं दलहन सुरक्षा' : 'Summer Pulses & Micro-Irrigation')
+    : (language === 'hi' ? 'शीतकालीन बुवाई एवं पाला/नमी सुरक्षा' : 'Winter Crop Sowing & Moisture Care');
+
   useEffect(() => {
     stopSpeech();
   }, [language]);
@@ -385,10 +402,10 @@ export default function KisanLandSetup() {
               </div>
               <div className="flex flex-col">
                 <h4 className="font-headline-sm text-base font-bold text-on-surface">
-                  {language === 'hi' ? `खरीफ सीज़न ${new Date().getFullYear()}` : `Kharif Season ${new Date().getFullYear()}`}
+                  {seasonTitle}
                 </h4>
                 <span className="font-body-sm text-xs text-on-surface-variant">
-                  {language === 'hi' ? 'मानसून आगमन: 12-16 जून (अपेक्षित)' : 'Monsoon Arrival: 12-16 June'}
+                  {seasonDetail}
                 </span>
               </div>
             </div>

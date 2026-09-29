@@ -27,8 +27,9 @@ export async function POST(req: NextRequest) {
     const genAI = new GoogleGenerativeAI(apiKey);
     const normalizedMime = normalizeAudioMimeType(mimeType);
 
-    const systemGrounding = `You are Mausam Vaani (मौसम-वाणी) Climate Copilot & Senior Agronomist AI for Central India.
-Current Location: ${location?.name || 'Indore, MP'} (${location?.lat || 22.7196}°N, ${location?.lng || 75.8577}°E).
+    const locName = location?.name ? `${location.name}${location.state ? ', ' + location.state : ''}` : 'India';
+    const systemGrounding = `You are Mausam Vaani (मौसम-वाणी) Climate Copilot & Senior Agronomist AI serving agricultural communities across India.
+Current Location: ${locName}${location?.lat ? ` (${location.lat}°N, ${location.lng}°E)` : ''}.
 Current Telemetry:
 - Temperature: ${weather?.temperature ?? 31}°C
 - Condition: ${weather?.conditionEn || 'Partly Cloudy'} (${weather?.conditionHi || 'आंशिक बादल'})

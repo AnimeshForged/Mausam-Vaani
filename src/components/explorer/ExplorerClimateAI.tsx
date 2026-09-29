@@ -26,6 +26,7 @@ export default function ExplorerClimateAI() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const clearSession = () => {
+    const stationCode = `Station ${(location?.name || 'IND').replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'IND'}-042`;
     setMessages([
       {
         id: `msg-${Date.now()}`,
@@ -34,8 +35,8 @@ export default function ExplorerClimateAI() {
         text: 'Session reset. Climate AI copilot is initialized with live ECMWF IFS and IMD Doppler boundary data. How can I assist with your meteorological research or field planning?',
         textHi: 'सत्र रीसेट हो गया है। मैं आपकी मौसम संबंधी शोध अथवा कार्य योजना में कैसे सहायता कर सकता हूँ?',
         consensusScore: 97.0,
-        modelBadge: 'ECMWF-IFS v48r1 • IMD Doppler MP-04',
-        sources: ['IMD Doppler Radar Station IND-042', 'Copernicus CDS ERA5 Boundary Layer'],
+        modelBadge: `ECMWF-IFS v48r1 • IMD Doppler ${stationCode}`,
+        sources: [`IMD Doppler Radar ${stationCode}`, 'Copernicus CDS ERA5 Boundary Layer'],
       },
     ]);
   };
@@ -61,23 +62,26 @@ export default function ExplorerClimateAI() {
     const now = new Date();
     const timeUser = new Date(now.getTime() - 2 * 60000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
     const timeBot = new Date(now.getTime() - 90000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    const locName = location?.name || 'Regional Agro-Zone';
+    const locNameHi = location?.nameHi || location?.name || 'क्षेत्रीय कृषि क्षेत्र';
+    const stationCode = `Station ${(location?.name || 'IND').replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'IND'}-042`;
 
     return [
       {
         id: 'msg-1',
         sender: 'user',
         timestamp: timeUser,
-        text: 'Evaluate the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in Depalpur block. Are there safe flight windows for ultra-low volume (ULV) fungicide broadcast over JS 20-34 soybean?',
+        text: `Evaluate the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in ${locName}. Are there safe flight windows for ultra-low volume (ULV) fungicide broadcast?`,
       },
       {
         id: 'msg-2',
         sender: 'assistant',
         timestamp: timeBot,
-        text: `Evaluating the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in Depalpur block. High squall shear (>45 km/h), deep convection, and hail risk develop rapidly post-11:30 IST across Depalpur and Sanwer corridors due to intense thermodynamic loading. The marginal drone window is early morning ${dayNameEn} 06:00 – 09:30 IST.`,
-        textHi: `देपालपुर ब्लॉक में कल दोपहर 11:30 के बाद 45 किमी/घंटा से अधिक तेज आंधी व ओलों की संभावना है। ड्रोन छिड़काव हेतु कल (${dayNameHi}) सुबह 6:00 से 9:30 बजे का समय ही सुरक्षित रहेगा।`,
+        text: `Evaluating the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in ${locName}. High squall shear (>45 km/h), deep convection, and gust risk develop rapidly post-11:30 IST across ${locName} corridors due to intense thermodynamic loading. The marginal drone window is early morning ${dayNameEn} 06:00 – 09:30 IST.`,
+        textHi: `${locNameHi} में कल दोपहर 11:30 के बाद 45 किमी/घंटा से अधिक तेज आंधी व मौसमी बदलाव की संभावना है। ड्रोन छिड़काव हेतु कल (${dayNameHi}) सुबह 6:00 से 9:30 बजे का समय ही सुरक्षित रहेगा।`,
         consensusScore: 96.4,
-        modelBadge: 'ECMWF-IFS v48r1 • IMD Doppler MP-04',
-        sources: ['IMD Doppler Radar Station IND-042', 'Copernicus CDS ERA5 Boundary Layer'],
+        modelBadge: `ECMWF-IFS v48r1 • IMD Doppler ${stationCode}`,
+        sources: [`IMD Doppler Radar ${stationCode}`, 'Copernicus CDS ERA5 Boundary Layer'],
         verdictCallout: {
           type: 'warning',
           title: 'Executive Flight Status: Constrained Window',
@@ -501,7 +505,7 @@ export default function ExplorerClimateAI() {
               </div>
               <div className="p-2.5 bg-surface-container-low rounded-xl flex items-center justify-between text-xs">
                 <span className="font-semibold text-on-surface">Doppler Radar Correlation</span>
-                <span className="text-primary font-bold">Station IND-042</span>
+                <span className="text-primary font-bold">Station {(location?.name || 'IND').replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'IND'}-042</span>
               </div>
             </div>
           </div>

@@ -216,22 +216,22 @@ export default function KisanAlerts() {
                     {language === 'hi' ? 'आपातकालीन आवाज सुनें' : 'Listen Emergency Audio'}
                   </span>
                   <span className="font-body-sm text-xs text-on-surface-variant">
-                    {language === 'hi' ? 'मालवी व सरल हिन्दी में उद्घोषणा • 0:32' : 'Spoken in Hindi & Malwi • 0:32'}
+                    {language === 'hi' ? 'सरल हिन्दी व क्षेत्रीय भाषा में उद्घोषणा' : 'Spoken Audio Broadcast in English & Hindi'}
                   </span>
                 </div>
               </div>
 
-              <div className="w-full sm:w-40 flex flex-col gap-1">
+              <div className="w-full sm:w-44 flex flex-col gap-1">
                 <div className="flex justify-between items-center text-outline font-label-sm text-[0.7rem]">
-                  <span>{isPlayingAlertAudio ? '0:14 / 0:32' : '0:00 / 0:32'}</span>
+                  <span>{isPlayingAlertAudio ? (language === 'hi' ? 'प्रसारण जारी...' : 'Broadcasting...') : (language === 'hi' ? 'ऑडियो तैयार' : 'Ready')}</span>
                   <span className="text-secondary font-bold">
-                    {isPlayingAlertAudio ? 'लाइव' : 'ऑडियो'}
+                    {isPlayingAlertAudio ? 'लाइव (LIVE)' : 'वॉइस'}
                   </span>
                 </div>
                 <div className="w-full h-2 bg-surface-container-high rounded-full overflow-hidden">
                   <div
                     className={`h-full bg-secondary rounded-full transition-all duration-300 ${
-                      isPlayingAlertAudio ? 'w-1/2' : 'w-0'
+                      isPlayingAlertAudio ? 'w-full animate-pulse' : 'w-0'
                     }`}
                   ></div>
                 </div>
@@ -575,7 +575,12 @@ export default function KisanAlerts() {
 
                   <button
                     className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary-container text-on-primary font-label-md text-xs hover:bg-primary shadow-xs transition-colors active:scale-95 cursor-pointer"
-                    onClick={() => playSpeech(directive.audioSnippetHi, 'hi-IN')}
+                    onClick={() => {
+                      const snippet = language === 'hi'
+                        ? directive.audioSnippetHi
+                        : (directive.audioSnippetEn || directive.descriptionEn || directive.titleEn);
+                      playSpeech(snippet, language === 'hi' ? 'hi-IN' : 'en-IN');
+                    }}
                     type="button"
                   >
                     <span className="material-symbols-outlined text-[1rem]">volume_up</span>
