@@ -31,11 +31,11 @@ export default function ExplorerWeatherDashboard() {
 
   const REGIONAL_RADAR_STATIONS: Record<string, { name: string; nameHi: string; state: string; lat: number; lng: number; elevation: number; district: string }[]> = {
     'Madhya Pradesh': [
-      { name: 'Indore (Depalpur / Sanwer)', nameHi: 'इंदौर (देपालपुर / सांवेर)', state: 'Madhya Pradesh', lat: 22.7196, lng: 75.8577, elevation: 553, district: 'Indore' },
-      { name: 'Bhopal (Berasia / Huzur)', nameHi: 'भोपाल (बैरसिया / हुजूर)', state: 'Madhya Pradesh', lat: 23.2599, lng: 77.4126, elevation: 527, district: 'Bhopal' },
-      { name: 'Ujjain (Tarana / Mahidpur)', nameHi: 'उज्जैन (तराना / महिदपुर)', state: 'Madhya Pradesh', lat: 23.1765, lng: 75.7885, elevation: 494, district: 'Ujjain' },
-      { name: 'Dewas (Sonkatch / Tonk Khurd)', nameHi: 'देवास (सोनकच्छ / टोंक खुर्द)', state: 'Madhya Pradesh', lat: 22.9676, lng: 76.0534, elevation: 535, district: 'Dewas' },
-      { name: 'Dhar (Badnawar / Sardarpur)', nameHi: 'धार (बदनावर / सरदारपुर)', state: 'Madhya Pradesh', lat: 22.5978, lng: 75.2979, elevation: 559, district: 'Dhar' },
+      { name: 'Indore (Met Station)', nameHi: 'इंदौर (मौसम केंद्र)', state: 'Madhya Pradesh', lat: 22.7196, lng: 75.8577, elevation: 553, district: 'Indore' },
+      { name: 'Bhopal (Met Station)', nameHi: 'भोपाल (मौसम केंद्र)', state: 'Madhya Pradesh', lat: 23.2599, lng: 77.4126, elevation: 527, district: 'Bhopal' },
+      { name: 'Ujjain (Met Station)', nameHi: 'उज्जैन (मौसम केंद्र)', state: 'Madhya Pradesh', lat: 23.1765, lng: 75.7885, elevation: 494, district: 'Ujjain' },
+      { name: 'Dewas (Met Station)', nameHi: 'देवास (मौसम केंद्र)', state: 'Madhya Pradesh', lat: 22.9676, lng: 76.0534, elevation: 535, district: 'Dewas' },
+      { name: 'Dhar (Met Station)', nameHi: 'धार (मौसम केंद्र)', state: 'Madhya Pradesh', lat: 22.5978, lng: 75.2979, elevation: 559, district: 'Dhar' },
       { name: 'Gwalior', nameHi: 'ग्वालियर', state: 'Madhya Pradesh', lat: 26.2183, lng: 78.1828, elevation: 211, district: 'Gwalior' },
       { name: 'Jabalpur', nameHi: 'जबलपुर', state: 'Madhya Pradesh', lat: 23.1815, lng: 79.9864, elevation: 411, district: 'Jabalpur' },
     ],

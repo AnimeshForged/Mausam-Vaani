@@ -8,7 +8,7 @@ const IMD_RADAR_STATIONS = [
   { id: 'LKO-DWR', name: 'Lucknow (Amausi Hub)', lat: 26.8467, lng: 80.9462, band: 'S-Band Doppler (EEC)', rangeKm: 250, qpeRangeKm: 100, state: 'Uttar Pradesh' },
   { id: 'DEL-DWR', name: 'New Delhi (Palam Station)', lat: 28.6139, lng: 77.2090, band: 'C-Band Doppler (BEL)', rangeKm: 250, qpeRangeKm: 100, state: 'Delhi NCR' },
   { id: 'BPL-DWR', name: 'Bhopal (IMD Central Hub)', lat: 23.2599, lng: 77.4126, band: 'S-Band Doppler (ISRO-ADR)', rangeKm: 250, qpeRangeKm: 100, state: 'Madhya Pradesh' },
-  { id: 'IND-DWR', name: 'Indore (Hatod Surveillance)', lat: 22.7196, lng: 75.8577, band: 'X-Band High-Res Radar', rangeKm: 150, qpeRangeKm: 75, state: 'Madhya Pradesh' },
+  { id: 'IND-DWR', name: 'Indore (DWR Observatory)', lat: 22.7196, lng: 75.8577, band: 'X-Band High-Res Radar', rangeKm: 150, qpeRangeKm: 75, state: 'Madhya Pradesh' },
   { id: 'PUN-DWR', name: 'Pune (Pashan IITM)', lat: 18.5204, lng: 73.8567, band: 'C-Band Dual-Pol Radar', rangeKm: 250, qpeRangeKm: 100, state: 'Maharashtra' },
   { id: 'BOM-DWR', name: 'Mumbai (Colaba Radar)', lat: 18.9220, lng: 72.8347, band: 'S-Band Coastal Radar', rangeKm: 250, qpeRangeKm: 100, state: 'Maharashtra' },
   { id: 'JAI-DWR', name: 'Jaipur (Sanganer DWR)', lat: 26.9124, lng: 75.7873, band: 'C-Band Doppler', rangeKm: 250, qpeRangeKm: 100, state: 'Rajasthan' },

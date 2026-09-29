@@ -216,8 +216,7 @@ Return ONLY valid JSON.`;
       descriptionHi: 'सिंचाई पंप चालू करने की आवश्यकता नहीं है, प्राकृतिक बारिश से खेत को पर्याप्त पानी मिलेगा।',
       descriptionEn: 'No need to run irrigation pumps tomorrow; natural rainfall will sufficiently saturate fields.',
     };
-  } else {
-    textEn = `Atmospheric telemetry for ${location.name} shows stable baseline conditions today with moderate surface insolation (780 W/m²), ambient temperature around ${weather.temperature}°C, and relative humidity at ${weather.relativeHumidity}%. The Western Malwa convective corridor remains under dual-model Doppler observation.`;
+    textEn = `Atmospheric telemetry for ${location.name} shows stable baseline conditions today with moderate surface insolation (780 W/m²), ambient temperature around ${weather.temperature}°C, and relative humidity at ${weather.relativeHumidity}%. The ${location.district || location.name} atmospheric corridor remains under continuous multi-model Doppler observation.`;
     textHi = `${location.nameHi || location.name} के मौसम विश्लेषण अनुसार आज तापमान ${weather.temperature}°C और आर्द्रता ${weather.relativeHumidity}% है। मौसम विभाग एवं उपग्रह रडार द्वारा निरंतर निगरानी रखी जा रही है।`;
     verdict = {
       type: 'info',

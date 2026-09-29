@@ -267,16 +267,16 @@ export default function Header() {
               )}
             </button>
 
-            {/* Ramesh Patel Profile */}
+            {/* Farmer Profile */}
             <div
               className="hidden xl:flex items-center gap-1.5 pl-1 cursor-pointer shrink-0"
               onClick={() => {
                 if (mode === 'kisan') setActiveKisanTab('land');
               }}
-              title="Farmer Ramesh Patel (Hatod, MP)"
+              title={language === 'hi' ? `किसान प्रोफ़ाइल (${location.district || location.name})` : `Farmer Profile (${location.district || location.name})`}
             >
               <img
-                alt="Farmer Ramesh Patel"
+                alt={language === 'hi' ? 'किसान प्रोफ़ाइल' : 'Farmer Profile'}
                 className="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed"
                 src="/images/farmer-ramesh.png"
                 onError={(e) => {
