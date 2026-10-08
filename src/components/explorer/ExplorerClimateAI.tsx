@@ -25,20 +25,22 @@ export default function ExplorerClimateAI() {
   const [isListening, setIsListening] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const clearSession = () => {
+  const createInitialMessage = (): ChatMessage => {
     const stationCode = `Station ${(location?.name || 'IND').replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'IND'}-042`;
-    setMessages([
-      {
-        id: `msg-${Date.now()}`,
-        sender: 'assistant',
-        timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-        text: 'Session reset. Climate AI copilot is initialized with live ECMWF IFS and IMD Doppler boundary data. How can I assist with your meteorological research or field planning?',
-        textHi: 'सत्र रीसेट हो गया है। मैं आपकी मौसम संबंधी शोध अथवा कार्य योजना में कैसे सहायता कर सकता हूँ?',
-        consensusScore: 97.0,
-        modelBadge: `ECMWF-IFS v48r1 • IMD Doppler ${stationCode}`,
-        sources: [`IMD Doppler Radar ${stationCode}`, 'Copernicus CDS ERA5 Boundary Layer'],
-      },
-    ]);
+    return {
+      id: `msg-${Date.now()}`,
+      sender: 'assistant',
+      timestamp: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+      text: `Climate AI copilot is initialized with live ECMWF IFS and IMD Doppler boundary data for ${location?.name || 'your region'}. How can I assist with your meteorological research, weather analysis, or field planning?`,
+      textHi: `${location?.nameHi || location?.name || 'आपके क्षेत्र'} के लिए क्लाइमेट AI कोपायलट सक्रिय है। मैं आपकी मौसम संबंधी शोध अथवा कार्य योजना में कैसे सहायता कर सकता हूँ?`,
+      consensusScore: 98.0,
+      modelBadge: `ECMWF-IFS v48r1 • IMD Doppler ${stationCode}`,
+      sources: [`IMD Doppler Radar ${stationCode}`, 'Copernicus CDS ERA5 Boundary Layer'],
+    };
+  };
+
+  const clearSession = () => {
+    setMessages([createInitialMessage()]);
   };
 
   const exportTranscript = () => {
@@ -54,47 +56,7 @@ export default function ExplorerClimateAI() {
     URL.revokeObjectURL(url);
   };
 
-  const [messages, setMessages] = useState<ChatMessage[]>(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const dayNameEn = tomorrow.toLocaleDateString('en-US', { weekday: 'long' });
-    const dayNameHi = tomorrow.toLocaleDateString('hi-IN', { weekday: 'long' });
-    const now = new Date();
-    const timeUser = new Date(now.getTime() - 2 * 60000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-    const timeBot = new Date(now.getTime() - 90000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-    const locName = location?.name || 'Regional Agro-Zone';
-    const locNameHi = location?.nameHi || location?.name || 'क्षेत्रीय कृषि क्षेत्र';
-    const stationCode = `Station ${(location?.name || 'IND').replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'IND'}-042`;
-
-    return [
-      {
-        id: 'msg-1',
-        sender: 'user',
-        timestamp: timeUser,
-        text: `Evaluate the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in ${locName}. Are there safe flight windows for ultra-low volume (ULV) fungicide broadcast?`,
-      },
-      {
-        id: 'msg-2',
-        sender: 'assistant',
-        timestamp: timeBot,
-        text: `Evaluating the 48-hour precipitation probability and surface wind shear for drone pesticide spraying in ${locName}. High squall shear (>45 km/h), deep convection, and gust risk develop rapidly post-11:30 IST across ${locName} corridors due to intense thermodynamic loading. The marginal drone window is early morning ${dayNameEn} 06:00 – 09:30 IST.`,
-        textHi: `${locNameHi} में कल दोपहर 11:30 के बाद 45 किमी/घंटा से अधिक तेज आंधी व मौसमी बदलाव की संभावना है। ड्रोन छिड़काव हेतु कल (${dayNameHi}) सुबह 6:00 से 9:30 बजे का समय ही सुरक्षित रहेगा।`,
-        consensusScore: 96.4,
-        modelBadge: `ECMWF-IFS v48r1 • IMD Doppler ${stationCode}`,
-        sources: [`IMD Doppler Radar ${stationCode}`, 'Copernicus CDS ERA5 Boundary Layer'],
-        verdictCallout: {
-          type: 'warning',
-          title: 'Executive Flight Status: Constrained Window',
-          description: `Marginal Drone Window: ${dayNameEn} 06:00 – 09:30 IST. Postpone afternoon flight schedules.`,
-        },
-        tableData: [
-          { 'Time Block': '06:00 - 09:30 IST', 'Gust Field': '8-14 km/h', 'Precip Prob': '15%', 'Stability (CAPE)': '450 J/kg', 'UAV Feasibility': 'Favorable (Safe)' },
-          { 'Time Block': '09:30 - 12:00 IST', 'Gust Field': '18-28 km/h', 'Precip Prob': '35%', 'Stability (CAPE)': '1,200 J/kg', 'UAV Feasibility': 'Marginal (Caution)' },
-          { 'Time Block': '12:00 - 18:00 IST', 'Gust Field': '45-65 km/h', 'Precip Prob': '75%', 'Stability (CAPE)': '2,600 J/kg', 'UAV Feasibility': 'Unsafe (Aborted)' },
-        ],
-      },
-    ];
-  });
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
 
   const handleSend = async (queryText?: string) => {
     const q = (queryText || inputQuery).trim();
@@ -260,7 +222,7 @@ export default function ExplorerClimateAI() {
                 <div className="flex flex-col">
                   <span className="text-[0.65rem] uppercase text-outline font-bold tracking-wider">Active Session Topic</span>
                   <span className="font-bold text-xs text-on-surface">
-                    {location.district || location.name} Agronomic Boundary Conditions & Spraying Windows
+                    {location.district || location.name} Agronomic Boundary Conditions & Weather Advisory
                   </span>
                 </div>
               </div>
@@ -377,8 +339,8 @@ export default function ExplorerClimateAI() {
                         )}
 
                         {/* Text Explanation */}
-                        <div className="bg-surface-container-low p-space-md rounded-2xl text-xs sm:text-sm text-on-surface leading-relaxed border border-outline-variant/20">
-                          {m.text}
+                        <div className="bg-surface-container-low p-space-md rounded-2xl text-xs sm:text-sm text-on-surface leading-relaxed border border-outline-variant/20 whitespace-pre-line">
+                          {language === 'hi' && m.textHi ? m.textHi : m.text}
                         </div>
 
                         {/* Parametric Flight Matrix Table */}

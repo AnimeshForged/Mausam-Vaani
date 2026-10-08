@@ -187,9 +187,13 @@ Return ONLY valid JSON.`;
   let verdict: ChatMessage['verdictCallout'] | undefined;
   let tableData: Array<Record<string, string>> | undefined;
 
-  if (lower.includes('drone') || lower.includes('spray') || lower.includes('छिड़काव') || lower.includes('कीटनाशक') || lower.includes('कल')) {
-    textEn = `Evaluating the 48-hour precipitation probability and surface wind shear for pesticide spraying in ${location.name}. High squall shear (>45 km/h) and hail cells develop rapidly after 11:30 IST tomorrow due to thermodynamic convective buildup. Marginal safe drone flight window is early morning Wednesday 06:00 – 09:30 IST.`;
-    textHi = `कल दोपहर बाद 11:30 के उपरांत 45 किमी/घंटा से अधिक तेज आंधी व ओलों की संभावना है। कीटनाशक या ड्रोन छिड़काव के लिए कल सुबह 6:00 से 9:30 बजे तक ही सीमित सुरक्षित समय मिलेगा।`;
+  if (lower.includes('drone') || lower.includes('spray') || lower.includes('छिड़काव') || lower.includes('कीटनाशक')) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dayNameEn = tomorrow.toLocaleDateString('en-US', { weekday: 'long' });
+    const dayNameHi = tomorrow.toLocaleDateString('hi-IN', { weekday: 'long' });
+    textEn = `Evaluating the 48-hour precipitation probability and surface wind shear for pesticide spraying in ${location.name}. High squall shear (>45 km/h) and hail cells develop rapidly after 11:30 IST tomorrow due to thermodynamic convective buildup. Marginal safe drone flight window is early morning ${dayNameEn} 06:00 – 09:30 IST.`;
+    textHi = `कल (${dayNameHi}) दोपहर बाद 11:30 के उपरांत 45 किमी/घंटा से अधिक तेज आंधी व ओलों की संभावना है। कीटनाशक या ड्रोन छिड़काव के लिए कल सुबह 6:00 से 9:30 बजे तक ही सीमित सुरक्षित समय मिलेगा।`;
     verdict = {
       type: 'warning',
       title: queryLang === 'hi' ? 'सीमित छिड़काव समय (उच्च धुलाई जोखिम)' : 'Constrained Spray Window (High Washout Risk)',
@@ -201,10 +205,10 @@ Return ONLY valid JSON.`;
     };
     tableData = [
       { 'Time Block': '06:00 - 09:30 IST', 'Gust Field': '8-14 km/h', 'Precip Prob': '15%', 'UAV Feasibility': 'Favorable (Safe)' },
-      { '09:30 - 12:00 IST': '18-28 km/h', 'Precip Prob': '35%', 'UAV Feasibility': 'Marginal (Caution)' },
-      { '12:00 - 18:00 IST': '45-65 km/h', 'Precip Prob': '75%', 'UAV Feasibility': 'Unsafe (Aborted)' },
+      { 'Time Block': '09:30 - 12:00 IST', 'Gust Field': '18-28 km/h', 'Precip Prob': '35%', 'UAV Feasibility': 'Marginal (Caution)' },
+      { 'Time Block': '12:00 - 18:00 IST', 'Gust Field': '45-65 km/h', 'Precip Prob': '75%', 'UAV Feasibility': 'Unsafe (Aborted)' },
     ];
-  } else if (lower.includes('tomorrow') || lower.includes('कल') || lower.includes('water') || lower.includes('पानी')) {
+  } else if (lower.includes('tomorrow') || lower.includes('कल') || lower.includes('water') || lower.includes('पानी') || lower.includes('बारिश') || lower.includes('rain')) {
     textEn = `Tomorrow in ${location.name}, expect convective cloud formations starting around 12:00 IST with a 70% probability of localized thunderstorm activity and up to 18mm rainfall. Morning temperatures will hover around 24°C, rising to 30°C peak.`;
     textHi = `कल ${location.nameHi || location.name} में दोपहर 12 बजे के बाद 70% बारिश और गरज चमक के आसार हैं। सिंचाई पंप चालू करने की आवश्यकता नहीं है, प्राकृतिक बारिश से खेत को पर्याप्त पानी मिलेगा।`;
     verdict = {
@@ -216,6 +220,7 @@ Return ONLY valid JSON.`;
       descriptionHi: 'सिंचाई पंप चालू करने की आवश्यकता नहीं है, प्राकृतिक बारिश से खेत को पर्याप्त पानी मिलेगा।',
       descriptionEn: 'No need to run irrigation pumps tomorrow; natural rainfall will sufficiently saturate fields.',
     };
+  } else {
     textEn = `Atmospheric telemetry for ${location.name} shows stable baseline conditions today with moderate surface insolation (780 W/m²), ambient temperature around ${weather.temperature}°C, and relative humidity at ${weather.relativeHumidity}%. The ${location.district || location.name} atmospheric corridor remains under continuous multi-model Doppler observation.`;
     textHi = `${location.nameHi || location.name} के मौसम विश्लेषण अनुसार आज तापमान ${weather.temperature}°C और आर्द्रता ${weather.relativeHumidity}% है। मौसम विभाग एवं उपग्रह रडार द्वारा निरंतर निगरानी रखी जा रही है।`;
     verdict = {

@@ -40,8 +40,7 @@ export function buildDomainCopilotFallback(
     lower.includes('drone') ||
     lower.includes('spray') ||
     lower.includes('छिड़काव') ||
-    lower.includes('कीटनाशक') ||
-    lower.includes('कल')
+    lower.includes('कीटनाशक')
   ) {
     const textEn = `Evaluating 48-hour precipitation probability and surface wind shear for spraying in ${locName}. High squall shear (>45 km/h) and convective cells develop rapidly post-noon tomorrow. The optimal window is early morning ${tomorrowDayEn} 06:00 – 09:30 IST.`;
     const textHi = `कल (${tomorrowDayHi}) दोपहर बाद 11:30 के उपरांत 45 किमी/घंटा से अधिक तेज आंधी व ओलों की संभावना है। कीटनाशक या ड्रोन छिड़काव के लिए कल सुबह 6:00 से 9:30 बजे तक ही सीमित सुरक्षित समय मिलेगा।`;
