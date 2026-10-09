@@ -375,7 +375,7 @@ export default function KisanVoiceAssistant() {
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               {/* Voice Language Selector */}
               <div className="flex items-center bg-surface-container rounded-full p-0.5 border border-outline-variant/30">
                 <button

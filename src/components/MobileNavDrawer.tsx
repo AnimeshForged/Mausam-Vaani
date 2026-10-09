@@ -34,6 +34,17 @@ export default function MobileNavDrawer({
 
   const t = translations[language];
 
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const navigateKisan = (tab: typeof activeKisanTab) => {

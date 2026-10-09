@@ -110,7 +110,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed top-0 inset-x-0 h-20 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 transition-colors">
+      <header className="fixed top-0 inset-x-0 h-16 sm:h-20 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 transition-colors">
         <div className="w-full h-full px-2 sm:px-3 md:px-4 lg:px-space-lg flex items-center justify-between gap-1 sm:gap-2 lg:gap-space-md min-w-0">
           {/* Left: Mobile Hamburger & Logo */}
           <div className="flex items-center gap-1 sm:gap-space-sm min-w-0 shrink">
@@ -142,7 +142,7 @@ export default function Header() {
                 <span className="material-symbols-outlined text-[1.25rem] sm:text-[1.5rem]">cloud_sync</span>
               </div>
               <div className="flex items-baseline gap-1 sm:gap-space-xs min-w-0">
-                <span className="font-headline-sm text-xs sm:text-sm lg:text-base text-primary tracking-tight font-bold truncate">
+                <span className="font-headline-sm text-xs sm:text-sm lg:text-base text-primary tracking-tight font-bold truncate hidden min-[440px]:inline">
                   {language === 'hi' ? 'मौसम वाणी' : 'Mausam Vaani'}
                 </span>
                 <span className="font-label-sm text-[0.65rem] sm:text-label-sm text-outline uppercase tracking-wider font-semibold hidden xl:inline shrink-0">
@@ -196,7 +196,7 @@ export default function Header() {
               title="Click to change location"
             >
               <span className="material-symbols-outlined text-primary text-[1rem] sm:text-[1.2rem]">location_on</span>
-              <span className="font-label-sm text-[0.68rem] sm:text-xs lg:text-label-sm font-semibold max-w-[70px] xs:max-w-[90px] sm:max-w-[120px] xl:max-w-[160px] truncate">
+              <span className="font-label-sm text-[0.68rem] sm:text-xs lg:text-label-sm font-semibold max-w-[60px] min-[390px]:max-w-[85px] sm:max-w-[120px] xl:max-w-[160px] truncate">
                 {language === 'hi' ? location.nameHi || location.name : location.name}
               </span>
               <span className="text-outline text-label-sm hidden xl:inline">•</span>

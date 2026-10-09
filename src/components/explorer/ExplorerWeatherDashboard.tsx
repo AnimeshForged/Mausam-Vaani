@@ -541,7 +541,7 @@ export default function ExplorerWeatherDashboard() {
           </div>
         </div>
 
-        <div className="flex gap-space-sm overflow-x-auto pb-space-xs pt-space-xs" style={{ scrollbarWidth: 'none' }}>
+        <div className="flex gap-space-sm overflow-x-auto no-scrollbar pb-space-xs pt-space-xs" style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
           {weather.hourly.slice(0, hourlyRange).map((h, i) => (
             <div
               key={i}

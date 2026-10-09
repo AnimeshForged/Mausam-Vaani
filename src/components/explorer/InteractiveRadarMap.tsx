@@ -447,8 +447,8 @@ export default function InteractiveRadarMap() {
 
   return (
     <div
-      className={`relative w-full rounded-3xl overflow-hidden shadow-lg border border-surface-container-high transition-all ${
-        isFullscreen ? 'fixed inset-0 z-50 rounded-none h-screen' : 'h-[520px] sm:h-[580px]'
+      className={`relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg border border-surface-container-high transition-all ${
+        isFullscreen ? 'fixed inset-0 z-50 rounded-none h-screen' : 'h-[460px] sm:h-[540px] md:h-[580px]'
       }`}
     >
       {/* Map Element Container */}
@@ -647,7 +647,7 @@ export default function InteractiveRadarMap() {
           </button>
 
           {/* Timeline Range Slider */}
-          <div className="flex items-center gap-2 min-w-[130px] sm:min-w-[170px]">
+          <div className="flex items-center gap-1.5 min-w-[70px] sm:min-w-[150px] flex-1">
             <input
               type="range"
               min={0}

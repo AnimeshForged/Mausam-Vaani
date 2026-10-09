@@ -391,7 +391,7 @@ export default function ExplorerClimateAI() {
               <div className="flex items-center gap-space-xs bg-surface-container-low rounded-2xl p-space-xs border border-outline-variant/30 focus-within:ring-2 focus-within:ring-primary">
                 <input
                   type="text"
-                  placeholder="Ask a detailed meteorological query (e.g. 'what about tomorrow?', 'drone flight parameters')..."
+                  placeholder="Ask a meteorological query or tap mic..."
                   value={inputQuery}
                   onChange={(e) => setInputQuery(e.target.value)}
                   onKeyDown={(e) => {
@@ -412,7 +412,7 @@ export default function ExplorerClimateAI() {
                 <button
                   onClick={() => handleSend()}
                   disabled={isLoading || !inputQuery.trim()}
-                  className="px-4 py-2 bg-primary text-on-primary rounded-xl font-bold text-xs hover:bg-primary-container disabled:opacity-50 transition-all active:scale-95 cursor-pointer shrink-0"
+                  className="px-3 sm:px-4 py-2 bg-primary text-on-primary rounded-xl font-bold text-xs hover:bg-primary-container disabled:opacity-50 transition-all active:scale-95 cursor-pointer shrink-0"
                   type="button"
                 >
                   Send
@@ -420,8 +420,8 @@ export default function ExplorerClimateAI() {
               </div>
 
               {/* Quick Inquiry Pills */}
-              <div className="flex flex-wrap items-center gap-1 text-xs">
-                <span className="text-[0.7rem] text-outline font-bold">Follow-ups:</span>
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+                <span className="text-[0.7rem] text-outline font-bold shrink-0">Follow-ups:</span>
                 {[
                   'What about tomorrow?',
                   'Can I spray fungicide JS 20-34?',
@@ -432,7 +432,7 @@ export default function ExplorerClimateAI() {
                     key={idx}
                     onClick={() => handleSend(s)}
                     disabled={isLoading}
-                    className="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high text-[0.7rem] transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+                    className="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant hover:bg-surface-container-high text-[0.7rem] whitespace-nowrap transition-all active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
                     type="button"
                   >
                     {s}
