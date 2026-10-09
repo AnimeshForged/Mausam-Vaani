@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     }
 
     const { imageBase64 } = body;
-    const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey || !imageBase64) {
       return NextResponse.json(DEFAULT_SOIL_RESPONSE);
