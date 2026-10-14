@@ -266,7 +266,7 @@ export function generateAgrometBulletinHtml(
       <td class="title-col">
         <div class="gov-title">${isHi ? 'भारत सरकार • पृथ्वी विज्ञान मंत्रालय' : 'GOVERNMENT OF INDIA • MINISTRY OF EARTH SCIENCES'}</div>
         <div class="dept-title">${isHi ? 'भारत मौसम विज्ञान विभाग • राष्ट्रीय कृषि मौसम वेधशाला' : 'INDIA METEOROLOGICAL DEPARTMENT • NATIONAL AGROMET DIVISION'}</div>
-        <div class="sub-title">${isHi ? 'ग्रामीण कृषि मौसम सेवा (GKMS) • मौसम-वाणी संवर्धित बुलेटिन' : 'Gramin Krishi Mausam Sewa (GKMS) • Akash-Vaani Synoptic Portal'}</div>
+        <div class="sub-title">${isHi ? 'ग्रामीण कृषि मौसम सेवा (GKMS) • मौसम-वाणी संवर्धित बुलेटिन' : 'Gramin Krishi Mausam Sewa (GKMS) • Mausam-Vaani Synoptic Portal'}</div>
       </td>
       <td class="emblem-col">
         <div class="seal-box">
