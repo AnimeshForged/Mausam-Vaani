@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useApp } from '@/context/AppContext';
 import { translations } from '@/lib/translations';
 import { SpeechHandler, detectQueryLanguage } from '@/lib/speechService';
@@ -248,13 +249,12 @@ export default function KisanHome() {
       <section className="relative bg-surface-container-lowest rounded-2xl p-space-md md:p-space-lg shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md border border-surface-container-high">
         <div className="flex items-center gap-space-md min-w-0">
           <div className="relative shrink-0">
-            <img
+            <Image
               alt="Ramesh Patel Profile"
               className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full object-cover shadow-md ring-4 ring-primary-fixed"
               src="/images/farmer-ramesh.png"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDq7Fe2bTiC-A9FsJWLnWrxhyQlYkBFVjVPuYhiTVv3hJKENXuTiPeAtTs9oLod3oWd1NSkvYHfZl_mEtL9PnXR3SxwxjeiIl7m9z_blNtMHW5hXnbLIy6bL3YJXDpYmFIxKCgAT4nsvF31edW7cnS0BVMq4FyFDAoYBfDxRb8N9I__vTkYFAVuLACso4_1hNEtmzr00N1JqpuEA5EnJDAlvj67up9DYbOhMIrGP1kYIK7rdqv6dppR';
-              }}
+              width={80}
+              height={80}
             />
             <span className="absolute bottom-0 right-0 w-5 h-5 sm:w-6 sm:h-6 bg-primary-container rounded-full flex items-center justify-center text-on-primary shadow-sm ring-2 ring-surface-container-lowest">
               <span className="material-symbols-outlined text-[0.875rem] sm:text-[1rem]">check</span>

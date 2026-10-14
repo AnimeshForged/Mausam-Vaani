@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useApp } from '@/context/AppContext';
 import { searchIndiaLocations } from '@/lib/indiaLocations';
 import { translations } from '@/lib/translations';
@@ -275,13 +276,12 @@ export default function Header() {
               }}
               title={language === 'hi' ? `किसान प्रोफ़ाइल (${location.district || location.name})` : `Farmer Profile (${location.district || location.name})`}
             >
-              <img
+              <Image
                 alt={language === 'hi' ? 'किसान प्रोफ़ाइल' : 'Farmer Profile'}
                 className="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed"
                 src="/images/farmer-ramesh.png"
-                onError={(e) => {
-                  (e.target as HTMLElement).style.display = 'none';
-                }}
+                width={32}
+                height={32}
               />
               <span className="material-symbols-outlined text-primary text-[1rem]">
                 verified

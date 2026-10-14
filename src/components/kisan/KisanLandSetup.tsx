@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { useApp } from '@/context/AppContext';
 import { translations } from '@/lib/translations';
 import { diagnoseSoilFromPhoto, STANDARD_SOIL_TYPES } from '@/lib/cropAdvisorService';
@@ -271,10 +272,12 @@ export default function KisanLandSetup() {
 
                   {/* Soil Image */}
                   <div className="w-full h-40 rounded-xl overflow-hidden relative mb-space-sm bg-surface-container">
-                    <img
+                    <Image
                       className="w-full h-full object-cover"
                       alt={soil.nameEn}
                       src={soil.image}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 320px"
                     />
                     <div className="absolute bottom-2 left-2 bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface px-space-xs py-0.5 rounded font-label-sm text-xs font-semibold">
                       {soil.classType}

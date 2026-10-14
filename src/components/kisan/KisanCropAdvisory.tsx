@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { useApp } from '@/context/AppContext';
 import { translations } from '@/lib/translations';
 import { CropRecommendation } from '@/types';
@@ -236,10 +237,13 @@ export default function KisanCropAdvisory() {
           </div>
 
           <div className="relative w-full h-28 rounded-xl overflow-hidden my-2 bg-surface-container">
-            <img
+            <Image
               className="w-full h-full object-cover"
               alt="Field satellite imagery"
               src={soilConfig.photoUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBgJ0TqIxUFVVJJUYabKKbdZVscGortF4aKFRTs9lpNjK9SyOmbrRIdt8TNvrLr0C1HQkiAaX2nDnCyM3ZTRKi0Suwsd6_6tNJICiLaLxbIzHg98N9tWzbGyEl6m0WTI0-5bNVmlPwlEXI26hysZwP535L4-lPcybLbtHtmY63V3fqEGXS92Z1M9BhDoy-HgbaIIgyUBKodL2XEOi0i-iG8I1OTIfT8XrUfVvpRlFq9BE0Y4CwPbV47'}
+              fill
+              unoptimized={Boolean(soilConfig.photoUrl?.startsWith('data:'))}
+              sizes="(max-width: 768px) 100vw, 384px"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-transparent to-transparent"></div>
             <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-inverse-on-surface text-xs font-bold">
@@ -353,10 +357,12 @@ export default function KisanCropAdvisory() {
 
                 {/* Crop Image */}
                 <div className="relative w-full h-40 rounded-2xl overflow-hidden mb-space-sm bg-surface-container">
-                  <img
+                  <Image
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     alt={crop.nameEn}
                     src={crop.imageUrl}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 320px"
                   />
                   <div className="absolute bottom-2 right-2 bg-inverse-surface/80 text-inverse-on-surface px-space-xs py-0.5 rounded-lg text-[0.75rem] backdrop-blur-sm font-semibold">
                     {crop.variety}
