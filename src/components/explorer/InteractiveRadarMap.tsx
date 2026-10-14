@@ -269,6 +269,7 @@ export default function InteractiveRadarMap() {
         mapInstanceRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Leaflet map instance is created on mount/theme change; dynamic updates are handled in dedicated effects below.
   }, [mapTheme, showRadarRings, isTouchDevice]);
 
   // Synchronize mobile gesture locking to prevent page scrolling interception
@@ -302,7 +303,7 @@ export default function InteractiveRadarMap() {
     if (activeMarkerRef.current) {
       activeMarkerRef.current.setLatLng([location.lat, location.lng]);
     }
-  }, [location.lat, location.lng]);
+  }, [location]);
 
   // Update Live Radar Tile Layer on current frame change
   useEffect(() => {
@@ -436,7 +437,7 @@ export default function InteractiveRadarMap() {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [showWind, weather.current.windSpeed, weather.current.windDirection]);
+  }, [showWind, weather]);
 
   // Current frame timestamp label formatted to IST
   const currentFrameTimeStr = useMemo(() => {

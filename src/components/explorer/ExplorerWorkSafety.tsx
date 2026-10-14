@@ -216,7 +216,7 @@ export default function ExplorerWorkSafety() {
     }
 
     return result;
-  }, [weather?.hourly, weather?.current, currentTemp, currentHumidity, location.district, location.name]);
+  }, [weather, currentTemp, currentHumidity, location.district, location.name]);
 
   const taskGuidance: Record<
     WorkTaskType,

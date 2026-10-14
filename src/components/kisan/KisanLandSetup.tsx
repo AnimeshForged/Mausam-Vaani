@@ -43,13 +43,13 @@ export default function KisanLandSetup() {
 
   useEffect(() => {
     stopSpeech();
-  }, [language]);
+  }, [language, stopSpeech]);
 
   useEffect(() => {
     return () => {
       stopSpeech();
     };
-  }, []);
+  }, [stopSpeech]);
 
   const handleSelectSoil = (soil: typeof STANDARD_SOIL_TYPES[0]) => {
     setSoilConfig(prev => ({

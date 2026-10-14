@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { AirQualityInfo, AppMode, ConsensusInfo, CropRecommendation, GovernmentAlert, Language, LocationInfo, NetworkMode, SoilConfig, WeatherCurrent, WeatherDaily, WeatherData, WeatherHourly } from '@/types';
 import { DEFAULT_LOCATION, fetchWeatherData, getFallbackWeatherData } from '@/lib/weatherService';
 import { ACTIVE_GOVERNMENT_ALERTS, getAlertsForLocation } from '@/lib/alertService';
@@ -207,7 +207,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Fetch Weather Data
-  const refreshWeather = async () => {
+  const refreshWeather = useCallback(async () => {
     setIsLoadingWeather(true);
     try {
       const res = await fetchWeatherData(location.lat, location.lng);
@@ -217,25 +217,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoadingWeather(false);
     }
-  };
+  }, [location.lat, location.lng]);
 
   useEffect(() => {
     refreshWeather();
-  }, [location.lat, location.lng]);
+  }, [refreshWeather]);
 
   // Update Alerts dynamically when location or weather telemetry changes
   useEffect(() => {
     setAlerts(getAlertsForLocation(location, weather?.current));
-  }, [
-    location.name,
-    location.district,
-    location.state,
-    weather?.current?.temperature,
-    weather?.current?.relativeHumidity,
-    weather?.current?.weatherCode,
-    weather?.current?.windSpeed,
-    weather?.current?.precipitation,
-  ]);
+  }, [location, weather]);
 
   // Update Crop Recommendations when soilConfig changes
   useEffect(() => {

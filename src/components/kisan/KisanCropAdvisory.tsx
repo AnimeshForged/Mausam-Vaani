@@ -40,13 +40,13 @@ export default function KisanCropAdvisory() {
   useEffect(() => {
     stopSpeech();
     setPlayingCropId(null);
-  }, [language]);
+  }, [language, stopSpeech]);
 
   useEffect(() => {
     return () => {
       stopSpeech();
     };
-  }, []);
+  }, [stopSpeech]);
 
   const filteredCrops = cropRecommendations.filter(c => {
     if (categoryFilter === 'seasonal') {
