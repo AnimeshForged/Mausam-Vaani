@@ -306,12 +306,4 @@ npm run start
 - **Meteorological Ensembles**: ECMWF IFS (0.25° grid), NOAA GFS, Doppler Weather Radar (DWR) reflectivity mosaics, Quantitative Precipitation Estimation (QPE).
 - **Rural Web Engineering**: Material Design 3 high-contrast tokens, Web Audio API synthesis, 2G bandwidth degradation mode, client-side normalized query caching.
 
----
 
-## Author & Acknowledgements
-
-Developed with a focus on climate resilience and technological equity for Indian agriculture.
-
-- **Author**: Animesh Shukla
-- **Profiles**: [LinkedIn](https://linkedin.com/in/animesh-shukla-96a179325/)
-- **Data Providers**: [Open-Meteo](https://open-meteo.com/), [RainViewer](https://www.rainviewer.com/), [India Meteorological Department (IMD)](https://mausam.imd.gov.in/), [Indian Council of Agricultural Research (ICAR)](https://icar.org.in/).
