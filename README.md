@@ -112,7 +112,6 @@ npm run start
 - **Dialectal acoustic variations:** While Hindi and Hinglish queries are supported, highly localized rural dialects (e.g., Malvi, Nimadi, Bhojpuri) may experience higher speech-to-text word error rates in noisy field environments.
 - **Radar coverage boundaries:** Doppler radar reflectivity relies on RainViewer feeds and proximity to active IMD radar stations (150–250 km radius); peripheral mountainous or deep inland regions have reduced radar resolution.
 
----
 
 ## Future Scope
 
