@@ -34,7 +34,6 @@ export default function RouteMapOverview({
 }: RouteMapOverviewProps) {
   return (
     <div className="flex flex-col gap-space-lg">
-      {/* Corridor Summary Metrics Strip */}
       <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-sm">
         <div className="bg-surface-container-lowest p-space-md rounded-2xl border border-surface-container-high shadow-xs flex flex-col justify-between min-w-0">
           <span className="text-xs text-on-surface-variant font-bold flex items-center justify-between gap-1">
@@ -99,7 +98,6 @@ export default function RouteMapOverview({
         </div>
       </section>
 
-      {/* Visual Corridor Diagram (Waypoints Journey Bar) */}
       <section className="bg-surface-container-lowest rounded-3xl p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
           <div>
@@ -126,9 +124,7 @@ export default function RouteMapOverview({
           </div>
         </div>
 
-        {/* Schematic Corridor Flow */}
         <div className="relative py-4 px-2">
-          {/* Connecting Line */}
           <div className="absolute top-1/2 left-6 right-6 h-1 -translate-y-1/2 bg-surface-container-high z-0 hidden xl:block"></div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 relative z-10">
@@ -198,7 +194,6 @@ export default function RouteMapOverview({
           </div>
         </div>
 
-        {/* Expanded Segment Detail Modal / Box */}
         {selectedSegmentIdx !== null && dynamicSegments[selectedSegmentIdx] && (
           <div className="p-space-md rounded-2xl bg-surface-container-low border border-primary/30 flex flex-col gap-2 animate-fadeIn">
             <div className="flex items-center justify-between">

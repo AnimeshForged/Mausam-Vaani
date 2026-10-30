@@ -29,7 +29,6 @@ export function generateAgrometBulletinHtml(
   const stubbleRisk = isHi ? (aqiInfo?.stubbleSmokeRiskHi || 'कम') : (aqiInfo?.stubbleSmokeRisk || 'Low');
   const aqiAdvisory = isHi ? (aqiInfo?.healthAdvisoryHi || 'कृषि कार्यों के लिए वायु गुणवत्ता उपयुक्त है।') : (aqiInfo?.healthAdvisoryEn || 'Air quality is favorable for standard outdoor farm operations.');
 
-  // Crop advice logic based on forecast
   const avgRainChance = weather.daily && weather.daily.length > 0
     ? Math.round(weather.daily.reduce((acc: number, d: WeatherDaily) => acc + d.precipitationProbability, 0) / weather.daily.length)
     : 10;
@@ -439,7 +438,6 @@ export function printAgrometBulletin(
 ): void {
   const html = generateAgrometBulletinHtml(location, weather, language);
   
-  // Use a hidden iframe for seamless printing without popup blocker issues
   const iframe = document.createElement('iframe');
   iframe.style.position = 'fixed';
   iframe.style.right = '0';
@@ -452,7 +450,6 @@ export function printAgrometBulletin(
 
   const doc = iframe.contentDocument || iframe.contentWindow?.document;
   if (!doc) {
-    // Fallback: Open popup window
     const printWindow = window.open('', '_blank');
     if (printWindow) {
       printWindow.document.write(html);

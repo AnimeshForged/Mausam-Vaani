@@ -18,7 +18,6 @@ export default function WaypointWeatherTable({
 }: WaypointWeatherTableProps) {
   return (
     <div className="flex flex-col gap-space-lg">
-      {/* Waypoint Telemetry Matrix Table */}
       <section className="bg-surface-container-lowest rounded-3xl p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
           <div>
@@ -34,7 +33,6 @@ export default function WaypointWeatherTable({
           </span>
         </div>
 
-        {/* Responsive Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
@@ -127,7 +125,6 @@ export default function WaypointWeatherTable({
         </div>
       </section>
 
-      {/* Driver & Logistics Advisory Checklist */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
         <div className="bg-surface-container-lowest p-space-md rounded-2xl border border-surface-container-high shadow-xs flex flex-col gap-2">
           <div className="flex items-center gap-2 text-primary">

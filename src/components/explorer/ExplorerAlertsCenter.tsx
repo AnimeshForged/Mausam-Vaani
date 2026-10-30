@@ -80,7 +80,6 @@ export default function ExplorerAlertsCenter() {
 
   return (
     <div className="flex flex-col gap-space-lg w-full max-w-7xl mx-auto">
-      {/* Top Banner & Radar Status */}
       <section className="relative overflow-hidden rounded-3xl bg-surface-container-lowest p-space-lg shadow-sm border border-surface-container-high">
         <div className="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-secondary-fixed/20 blur-3xl pointer-events-none"></div>
 
@@ -123,7 +122,6 @@ export default function ExplorerAlertsCenter() {
             </div>
           </div>
 
-          {/* 4 Stat Quadrants */}
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-sm pt-space-xs">
             <div className="p-space-md rounded-2xl bg-surface-container-low flex items-center justify-between border border-secondary/20 min-w-0">
               <div className="flex flex-col min-w-0 pr-2">
@@ -170,7 +168,6 @@ export default function ExplorerAlertsCenter() {
             </div>
           </div>
 
-          {/* Filter Hazard Pills */}
           <div className="flex flex-wrap items-center gap-space-xs pt-space-2xs text-xs">
             <span className="font-bold text-on-surface-variant mr-1">Filter Hazard:</span>
             {[
@@ -196,9 +193,7 @@ export default function ExplorerAlertsCenter() {
         </div>
       </section>
 
-      {/* Main Grid: Active Dossiers (7 cols) & 3x3 Threat Matrix (5 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-        {/* Left 7 Cols: Active Alert Dossiers */}
         <div className="lg:col-span-7 flex flex-col gap-space-md">
           <div className="flex items-baseline justify-between">
             <div className="flex items-center gap-space-xs">
@@ -246,7 +241,6 @@ export default function ExplorerAlertsCenter() {
                 </p>
               </div>
 
-              {/* Action Directive Steps & Operational Controls */}
               <div className="bg-surface-container-low rounded-2xl p-space-md flex flex-col gap-2">
                 <span className="text-xs font-bold text-outline uppercase tracking-wider">
                   Operational Directives:
@@ -313,7 +307,6 @@ export default function ExplorerAlertsCenter() {
           ))}
         </div>
 
-        {/* Right 5 Cols: 3x3 Mesoscale Threat Matrix */}
         <div className="lg:col-span-5 bg-surface-container-lowest rounded-3xl p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-md">
           <div className="flex items-start justify-between">
             <div>
@@ -336,10 +329,8 @@ export default function ExplorerAlertsCenter() {
             )}
           </div>
 
-          {/* Matrix Grid Visual */}
           <div className="space-y-1.5 bg-surface-container-low p-space-md rounded-2xl border border-outline-variant/20">
             <div className="grid grid-cols-3 gap-1.5 text-center text-xs font-bold">
-              {/* High Probability Row */}
               {[
                 { label: 'High Prob / Low Imp', title: 'Light Showers', bg: 'bg-secondary-fixed/40 text-on-secondary-fixed' },
                 { label: 'High Prob / Med Imp', title: 'Wind Squall', bg: 'bg-secondary-fixed text-on-secondary-fixed' },
@@ -371,7 +362,6 @@ export default function ExplorerAlertsCenter() {
             </div>
           </div>
 
-          {/* Broadcast Simulation Notice */}
           {simulatedBroadcastNotice && (
             <div className="p-3 bg-secondary-fixed text-on-secondary-fixed rounded-2xl text-xs font-bold flex items-center gap-2 animate-fadeIn">
               <span className="material-symbols-outlined text-[1.25rem] animate-spin">sync</span>
@@ -398,7 +388,6 @@ export default function ExplorerAlertsCenter() {
         </div>
       </div>
 
-      {/* Early Warning System (EWS) SMS / Push Simulator Modal */}
       <EarlyWarningSimulatorModal
         isOpen={showSimulatorModal}
         onClose={() => setShowSimulatorModal(false)}

@@ -20,7 +20,6 @@ export default function EarlyWarningSimulatorModal({
   initialAlertId,
   location,
 }: EarlyWarningSimulatorModalProps) {
-  // Filter red and orange alerts first, fallback to all
   const highPriorityAlerts = alerts.filter(a => a.severity === 'red' || a.severity === 'orange');
   const availableAlerts = highPriorityAlerts.length > 0 ? highPriorityAlerts : alerts;
 
@@ -73,7 +72,6 @@ export default function EarlyWarningSimulatorModal({
       osc.start();
       osc.stop(ctx.currentTime + 0.45);
     } catch {
-      // Audio playback fails silently if browser policy blocks autoplay
     }
   };
 
@@ -116,7 +114,6 @@ export default function EarlyWarningSimulatorModal({
         role="dialog"
         aria-modal="true"
       >
-        {/* Top Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 bg-surface-container-low border-b border-surface-container-high">
           <div className="flex items-center gap-2.5">
             <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold shadow-xs ${
@@ -145,7 +142,6 @@ export default function EarlyWarningSimulatorModal({
             </div>
           </div>
 
-          {/* Action buttons */}
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -172,12 +168,9 @@ export default function EarlyWarningSimulatorModal({
           </div>
         </div>
 
-        {/* Content Body: Left Control Panel (5 cols) & Right Simulator View (7 cols) */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5">
           
-          {/* Controls: Target Alert, Mode, Tehsils */}
           <div className="lg:col-span-5 flex flex-col gap-4">
-            {/* Alert Selector */}
             <div className="bg-surface-container-low p-3.5 rounded-2xl border border-surface-container-high">
               <label className="text-[11px] uppercase font-bold text-on-surface-variant tracking-wider block mb-1.5">
                 Target Hazard Dossier
@@ -199,7 +192,6 @@ export default function EarlyWarningSimulatorModal({
               </div>
             </div>
 
-            {/* Broadcast Channel Selector */}
             <div className="bg-surface-container-low p-3.5 rounded-2xl border border-surface-container-high">
               <label className="text-[11px] uppercase font-bold text-on-surface-variant tracking-wider block mb-1.5">
                 Transmission Channel
@@ -244,7 +236,6 @@ export default function EarlyWarningSimulatorModal({
               </div>
             </div>
 
-            {/* Target Tehsils & Geographic Polygon */}
             <div className="bg-surface-container-low p-3.5 rounded-2xl border border-surface-container-high">
               <div className="flex items-center justify-between mb-2">
                 <label className="text-[11px] uppercase font-bold text-on-surface-variant tracking-wider">
@@ -278,7 +269,6 @@ export default function EarlyWarningSimulatorModal({
               </div>
             </div>
 
-            {/* Trigger Simulation Action */}
             <div className="bg-surface-container-low p-3.5 rounded-2xl border border-surface-container-high flex flex-col gap-2.5">
               <button
                 type="button"
@@ -294,7 +284,6 @@ export default function EarlyWarningSimulatorModal({
                 </span>
               </button>
 
-              {/* Progress Bar */}
               {(isTransmitting || transmissionComplete) && (
                 <div className="space-y-1 animate-fadeIn">
                   <div className="flex items-center justify-between text-[11px] font-semibold text-on-surface">
@@ -323,12 +312,9 @@ export default function EarlyWarningSimulatorModal({
 
           </div>
 
-          {/* Right Preview Column: Mock Device Simulator */}
           <div className="lg:col-span-7 flex flex-col items-center justify-center bg-slate-900 rounded-3xl p-5 border border-slate-800 relative overflow-hidden">
-            {/* Background subtle radar grid */}
             <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
 
-            {/* Language preview toggle */}
             <div className="self-end mb-3 flex items-center gap-1 bg-slate-800/80 backdrop-blur-md p-1 rounded-full border border-slate-700 z-10">
               <span className="text-[10px] text-slate-400 font-bold px-2">Message Script:</span>
               <button
@@ -351,17 +337,13 @@ export default function EarlyWarningSimulatorModal({
               </button>
             </div>
 
-            {/* Simulated Phone Frame */}
             <div className="w-full max-w-sm bg-black rounded-[2.5rem] p-3 shadow-2xl border-4 border-slate-700 relative z-10">
-              {/* Phone Speaker Notch */}
               <div className="w-24 h-4 bg-slate-800 rounded-full mx-auto mb-3 flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-slate-900 mr-2" />
                 <div className="w-8 h-1.5 rounded-full bg-slate-900" />
               </div>
 
-              {/* Screen Canvas */}
               <div className="bg-slate-950 rounded-[2rem] p-4 text-white min-h-[380px] flex flex-col justify-between border border-slate-800">
-                {/* Status Bar */}
                 <div className="flex items-center justify-between text-[11px] text-slate-400 px-1 mb-3">
                   <span>{new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false })}</span>
                   <div className="flex items-center gap-1.5">
@@ -371,7 +353,6 @@ export default function EarlyWarningSimulatorModal({
                   </div>
                 </div>
 
-                {/* Main Notification Card based on selected Channel */}
                 {channel === 'cell-broadcast' && (
                   <div className={`p-4 rounded-2xl border-2 ${
                     currentAlert.severity === 'red'
@@ -448,12 +429,10 @@ export default function EarlyWarningSimulatorModal({
                   </div>
                 )}
 
-                {/* Bottom Navigation Bar */}
                 <div className="w-28 h-1 bg-slate-600 rounded-full mx-auto mt-4" />
               </div>
             </div>
 
-            {/* Bottom Caption */}
             <div className="text-[11px] text-slate-400 text-center mt-3">
               Sector: <strong>{location.name}</strong> • Frequency Band: <strong>3.5 GHz (n78 5G) & 850 MHz (GSM CBS)</strong>
             </div>
@@ -461,7 +440,6 @@ export default function EarlyWarningSimulatorModal({
 
         </div>
 
-        {/* Modal Footer */}
         <div className="px-5 py-3 bg-surface-container-low border-t border-surface-container-high flex flex-wrap items-center justify-between text-xs text-on-surface-variant">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-green-500" />

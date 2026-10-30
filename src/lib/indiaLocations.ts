@@ -17,7 +17,6 @@ export interface Coord {
 }
 
 export const INDIA_LOCATIONS: IndiaLocation[] = [
-  // --- MADHYA PRADESH (Local & Key Corridors) ---
   { name: 'Indore', nameHi: 'इंदौर', state: 'Madhya Pradesh', stateHi: 'मध्य प्रदेश', region: 'mp', lat: 22.7196, lng: 75.8577, elevation: 553, district: 'Indore', isLocalPriority: true },
   { name: 'Ujjain', nameHi: 'उज्जैन', state: 'Madhya Pradesh', stateHi: 'मध्य प्रदेश', region: 'mp', lat: 23.1765, lng: 75.7885, elevation: 494, district: 'Ujjain', isLocalPriority: true },
   { name: 'Dewas', nameHi: 'देवास', state: 'Madhya Pradesh', stateHi: 'मध्य प्रदेश', region: 'mp', lat: 22.9676, lng: 76.0534, elevation: 535, district: 'Dewas', isLocalPriority: true },
@@ -56,7 +55,6 @@ export const INDIA_LOCATIONS: IndiaLocation[] = [
   { name: 'Damoh', nameHi: 'दमोह', state: 'Madhya Pradesh', stateHi: 'मध्य प्रदेश', region: 'mp', lat: 23.8382, lng: 79.4422, elevation: 395, district: 'Damoh' },
   { name: 'Chhatarpur', nameHi: 'छतरपुर', state: 'Madhya Pradesh', stateHi: 'मध्य प्रदेश', region: 'mp', lat: 24.9164, lng: 79.5811, elevation: 305, district: 'Chhatarpur' },
 
-  // --- NORTH INDIA (Delhi NCR, UP, Rajasthan, Punjab, Haryana, Uttarakhand, HP, J&K) ---
   { name: 'New Delhi', nameHi: 'नई दिल्ली', state: 'Delhi', stateHi: 'दिल्ली', region: 'north', lat: 28.6139, lng: 77.2090, elevation: 216, district: 'New Delhi', isLocalPriority: true },
   { name: 'Delhi', nameHi: 'दिल्ली', state: 'Delhi', stateHi: 'दिल्ली', region: 'north', lat: 28.6139, lng: 77.2090, elevation: 216, district: 'Delhi' },
   { name: 'Noida', nameHi: 'नोएडा', state: 'Uttar Pradesh', stateHi: 'उत्तर प्रदेश', region: 'north', lat: 28.5355, lng: 77.3910, elevation: 200, district: 'Gautam Buddha Nagar' },
@@ -107,7 +105,6 @@ export const INDIA_LOCATIONS: IndiaLocation[] = [
   { name: 'Jammu', nameHi: 'जम्मू', state: 'Jammu & Kashmir', stateHi: 'जम्मू और कश्मीर', region: 'north', lat: 32.7266, lng: 74.8570, elevation: 327, district: 'Jammu' },
   { name: 'Srinagar', nameHi: 'श्रीनगर', state: 'Jammu & Kashmir', stateHi: 'जम्मू और कश्मीर', region: 'north', lat: 34.0837, lng: 74.7973, elevation: 1585, district: 'Srinagar' },
 
-  // --- WESTERN INDIA (Maharashtra, Gujarat, Goa) ---
   { name: 'Mumbai', nameHi: 'मुंबई', state: 'Maharashtra', stateHi: 'महाराष्ट्र', region: 'west', lat: 19.0760, lng: 72.8777, elevation: 14, district: 'Mumbai City', isLocalPriority: true },
   { name: 'Navi Mumbai', nameHi: 'नवी मुंबई', state: 'Maharashtra', stateHi: 'महाराष्ट्र', region: 'west', lat: 19.0330, lng: 73.0297, elevation: 10, district: 'Thane' },
   { name: 'Lonavala', nameHi: 'लोनावला', state: 'Maharashtra', stateHi: 'महाराष्ट्र', region: 'west', lat: 18.7557, lng: 73.4091, elevation: 624, district: 'Pune' },
@@ -130,7 +127,6 @@ export const INDIA_LOCATIONS: IndiaLocation[] = [
   { name: 'Gandhinagar', nameHi: 'गांधीनगर', state: 'Gujarat', stateHi: 'गुजरात', region: 'west', lat: 23.2156, lng: 72.6369, elevation: 81, district: 'Gandhinagar' },
   { name: 'Panaji', nameHi: 'पणजी (गोवा)', state: 'Goa', stateHi: 'गोवा', region: 'west', lat: 15.4909, lng: 73.8278, elevation: 7, district: 'North Goa' },
 
-  // --- SOUTH INDIA (Karnataka, Telangana, Andhra Pradesh, Tamil Nadu, Kerala) ---
   { name: 'Bengaluru', nameHi: 'बेंगलुरु', state: 'Karnataka', stateHi: 'कर्नाटक', region: 'south', lat: 12.9716, lng: 77.5946, elevation: 920, district: 'Bengaluru Urban', isLocalPriority: true },
   { name: 'Mysuru', nameHi: 'मैसूरु', state: 'Karnataka', stateHi: 'कर्नाटक', region: 'south', lat: 12.2958, lng: 76.6394, elevation: 763, district: 'Mysuru' },
   { name: 'Hubballi', nameHi: 'हुबली-धारवाड़', state: 'Karnataka', stateHi: 'कर्नाटक', region: 'south', lat: 15.3647, lng: 75.1240, elevation: 671, district: 'Dharwad' },
@@ -155,7 +151,6 @@ export const INDIA_LOCATIONS: IndiaLocation[] = [
   { name: 'Thiruvananthapuram', nameHi: 'तिरुवनंतपुरम', state: 'Kerala', stateHi: 'केरल', region: 'south', lat: 8.5241, lng: 76.9366, elevation: 10, district: 'Thiruvananthapuram' },
   { name: 'Kozhikode', nameHi: 'कोझिकोड', state: 'Kerala', stateHi: 'केरल', region: 'south', lat: 11.2588, lng: 75.7804, elevation: 1, district: 'Kozhikode' },
 
-  // --- EAST & CENTRAL / NORTH-EAST (Bengal, Bihar, Jharkhand, Odisha, Chhattisgarh, Assam, etc.) ---
   { name: 'Kolkata', nameHi: 'कोलकाता', state: 'West Bengal', stateHi: 'पश्चिम बंगाल', region: 'east', lat: 22.5726, lng: 88.3639, elevation: 9, district: 'Kolkata', isLocalPriority: true },
   { name: 'Howrah', nameHi: 'हावड़ा', state: 'West Bengal', stateHi: 'पश्चिम बंगाल', region: 'east', lat: 22.5958, lng: 88.2636, elevation: 12, district: 'Howrah' },
   { name: 'Siliguri', nameHi: 'सिलीगुड़ी', state: 'West Bengal', stateHi: 'पश्चिम बंगाल', region: 'east', lat: 26.7271, lng: 88.3953, elevation: 122, district: 'Darjeeling' },
@@ -188,16 +183,11 @@ export const INDIA_LOCATIONS: IndiaLocation[] = [
   { name: 'Itanagar', nameHi: 'ईटानगर', state: 'Arunachal Pradesh', stateHi: 'अरुणाचल प्रदेश', region: 'east', lat: 27.0844, lng: 93.6053, elevation: 320, district: 'Papum Pare' },
 ];
 
-/**
- * Global Indian City & Highway Node Coordinates dictionary
- * Generated directly from INDIA_LOCATIONS to eliminate coordinate redundancy.
- */
 export const CITY_COORDS: Record<string, Coord> = INDIA_LOCATIONS.reduce((acc, loc) => {
   acc[loc.name.toLowerCase()] = { lat: loc.lat, lng: loc.lng };
   return acc;
 }, {} as Record<string, Coord>);
 
-// Additional highway aliases / synonyms
 CITY_COORDS['delhi'] = { lat: 28.6139, lng: 77.2090 };
 CITY_COORDS['allahabad'] = { lat: 25.4358, lng: 81.8463 };
 CITY_COORDS['aurangabad'] = { lat: 19.8762, lng: 75.3433 };
@@ -226,12 +216,8 @@ export function searchIndiaLocations(query: string): IndiaLocation[] {
   );
 }
 
-// In-memory dynamic geocoding cache for custom searched locations
 export const DYNAMIC_GEOCODE_CACHE: Record<string, Coord> = {};
 
-/**
- * Universal lookup helper to retrieve { lat, lng } for any Indian city or locality
- */
 export function findCityCoords(cityName: string, customCoords?: Record<string, Coord>): Coord {
   if (!cityName) return { lat: 28.6139, lng: 77.2090 };
   const clean = cityName.toLowerCase().trim();
@@ -252,6 +238,5 @@ export function findCityCoords(cityName: string, customCoords?: Record<string, C
     return { lat: found.lat, lng: found.lng };
   }
 
-  // Fallback to Gangetic / Central plain baseline
   return { lat: 26.8467, lng: 80.9462 };
 }

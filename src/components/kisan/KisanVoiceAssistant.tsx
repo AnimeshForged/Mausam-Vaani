@@ -118,7 +118,6 @@ export default function KisanVoiceAssistant() {
           setTranscript(cleanText);
           await handleQuerySubmit(cleanText, detected);
         } else if (audioBlob && audioBlob.size > 100) {
-          // Process recorded audio with Gemini voice-query
           setIsProcessing(true);
           setTranscript(
             queryLanguage === 'hi'
@@ -190,7 +189,6 @@ export default function KisanVoiceAssistant() {
             setIsProcessing(false);
           }
         } else {
-          // If no sound captured, provide immediate weather advisory so an answer is ALWAYS given
           const defaultPrompt = queryLanguage === 'en' ? "Today's weather and crop advisory" : 'आज का मौसम और फसल परामर्श';
           await handleQuerySubmit(defaultPrompt, queryLanguage);
         }
@@ -317,7 +315,6 @@ export default function KisanVoiceAssistant() {
 
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto gap-space-lg">
-      {/* Top Banner */}
       <section className="relative overflow-hidden rounded-3xl bg-surface-container-low p-space-md md:p-space-lg shadow-sm border border-surface-container-high">
         <div className="flex flex-col gap-space-md lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-space-sm">
@@ -361,9 +358,7 @@ export default function KisanVoiceAssistant() {
         </div>
       </section>
 
-      {/* Two Column Assistant Workspace */}
       <div className="grid grid-cols-1 gap-space-lg lg:grid-cols-12 items-start">
-        {/* Left Section (7 cols): Microphone Stage & Transcript */}
         <section className="flex flex-col justify-between rounded-3xl bg-surface-container-lowest p-space-md md:p-space-lg shadow-sm border border-surface-container-high lg:col-span-7">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="inline-flex items-center gap-space-xs rounded-full bg-primary/10 px-space-md py-1 text-primary text-xs font-bold">
@@ -376,7 +371,6 @@ export default function KisanVoiceAssistant() {
             </div>
 
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              {/* Voice Language Selector */}
               <div className="flex items-center bg-surface-container rounded-full p-0.5 border border-outline-variant/30">
                 <button
                   type="button"
@@ -434,7 +428,6 @@ export default function KisanVoiceAssistant() {
             </div>
           </div>
 
-          {/* Concentric Circle Mic Stage */}
           <div className="relative my-space-lg flex flex-col items-center justify-center py-space-md">
             <div className="absolute h-64 w-64 rounded-full bg-primary-fixed-dim/25 blur-3xl pointer-events-none"></div>
             <div className="absolute h-48 w-48 rounded-full bg-tertiary-fixed/30 blur-2xl pointer-events-none"></div>
@@ -456,7 +449,6 @@ export default function KisanVoiceAssistant() {
               </button>
             </div>
 
-            {/* Guidance Hint */}
             <div className="mt-3 text-center">
               <span className={`text-xs font-bold ${isListening ? 'text-secondary animate-pulse' : 'text-on-surface-variant'}`}>
                 {isListening
@@ -465,7 +457,6 @@ export default function KisanVoiceAssistant() {
               </span>
             </div>
 
-            {/* Audio Equalizer Waves with Real Microphone Telemetry */}
             <div className="mt-space-lg flex h-10 items-center justify-center gap-1.5">
               {[0, 1, 2, 3, 4, 5, 6].map((i) => {
                 const dynamicHeight = isListening
@@ -488,7 +479,6 @@ export default function KisanVoiceAssistant() {
             </div>
           </div>
 
-          {/* Transcript Box with Interactive Edit Support */}
           <div className="rounded-2xl bg-surface-container-low p-space-md border border-outline-variant/30">
             <div className="flex items-center justify-between text-outline">
               <div className="flex items-center gap-1">
@@ -516,7 +506,6 @@ export default function KisanVoiceAssistant() {
             />
           </div>
 
-          {/* Quick Question Suggestions */}
           <div className="mt-space-sm flex flex-col gap-1.5">
             <span className="font-label-sm text-[0.7rem] text-outline font-bold">
               {language === 'hi' ? 'जल्दी पूछने के लिए टैप करें:' : 'Quick Tap Questions:'}
@@ -548,7 +537,6 @@ export default function KisanVoiceAssistant() {
             </div>
           </div>
 
-          {/* Controls */}
           <div className="mt-space-md flex flex-col gap-space-xs sm:flex-row sm:items-center">
             <button
               className="flex min-h-[3.25rem] flex-1 items-center justify-center gap-space-xs rounded-2xl bg-primary px-space-md font-label-lg text-sm font-bold text-on-primary shadow-sm hover:bg-primary-container transition-all active:scale-95 cursor-pointer"
@@ -574,7 +562,6 @@ export default function KisanVoiceAssistant() {
           </div>
         </section>
 
-        {/* Right Section (5 cols): Instant Agronomic Solution */}
         <section className="flex flex-col gap-space-md lg:col-span-5">
           <div className="overflow-hidden rounded-3xl bg-surface-container-lowest p-space-md md:p-space-lg shadow-sm border border-surface-container-high">
             <div className="flex items-center justify-between">
@@ -589,7 +576,6 @@ export default function KisanVoiceAssistant() {
               </span>
             </div>
 
-            {/* Verdict Callout */}
             <div className="mt-space-sm rounded-2xl bg-secondary-container/20 p-space-md border border-secondary/20">
               <div className="flex items-start gap-space-sm">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary text-on-secondary shadow-sm">
@@ -606,7 +592,6 @@ export default function KisanVoiceAssistant() {
               </div>
             </div>
 
-            {/* Weather Reason & Safe Window */}
             <div className="mt-space-sm flex flex-col gap-space-xs">
               <div className="flex items-start gap-space-sm rounded-xl bg-primary-fixed/30 p-space-sm border border-primary/20">
                 <span className="material-symbols-outlined text-primary text-[1.25rem] mt-0.5">schedule</span>
@@ -624,7 +609,6 @@ export default function KisanVoiceAssistant() {
               </div>
             </div>
 
-            {/* Play Answer Audio & Share */}
             <div className="mt-space-md flex flex-col gap-2">
               <div className="rounded-2xl bg-surface-container-high p-space-sm flex items-center justify-between gap-space-sm">
                 <button

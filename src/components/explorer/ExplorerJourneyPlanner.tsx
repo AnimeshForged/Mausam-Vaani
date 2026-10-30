@@ -11,9 +11,8 @@ import WaypointWeatherTable from './WaypointWeatherTable';
 
 type VehicleType = 'car' | 'truck' | 'bike';
 
-
 function getGreatCircleDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371; // km
+  const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
@@ -24,7 +23,6 @@ function getGreatCircleDistance(lat1: number, lon1: number, lat2: number, lon2: 
 }
 
 const EXACT_HIGHWAY_DISTANCES: Record<string, number> = {
-  // Ayodhya corridors (National Highway 27 & Purvanchal)
   'ayodhya-lucknow': 135,
   'lucknow-ayodhya': 135,
   'ayodhya-varanasi': 210,
@@ -42,7 +40,6 @@ const EXACT_HIGHWAY_DISTANCES: Record<string, number> = {
   'ayodhya-agra': 470,
   'agra-ayodhya': 470,
 
-  // Delhi - UP Corridors
   'delhi-lucknow': 535,
   'lucknow-delhi': 535,
   'new delhi-lucknow': 535,
@@ -82,13 +79,11 @@ const EXACT_HIGHWAY_DISTANCES: Record<string, number> = {
   'delhi-agra': 210,
   'agra-delhi': 210,
 
-  // Rajasthan Corridors
   'delhi-jaipur': 280,
   'jaipur-delhi': 280,
   'new delhi-jaipur': 280,
   'jaipur-new delhi': 280,
 
-  // Madhya Pradesh Corridors
   'indore-bhopal': 192,
   'bhopal-indore': 192,
   'indore-dewas': 36,
@@ -108,7 +103,6 @@ const EXACT_HIGHWAY_DISTANCES: Record<string, number> = {
   'bhopal-jabalpur': 308,
   'jabalpur-bhopal': 308,
 
-  // Western & Southern Corridors
   'mumbai-pune': 150,
   'pune-mumbai': 150,
   'mumbai-navi mumbai': 35,
@@ -127,7 +121,6 @@ const EXACT_HIGHWAY_DISTANCES: Record<string, number> = {
   'bengaluru-hyderabad': 570,
   'hyderabad-bengaluru': 570,
 
-  // Eastern Corridors
   'patna-varanasi': 255,
   'varanasi-patna': 255,
   'kolkata-patna': 580,
@@ -152,7 +145,6 @@ function calculateSegmentDistance(
   const straight = getGreatCircleDistance(c1.lat, c1.lng, c2.lat, c2.lng);
   if (straight < 1) return 0;
 
-  // National highway winding ratio is ~1.15x for modern NH/expressways in India
   const roadDistance = Math.round(straight * 1.15);
   return Math.max(15, roadDistance);
 }
@@ -184,26 +176,22 @@ export default function ExplorerJourneyPlanner() {
   const { language, weather, location } = useApp();
   const t = translations[language];
 
-  // Primary routing state
   const [origin, setOrigin] = useState<string>('New Delhi');
   const [destination, setDestination] = useState<string>('Lucknow');
   const [waypoints, setWaypoints] = useState<string[]>(['Mathura', 'Agra', 'Kannauj']);
   const [vehicle, setVehicle] = useState<VehicleType>('car');
-  const [departureOffset, setDepartureOffset] = useState<number>(0); // 0 = now, 1 = +1h, etc.
+  const [departureOffset, setDepartureOffset] = useState<number>(0);
   const [isCalculating, setIsCalculating] = useState<boolean>(false);
   const [selectedSegmentIdx, setSelectedSegmentIdx] = useState<number | null>(null);
 
-  // Dynamic geocoded coordinates cache for custom searched towns
   const [resolvedCoords, setResolvedCoords] = useState<Record<string, Coord>>({});
 
-  // Autocomplete UI suggestions state
   const [originSuggestionsOpen, setOriginSuggestionsOpen] = useState(false);
   const [destSuggestionsOpen, setDestSuggestionsOpen] = useState(false);
 
   const originInputRef = useRef<HTMLInputElement>(null);
   const destInputRef = useRef<HTMLInputElement>(null);
 
-  // Filtered city suggestion lists for Point A and B inputs
   const originSuggestions = useMemo(() => {
     if (!origin || origin.trim() === '') return INDIA_LOCATIONS.slice(0, 12);
     const q = origin.toLowerCase().trim();
@@ -220,19 +208,17 @@ export default function ExplorerJourneyPlanner() {
     ).slice(0, 10);
   }, [destination]);
 
-  // Dynamic vehicle speed defaults
   const vehicleSpeed = useMemo(() => {
     switch (vehicle) {
       case 'car':
-        return 75; // average expressway cruising speed
+        return 75;
       case 'truck':
-        return 48; // commercial freight speed
+        return 48;
       case 'bike':
         return 58;
     }
   }, [vehicle]);
 
-  // Recalculate and trigger brief calculation state indicator
   const triggerRecalculate = () => {
     setIsCalculating(true);
     setTimeout(() => {
@@ -240,7 +226,6 @@ export default function ExplorerJourneyPlanner() {
     }, 450);
   };
 
-  // Preset selector
   const handleSelectPreset = (preset: PresetRoute) => {
     setOrigin(preset.origin);
     setDestination(preset.destination);
@@ -248,7 +233,6 @@ export default function ExplorerJourneyPlanner() {
     triggerRecalculate();
   };
 
-  // Swap Point A and Point B
   const handleSwapLocations = () => {
     const temp = origin;
     setOrigin(destination);
@@ -257,7 +241,6 @@ export default function ExplorerJourneyPlanner() {
     triggerRecalculate();
   };
 
-  // Add / Remove / Edit Waypoints
   const handleAddWaypoint = () => {
     if (waypoints.length >= 5) return;
     setWaypoints([...waypoints, `Stop ${waypoints.length + 1}`]);
@@ -275,14 +258,12 @@ export default function ExplorerJourneyPlanner() {
     setWaypoints(updated);
   };
 
-  // Calculate ETA time string with offset
   const formatETA = (hoursOffset: number, additionalMinutes: number = 0): string => {
     const d = new Date();
     d.setMinutes(d.getMinutes() + Math.round(hoursOffset * 60) + additionalMinutes);
     return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
   };
 
-  // Build dynamic segments between Origin -> Waypoints -> Destination
   const dynamicSegments = useMemo<RouteWaypoint[]>(() => {
     const validWaypoints = waypoints.filter(w => w && w.trim().length > 0 && !w.startsWith('Stop '));
     const allStops = [origin || 'Origin', ...validWaypoints, destination || 'Destination'];
@@ -299,7 +280,6 @@ export default function ExplorerJourneyPlanner() {
       const fromName = allStops[i];
       const toName = allStops[i + 1];
 
-      // Segment distance calculated dynamically from coordinates & highway curves
       const segDistance = calculateSegmentDistance(fromName, toName, resolvedCoords);
       const segDurationMins = Math.round((segDistance / vehicleSpeed) * 60);
 
@@ -310,16 +290,12 @@ export default function ExplorerJourneyPlanner() {
       const c1 = findCityCoords(fromName, resolvedCoords);
       const c2 = findCityCoords(toName, resolvedCoords);
 
-      // Dynamic crosswind based on highway bearing relative to wind direction
       const { crosswind, bearing } = calculateCrosswind(c1, c2, baseWind, baseWindDir);
 
-      // Dynamic squall gust factor
       const windGust = Math.max(14, Math.round(crosswind + (isStormHour ? 22 : 8) + ((i * 3) % 7)));
 
-      // Dynamic temperature based on terrain & time of transit
       const temp = Math.round(baseTemp - (i * 0.7) + (isStormHour ? -3 : isEveningClear ? -2 : 1));
 
-      // Dynamic visibility & surface wetness
       let riskLevel: 'low' | 'moderate' | 'severe' = 'low';
       let condition = 'Clear & Dry';
       let icon = 'wb_sunny';
@@ -379,7 +355,6 @@ export default function ExplorerJourneyPlanner() {
     return segments;
   }, [origin, destination, waypoints, vehicleSpeed, departureOffset, weather, language, resolvedCoords]);
 
-  // Overall route summary metrics
   const totalDistance = dynamicSegments.reduce((acc, s) => acc + s.distanceKm, 0);
   const totalMinutes = Math.round((totalDistance / vehicleSpeed) * 60);
   const totalHours = Math.floor(totalMinutes / 60);
@@ -390,7 +365,6 @@ export default function ExplorerJourneyPlanner() {
 
   return (
     <div className="flex flex-col w-full max-w-7xl mx-auto gap-space-lg">
-      {/* Route Configurator Header & Form */}
       <section className="bg-surface-container-lowest p-space-lg rounded-3xl shadow-sm border border-surface-container-high flex flex-col gap-space-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
           <div>
@@ -408,7 +382,6 @@ export default function ExplorerJourneyPlanner() {
             </p>
           </div>
 
-          {/* Preset Corridors Subcomponent */}
           <RouteCorridorPresets
             language={language}
             currentOrigin={origin}
@@ -417,9 +390,7 @@ export default function ExplorerJourneyPlanner() {
           />
         </div>
 
-        {/* Location Inputs Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-sm items-start bg-surface-container-low p-space-md rounded-2xl border border-outline-variant/30">
-          {/* Point A: Origin Input with Autocomplete */}
           <div className="lg:col-span-4 flex flex-col gap-1.5 relative">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-on-surface flex items-center gap-1">
@@ -465,7 +436,6 @@ export default function ExplorerJourneyPlanner() {
               )}
             </div>
 
-            {/* Quick Origin Suggestions Popover */}
             {originSuggestionsOpen && originSuggestions.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-1 bg-surface-container-lowest border border-outline-variant/40 rounded-xl shadow-lg z-30 max-h-48 overflow-y-auto">
                 <div className="p-1 flex flex-col gap-0.5">
@@ -500,7 +470,6 @@ export default function ExplorerJourneyPlanner() {
               </div>
             )}
 
-            {/* Quick local mini-chips for Origin */}
             <div className="flex flex-wrap items-center gap-1 pt-0.5">
               <span className="text-[0.65rem] text-on-surface-variant font-medium">Quick A:</span>
               {['New Delhi', 'Lucknow', 'Ayodhya', 'Indore', 'Bhopal', 'Jaipur', 'Agra'].map(c => (
@@ -522,7 +491,6 @@ export default function ExplorerJourneyPlanner() {
             </div>
           </div>
 
-          {/* Swap Button (A <-> B) */}
           <div className="lg:col-span-1 flex justify-center py-2 lg:py-6">
             <button
               type="button"
@@ -534,7 +502,6 @@ export default function ExplorerJourneyPlanner() {
             </button>
           </div>
 
-          {/* Point B: Destination Input with Autocomplete */}
           <div className="lg:col-span-4 flex flex-col gap-1.5 relative">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-on-surface flex items-center gap-1">
@@ -570,7 +537,6 @@ export default function ExplorerJourneyPlanner() {
               )}
             </div>
 
-            {/* Quick Destination Suggestions Popover */}
             {destSuggestionsOpen && destSuggestions.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-1 bg-surface-container-lowest border border-outline-variant/40 rounded-xl shadow-lg z-30 max-h-48 overflow-y-auto">
                 <div className="p-1 flex flex-col gap-0.5">
@@ -605,7 +571,6 @@ export default function ExplorerJourneyPlanner() {
               </div>
             )}
 
-            {/* Quick local mini-chips for Destination */}
             <div className="flex flex-wrap items-center gap-1 pt-0.5">
               <span className="text-[0.65rem] text-secondary font-bold">Quick B:</span>
               {['Lucknow', 'Ayodhya', 'Varanasi', 'Kanpur', 'Bhopal', 'Jaipur', 'Agra'].map(c => (
@@ -627,7 +592,6 @@ export default function ExplorerJourneyPlanner() {
             </div>
           </div>
 
-          {/* Action: Recalculate / Plan Button */}
           <div className="lg:col-span-3 flex flex-col justify-end gap-1.5 pt-2 lg:pt-5">
             <button
               type="button"
@@ -651,7 +615,6 @@ export default function ExplorerJourneyPlanner() {
           </div>
         </div>
 
-        {/* Intermediate Waypoints (Stops) Section */}
         <div className="flex flex-col gap-2 bg-surface-container-lowest p-space-sm rounded-2xl border border-surface-container-high">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -696,7 +659,6 @@ export default function ExplorerJourneyPlanner() {
             </div>
           </div>
 
-          {/* Waypoints Input List */}
           {waypoints.length === 0 ? (
             <div className="text-center py-2 text-xs text-on-surface-variant">
               {language === 'hi'
@@ -732,9 +694,7 @@ export default function ExplorerJourneyPlanner() {
           )}
         </div>
 
-        {/* Vehicle Mode & Departure Simulation Controls */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-space-sm bg-surface-container-high/30 p-space-sm rounded-2xl">
-          {/* Transport Mode Switcher */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-surface-container-lowest p-2.5 rounded-xl border border-outline-variant/30">
             <div className="flex items-center gap-2 text-xs font-bold text-on-surface">
               <span className="material-symbols-outlined text-primary text-[1.125rem]">directions_car</span>
@@ -763,7 +723,6 @@ export default function ExplorerJourneyPlanner() {
             </div>
           </div>
 
-          {/* Departure Offset Simulation Switcher */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-surface-container-lowest p-2.5 rounded-xl border border-outline-variant/30">
             <div className="flex items-center gap-2 text-xs font-bold text-on-surface">
               <span className="material-symbols-outlined text-primary text-[1.125rem]">schedule</span>
@@ -795,7 +754,6 @@ export default function ExplorerJourneyPlanner() {
         </div>
       </section>
 
-      {/* Visual Corridor Diagram & Metrics (RouteMapOverview) */}
       <RouteMapOverview
         language={language}
         origin={origin}
@@ -811,7 +769,6 @@ export default function ExplorerJourneyPlanner() {
         onSelectSegment={setSelectedSegmentIdx}
       />
 
-      {/* Waypoint Weather Telemetry Table & Driver Advisory Checklist */}
       <WaypointWeatherTable
         language={language}
         dynamicSegments={dynamicSegments}

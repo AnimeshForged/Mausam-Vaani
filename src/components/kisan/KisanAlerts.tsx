@@ -24,7 +24,6 @@ export default function KisanAlerts() {
   const [livestockDoneSteps, setLivestockDoneSteps] = useState<number[]>([]);
   const [isSirenActive, setIsSirenActive] = useState(false);
 
-  // Dynamic Livestock THI & Outdoor WBGT from live telemetry
   const currentTemp = weather?.current?.temperature ?? 32;
   const currentHumidity = weather?.current?.relativeHumidity ?? 62;
   const livestockIndices = calculateHeatStressAndLivestockIndices(currentTemp, currentHumidity);
@@ -113,7 +112,6 @@ export default function KisanAlerts() {
 
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto gap-space-lg">
-      {/* Top Emergency Status Ribbon */}
       <div className="flex flex-wrap items-center justify-between gap-space-sm bg-secondary-fixed text-on-secondary-fixed p-space-sm rounded-2xl shadow-xs border border-secondary/20">
         <div className="flex items-center gap-space-xs">
           <span className="material-symbols-outlined text-secondary text-[1.75rem] animate-bounce">
@@ -136,13 +134,11 @@ export default function KisanAlerts() {
         </div>
       </div>
 
-      {/* 1. Urgent Alert Hero Banner */}
       <div className="relative overflow-hidden bg-secondary text-on-secondary rounded-3xl shadow-xl p-space-lg md:p-space-xl">
         <div className="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-secondary-container opacity-40 blur-3xl pointer-events-none"></div>
         <div className="absolute right-12 bottom-0 w-64 h-64 rounded-full bg-tertiary-fixed opacity-15 blur-2xl pointer-events-none"></div>
 
         <div className="relative z-10 flex flex-col gap-space-md">
-          {/* Badges & Timing Row */}
           <div className="flex flex-wrap items-center justify-between gap-space-sm">
             <div className="flex items-center gap-space-xs">
               <span className="flex items-center gap-1 bg-surface-container-lowest text-secondary px-space-md py-1 rounded-full font-label-md text-xs font-bold shadow-sm">
@@ -159,7 +155,6 @@ export default function KisanAlerts() {
             </div>
           </div>
 
-          {/* Main Headline */}
           <div className="flex flex-col gap-1 max-w-4xl">
             <h1 className="font-display-lg text-xl sm:text-2xl md:text-3xl font-extrabold leading-tight text-on-secondary">
               {language === 'hi' ? primaryAlert.titleHi : primaryAlert.titleEn}
@@ -169,7 +164,6 @@ export default function KisanAlerts() {
             </p>
           </div>
 
-          {/* Action Row: Siren, WhatsApp Share & Audio Dispatch */}
           <div className="flex flex-wrap items-center gap-space-sm pt-space-xs">
             <button
               onClick={toggleSiren}
@@ -196,9 +190,7 @@ export default function KisanAlerts() {
             </button>
           </div>
 
-          {/* Audio Dispatch Bar & Location Impact Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-md pt-space-xs items-center">
-            {/* Audio Play Control */}
             <div className="lg:col-span-7 bg-surface-container-lowest text-on-surface rounded-2xl p-space-md shadow-md flex flex-col sm:flex-row items-center justify-between gap-space-md">
               <div className="flex items-center gap-space-sm w-full sm:w-auto">
                 <button
@@ -238,7 +230,6 @@ export default function KisanAlerts() {
               </div>
             </div>
 
-            {/* Affected Tehsils Pill List */}
             <div className="lg:col-span-5 bg-surface-container-lowest/15 backdrop-blur-md rounded-2xl p-space-md flex flex-col gap-1 text-on-secondary">
               <span className="font-label-sm text-[0.7rem] uppercase tracking-wider font-semibold text-secondary-fixed">
                 {language === 'hi' ? 'प्रभावित तहसीलें (Critical High Risk Zones)' : 'Affected Tehsils'}
@@ -258,7 +249,6 @@ export default function KisanAlerts() {
         </div>
       </div>
 
-      {/* 2. Heat Stress & Livestock Safety Index Card (पशुधन एवं श्रमिक गर्मी/लू सुरक्षा) */}
       <section className="bg-surface-container-lowest rounded-3xl p-space-md md:p-space-lg shadow-sm border border-secondary/20 flex flex-col gap-space-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs border-b border-surface-container-high pb-3">
           <div className="flex items-center gap-space-xs">
@@ -298,9 +288,7 @@ export default function KisanAlerts() {
           </button>
         </div>
 
-        {/* Index Metrics Gauges Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {/* Livestock THI */}
           <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container-high flex flex-col justify-between gap-2">
             <div className="flex items-center justify-between text-xs text-on-surface-variant font-bold">
               <span>{language === 'hi' ? 'पशुधन THI सूचकांक' : 'Livestock THI Score'}</span>
@@ -330,7 +318,6 @@ export default function KisanAlerts() {
             </span>
           </div>
 
-          {/* Farm Labor WBGT */}
           <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container-high flex flex-col justify-between gap-2">
             <div className="flex items-center justify-between text-xs text-on-surface-variant font-bold">
               <span>{language === 'hi' ? 'श्रमिक वेट-बल्ब (WBGT)' : 'Worker WBGT Metric'}</span>
@@ -360,7 +347,6 @@ export default function KisanAlerts() {
             </span>
           </div>
 
-          {/* Daily Water Demand */}
           <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container-high flex flex-col justify-between gap-2">
             <div className="flex items-center justify-between text-xs text-on-surface-variant font-bold">
               <span>{language === 'hi' ? 'पशु जल मांग दर' : 'Livestock Water Intake'}</span>
@@ -384,7 +370,6 @@ export default function KisanAlerts() {
             </span>
           </div>
 
-          {/* Buffalo Melanin / Misting Status */}
           <div className="p-3.5 rounded-2xl bg-surface-container-low border border-surface-container-high flex flex-col justify-between gap-2">
             <div className="flex items-center justify-between text-xs text-on-surface-variant font-bold">
               <span>{language === 'hi' ? 'मुर्राह भैंस विशेष देखभाल' : 'Buffalo Solar Load'}</span>
@@ -408,7 +393,6 @@ export default function KisanAlerts() {
           </div>
         </div>
 
-        {/* 4 Heat Mitigation Steps for Farmers */}
         <div className="flex flex-col gap-2 pt-1">
           <span className="text-xs font-bold text-on-surface uppercase tracking-wider">
             {language === 'hi' ? 'लू व गर्मी से बचाव के 4 तत्काल उपाय (चेकलिस्ट):' : '4 Heat & Loo Stress Mitigation Directives:'}
@@ -483,7 +467,6 @@ export default function KisanAlerts() {
         </div>
       </section>
 
-      {/* 3. "अब किसान भाई क्या करें?" Checklist (Bold Tactile Action Cards) */}
       <section className="flex flex-col gap-space-md">
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-space-xs">
           <div className="flex items-center gap-space-xs">
@@ -506,7 +489,6 @@ export default function KisanAlerts() {
           </div>
         </div>
 
-        {/* Progress bar */}
         <div className="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
           <div
             className="bg-primary h-full rounded-full transition-all duration-500"
@@ -514,7 +496,6 @@ export default function KisanAlerts() {
           ></div>
         </div>
 
-        {/* 4 High Impact Action Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-space-md">
           {primaryAlert.farmerDirectives.map(directive => {
             const isDone = completedSteps.includes(directive.step);
@@ -593,7 +574,6 @@ export default function KisanAlerts() {
         </div>
       </section>
 
-      {/* Emergency Helpline Banner */}
       <section className="bg-surface-container-lowest p-space-md rounded-2xl border border-surface-container-high flex flex-wrap items-center justify-between gap-space-md">
         <div className="flex items-center gap-space-sm">
           <span className="material-symbols-outlined text-primary text-[1.5rem]">call</span>

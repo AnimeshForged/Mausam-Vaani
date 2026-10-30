@@ -16,7 +16,6 @@ export default function ExplorerClimateAnalytics() {
   const [showBulletinModal, setShowBulletinModal] = useState(false);
   const [showHistoricalComparison, setShowHistoricalComparison] = useState(true);
 
-  // Dynamic SVG Chart data points mapped from live daily forecast
   const chartData = (weather.daily && weather.daily.length > 0)
     ? weather.daily.slice(0, 7).map((d, i) => ({
         label: language === 'hi' ? d.dayNameHi : d.dayNameEn,
@@ -106,7 +105,6 @@ export default function ExplorerClimateAnalytics() {
 
   return (
     <div className="flex flex-col w-full max-w-7xl mx-auto gap-space-lg">
-      {/* Top Bar: Scope, Time Horizon Selector & Data Export */}
       <section className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-3xl shadow-sm border border-surface-container-high">
         <div className="flex flex-col gap-space-xs">
           <div className="flex items-center gap-space-xs text-outline text-xs">
@@ -124,7 +122,6 @@ export default function ExplorerClimateAnalytics() {
           </p>
         </div>
 
-        {/* Time Horizon & Export Controls */}
         <div className="flex flex-wrap items-center gap-space-sm">
           <div className="flex items-center bg-surface-container p-1 rounded-full shadow-inner">
             {(['24h', '7d', '30d', 'monsoon'] as const).map(horizon => (
@@ -200,7 +197,6 @@ export default function ExplorerClimateAnalytics() {
         </div>
       </section>
 
-      {/* Export Success Toast Notification */}
       {exportNotice && (
         <div className="flex items-center justify-between bg-primary text-on-primary px-space-md py-2.5 rounded-2xl shadow-md text-xs font-bold animate-fadeIn">
           <div className="flex items-center gap-2">
@@ -217,7 +213,6 @@ export default function ExplorerClimateAnalytics() {
         </div>
       )}
 
-      {/* Multi-Source Consensus Validation Strip */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-space-sm p-space-md bg-surface-container-low rounded-2xl border border-surface-container-high">
         <div className="flex items-center gap-space-sm flex-wrap">
           <div className="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1 rounded-full shadow-xs">
@@ -236,11 +231,8 @@ export default function ExplorerClimateAnalytics() {
         </div>
       </div>
 
-      {/* Grid: Microclimate Indicators (Left 4 cols) & Historical Chart (Right 8 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-        {/* Topographical & Microclimate Context Panel (4 Columns) */}
         <div className="lg:col-span-4 flex flex-col gap-space-md">
-          {/* Spatial Card with Topographical View */}
           <div className="relative overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm border border-surface-container-high flex flex-col">
             <div
               className="relative h-44 w-full bg-cover bg-center"
@@ -274,9 +266,7 @@ export default function ExplorerClimateAnalytics() {
               </div>
             </div>
 
-            {/* Metric Quadrants */}
             <div className="grid grid-cols-2 gap-px bg-surface-container-high">
-              {/* Soil Moisture */}
               <div className="p-space-md bg-surface-container-lowest flex flex-col justify-between gap-1">
                 <div className="flex items-center justify-between text-on-surface-variant">
                   <span className="font-label-sm text-xs">Soil Moisture (0-30cm)</span>
@@ -294,7 +284,6 @@ export default function ExplorerClimateAnalytics() {
                 <span className="text-[0.65rem] text-outline">Volumetric Cap: 34% max</span>
               </div>
 
-              {/* Solar Irradiance */}
               <div className="p-space-md bg-surface-container-lowest flex flex-col justify-between gap-1">
                 <div className="flex items-center justify-between text-on-surface-variant">
                   <span className="font-label-sm text-xs">Solar Irradiance</span>
@@ -310,7 +299,6 @@ export default function ExplorerClimateAnalytics() {
                 <span className="text-[0.65rem] text-outline">Live Direct Irradiance</span>
               </div>
 
-              {/* Evapotranspiration */}
               <div className="p-space-md bg-surface-container-lowest flex flex-col justify-between gap-1">
                 <div className="flex items-center justify-between text-on-surface-variant">
                   <span className="font-label-sm text-xs">Evapotranspiration</span>
@@ -326,7 +314,6 @@ export default function ExplorerClimateAnalytics() {
                 <span className="text-[0.65rem] text-outline">Penman-Monteith Model</span>
               </div>
 
-              {/* Vapor Pressure Deficit */}
               <div className="p-space-md bg-surface-container-lowest flex flex-col justify-between gap-1">
                 <div className="flex items-center justify-between text-on-surface-variant">
                   <span className="font-label-sm text-xs">Vapor Deficit (VPD)</span>
@@ -345,7 +332,6 @@ export default function ExplorerClimateAnalytics() {
           </div>
         </div>
 
-        {/* Multi-Day Historical Line & Bar Chart (Right 8 Columns) */}
         <div className="lg:col-span-8 bg-surface-container-lowest rounded-3xl p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-md">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
             <div>
@@ -369,9 +355,7 @@ export default function ExplorerClimateAnalytics() {
             </div>
           </div>
 
-          {/* Interactive SVG Chart Rendering */}
           <div className="w-full h-64 bg-surface-container-low rounded-2xl p-space-md flex flex-col justify-between relative overflow-hidden border border-outline-variant/20">
-            {/* Chart Legend */}
             <div className="flex items-center justify-end gap-space-md text-xs font-semibold">
               <span className="flex items-center gap-1.5">
                 <span className="w-3 h-3 rounded-full bg-primary"></span>
@@ -389,14 +373,11 @@ export default function ExplorerClimateAnalytics() {
               </span>
             </div>
 
-            {/* SVG Visual Curves & Bars */}
             <svg className="w-full h-44 overflow-visible" viewBox="0 0 700 160">
-              {/* Grid lines */}
               <line x1="0" y1="40" x2="700" y2="40" stroke="#dbe5e0" strokeWidth="1" strokeDasharray="4 4" />
               <line x1="0" y1="80" x2="700" y2="80" stroke="#dbe5e0" strokeWidth="1" strokeDasharray="4 4" />
               <line x1="0" y1="120" x2="700" y2="120" stroke="#dbe5e0" strokeWidth="1" strokeDasharray="4 4" />
 
-              {/* Rain Bars */}
               {chartData.map((d, i) => {
                 const x = 50 + i * 100;
                 const barHeight = d.rain * 4;
@@ -413,7 +394,6 @@ export default function ExplorerClimateAnalytics() {
                 );
               })}
 
-              {/* Last year dashed polyline */}
               {showHistoricalComparison && (
                 <polyline
                   fill="none"
@@ -426,7 +406,6 @@ export default function ExplorerClimateAnalytics() {
                 />
               )}
 
-              {/* Current Temperature Solid Line */}
               <polyline
                 fill="none"
                 stroke="#0f5238"
@@ -438,7 +417,6 @@ export default function ExplorerClimateAnalytics() {
                   .join(' ')}
               />
 
-              {/* Data points */}
               {chartData.map((d, i) => {
                 const x = 50 + i * 100;
                 const y = 160 - (d.temp - 20) * 8;
@@ -457,7 +435,6 @@ export default function ExplorerClimateAnalytics() {
             </svg>
           </div>
 
-          {/* Anomaly Metrics Table */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-sm pt-space-xs">
             <div className="bg-surface-container-low p-space-sm rounded-2xl flex flex-col">
               <span className="text-[0.7rem] uppercase font-bold text-outline">Mean Temp Anomaly</span>
@@ -480,10 +457,8 @@ export default function ExplorerClimateAnalytics() {
         </div>
       </div>
 
-      {/* Historical Climate Comparison & 30-Year IMD Monsoon Deficit Tracker */}
       <MonsoonDeficitTracker />
 
-      {/* Official Agromet Bulletin PDF Export & Preview Modal */}
       <AgrometBulletinModal
         isOpen={showBulletinModal}
         onClose={() => setShowBulletinModal(false)}

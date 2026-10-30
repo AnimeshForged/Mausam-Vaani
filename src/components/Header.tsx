@@ -76,7 +76,6 @@ export default function Header() {
           console.warn('Reverse geocoding error:', e);
         }
 
-        // Resilient fallback
         setLocation({
           name: 'Current GPS Location',
           nameHi: 'वर्तमान GPS स्थान',
@@ -113,7 +112,6 @@ export default function Header() {
     <>
       <header className="fixed top-0 inset-x-0 h-16 sm:h-20 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 transition-colors">
         <div className="w-full h-full px-2 sm:px-3 md:px-4 lg:px-space-lg flex items-center justify-between gap-1 sm:gap-2 lg:gap-space-md min-w-0">
-          {/* Left: Mobile Hamburger & Logo */}
           <div className="flex items-center gap-1 sm:gap-space-sm min-w-0 shrink">
             <button
               onClick={() => setIsMobileDrawerOpen(true)}
@@ -131,7 +129,6 @@ export default function Header() {
               )}
             </button>
 
-            {/* Logo & Brand Identity */}
             <div
               className="flex items-center gap-1.5 sm:gap-space-sm cursor-pointer min-w-0"
               onClick={() => {
@@ -153,7 +150,6 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Center: Universal Mode Switcher (Kisan Mode vs Explorer Mode) */}
           <div className="flex items-center bg-surface-container-high p-0.5 sm:p-1 rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.03)] shrink-0">
             <button
               className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 lg:px-space-md py-1 sm:py-space-xs rounded-full transition-all cursor-pointer active:scale-95 text-[0.7rem] sm:text-xs lg:text-sm ${
@@ -187,9 +183,7 @@ export default function Header() {
             </button>
           </div>
 
-          {/* Right: Location Badge, Language, Network Toggle & Alerts */}
           <div className="flex items-center gap-1 sm:gap-1.5 md:gap-space-sm shrink-0">
-            {/* Location Selector Pill */}
             <button
               className="flex items-center gap-1 sm:gap-1.5 bg-surface-container-low hover:bg-surface-container px-2 sm:px-2.5 lg:px-space-sm py-1 sm:py-space-xs rounded-full text-on-surface transition-all cursor-pointer active:scale-95"
               onClick={() => setShowLocationModal(true)}
@@ -206,7 +200,6 @@ export default function Header() {
               </span>
             </button>
 
-            {/* Network Degradation Indicator / Tester (FR-8) */}
             <button
               onClick={toggleNetworkMode}
               className={`hidden md:flex items-center gap-1 px-2 py-1 lg:px-2.5 lg:py-1.5 rounded-full text-[0.7rem] lg:text-[0.75rem] font-bold transition-all shadow-xs cursor-pointer active:scale-95 ${
@@ -225,7 +218,6 @@ export default function Header() {
               </span>
             </button>
 
-            {/* Language Switcher (EN | हिन्दी) */}
             <div className="flex items-center bg-surface-container p-0.5 rounded-full shrink-0">
               <button
                 className={`px-1.5 sm:px-2 py-0.5 rounded-full font-label-sm text-[0.65rem] sm:text-xs transition-all cursor-pointer active:scale-95 ${
@@ -252,7 +244,6 @@ export default function Header() {
               </button>
             </div>
 
-            {/* Alerts Notification Button */}
             <button
               className="relative flex items-center justify-center p-1.5 sm:p-2 rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all cursor-pointer active:scale-95 shrink-0"
               onClick={() => {
@@ -268,7 +259,6 @@ export default function Header() {
               )}
             </button>
 
-            {/* Farmer Profile */}
             <div
               className="hidden xl:flex items-center gap-1.5 pl-1 cursor-pointer shrink-0"
               onClick={() => {
@@ -291,7 +281,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Location Modal */}
       {showLocationModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 backdrop-blur-sm p-4">
           <div className="bg-surface-container-lowest rounded-2xl shadow-2xl p-space-lg w-full max-w-md border border-outline-variant">
@@ -378,7 +367,6 @@ export default function Header() {
         </div>
       )}
 
-      {/* Mobile Navigation Drawer */}
       <MobileNavDrawer
         isOpen={isMobileDrawerOpen}
         onClose={() => setIsMobileDrawerOpen(false)}

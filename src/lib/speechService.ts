@@ -1,37 +1,25 @@
-// Web Speech API Voice Layer (STT & TTS) + MediaRecorder Audio Resilience
-// Satisfies FR-5.2 and rural accessibility (bilingual voice input/output)
 
-/**
- * Detects whether a query is primarily Hindi (Devanagari or Hinglish) or English.
- */
 export function detectQueryLanguage(text: string): 'hi' | 'en' {
   if (!text || !text.trim()) return 'hi';
 
-  // 1. Devanagari script: Unicode \u0900 - \u097F
   if (/[\u0900-\u097F]/.test(text)) {
     return 'hi';
   }
 
   const clean = text.toLowerCase().trim();
 
-  // 2. Comprehensive Hindi / Hinglish keywords
   const hindiKeywords = [
-    // Question & interrogatives
     'kya', 'kyun', 'kyu', 'kaise', 'kaisa', 'kaisi', 'kab', 'kahan', 'kaha',
     'kitna', 'kitni', 'kitne', 'kaun', 'kaunsa', 'kaunsi', 'kis', 'kisko', 'kisse',
-    // Time & calendar
     'kal', 'aaj', 'parso', 'parson', 'tarso', 'subah', 'dopahar', 'shaam', 'sham', 'raat',
     'hafte', 'mahine', 'samay', 'waqt', 'din',
-    // Weather & meteorology
     'pani', 'paani', 'barish', 'barsat', 'badal', 'hava', 'hawa', 'aandhi', 'toofan',
     'dhoop', 'thand', 'sardi', 'garmi', 'mausam', 'tapman', 'kohra', 'ole', 'gira', 'girne',
     'hogi', 'hoga', 'honge', 'rahega', 'rahegi', 'rahenge', 'aayegi', 'aayega', 'padega', 'padegi',
-    // Agriculture & farming
     'kheti', 'fasal', 'faslo', 'kisan', 'kisano', 'soya', 'soyabean', 'dhan', 'gehu', 'pyaj',
     'lahsun', 'kapas', 'mitti', 'urvarak', 'khad', 'sinchai', 'dawa', 'dawai', 'keeda', 'keede',
     'rog', 'bimari', 'kheto', 'khet', 'mandee', 'mandi', 'chhidkaw', 'chhidkao', 'chhidkav',
     'buwai', 'katai', 'beej', 'rakba', 'bhav', 'daam', 'upaj',
-    // Conversational & verbs
     'namaste', 'namaskar', 'pranam', 'ram', 'bhai', 'sahab', 'ji', 'batao', 'bataiye', 'bolie',
     'suno', 'kare', 'karein', 'karo', 'karna', 'sakte', 'sakta', 'sakti', 'chahiye',
     'hai', 'hain', 'hoon', 'tha', 'thi', 'the', 'nahi', 'mat', 'theek', 'achha', 'bahut', 'jyada', 'kam'
@@ -45,7 +33,6 @@ export function detectQueryLanguage(text: string): 'hi' | 'en' {
     }
   }
 
-  // If there are at least 2 Hindi keywords, or at least 1 keyword in a short query (<= 3 words)
   if (hindiWordCount >= 2 || (hindiWordCount >= 1 && words.length <= 3)) {
     return 'hi';
   }
@@ -78,7 +65,6 @@ export class SpeechHandler {
   private static onEndCallback: (() => void) | null = null;
   private static onVolumeChangeCallback: ((volume: number) => void) | null = null;
 
-  // TTS utterance, Web Audio & HTMLAudioElement management
   private static currentUtterance: SpeechSynthesisUtterance | null = null;
   private static resumeInterval: any = null;
   private static activeAudioElement: HTMLAudioElement | null = null;
@@ -87,7 +73,6 @@ export class SpeechHandler {
   private static activeSessionId: number = 0;
   private static currentAbortController: AbortController | null = null;
 
-  // MediaStream and Audio Recording fallback handles
   private static activeMediaStream: MediaStream | null = null;
   private static mediaRecorder: MediaRecorder | null = null;
   private static recordedChunks: Blob[] = [];
@@ -106,20 +91,12 @@ export class SpeechHandler {
     return 'speechSynthesis' in window;
   }
 
-  /**
-   * Continuous, resilient speech recognition listener
-   * 1. Acquires physical microphone stream via getUserMedia.
-   * 2. Runs MediaRecorder alongside Web Speech API for 100% fail-safe audio backup.
-   * 3. Ignores 'network' and 'no-speech' drops so mic NEVER dies in 1-2 seconds.
-   * 4. Exposes real-time volume stream for fluid UI equalizer animation.
-   */
   static async startListening(
     onResultOrOptions: ((transcript: string, audioBlob?: Blob) => void) | StartListeningOptions,
     onError?: (err: any) => void,
     lang: 'hi-IN' | 'en-IN' = 'hi-IN',
     onInterim?: (interim: string) => void
   ): Promise<() => void> {
-    // Parse arguments
     let opts: StartListeningOptions;
     if (typeof onResultOrOptions === 'function') {
       opts = {
@@ -127,9 +104,9 @@ export class SpeechHandler {
         onError,
         lang: lang || 'hi-IN',
         onInterim,
-        pauseTimeoutMs: 3000, // 3 seconds pause after speaking completes the query
-        initialTimeoutMs: 15000, // 15 seconds grace period before auto-timeout
-        maxDurationMs: 45000, // 45 seconds maximum recording session
+        pauseTimeoutMs: 3000,
+        initialTimeoutMs: 15000,
+        maxDurationMs: 45000,
       };
     } else {
       opts = {
@@ -141,10 +118,8 @@ export class SpeechHandler {
       };
     }
 
-    // Stop previous session if still running
     this.stopListening(false);
 
-    // Cancel speech synthesis so microphone doesn't pick up speaker audio
     this.stopSpeaking();
     this.prewarmAudio();
 
@@ -158,7 +133,6 @@ export class SpeechHandler {
     this.onEndCallback = opts.onEnd || null;
     this.onVolumeChangeCallback = opts.onVolumeChange || null;
 
-    // 1. Acquire Physical Microphone Stream
     try {
       if (typeof navigator !== 'undefined' && navigator.mediaDevices?.getUserMedia) {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -170,7 +144,6 @@ export class SpeechHandler {
         });
         this.activeMediaStream = stream;
 
-        // Initialize AudioContext for volume analyzer
         try {
           const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
           if (AudioCtx) {
@@ -201,7 +174,6 @@ export class SpeechHandler {
           console.warn('[SpeechHandler] AudioContext initialization skipped:', audioErr);
         }
 
-        // Initialize MediaRecorder for fail-safe audio backup
         try {
           if (typeof MediaRecorder !== 'undefined') {
             let selectedMime = '';
@@ -256,7 +228,6 @@ export class SpeechHandler {
       }
     };
 
-    // Auto-timeout after max duration (e.g., 45s)
     this.maxDurationTimer = setTimeout(() => {
       if (this.isListeningActive) {
         console.log('[SpeechHandler] Max duration reached, finalizing.');
@@ -264,7 +235,6 @@ export class SpeechHandler {
       }
     }, opts.maxDurationMs || 45000);
 
-    // 2. Initialize Web Speech API
     if (this.isRecognitionSupported()) {
       const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       const recognition = new SpeechRec();
@@ -294,12 +264,10 @@ export class SpeechHandler {
         if (currentText) {
           this.accumulatedTranscript = currentText;
 
-          // Stream live transcript to UI
           if (this.onInterimCallback) {
             this.onInterimCallback(currentText);
           }
 
-          // Natural pause detection: user spoke and then paused for 3s -> auto submit
           if (this.silenceTimer) clearTimeout(this.silenceTimer);
           this.silenceTimer = setTimeout(() => {
             if (this.isListeningActive && this.accumulatedTranscript.trim()) {
@@ -313,14 +281,10 @@ export class SpeechHandler {
       recognition.onerror = (event: any) => {
         console.log('[SpeechHandler] recognition.onerror:', event.error);
 
-        // 'no-speech' is completely normal when user is thinking before speaking.
-        // DO NOT kill the microphone on 'no-speech'!
         if (event.error === 'no-speech' || event.error === 'aborted') {
           return;
         }
 
-        // 'network' error occurs in Chrome when Google speech cloud server is blocked/restricted.
-        // DO NOT abort listening! The MediaRecorder is active and recording user voice.
         if (event.error === 'network') {
           console.log('[SpeechHandler] Cloud STT offline or restricted. Continuing in direct audio recorder mode.');
           this.isCloudSttBlocked = true;
@@ -343,7 +307,6 @@ export class SpeechHandler {
           return;
         }
 
-        // Any other non-fatal error: let audio recorder continue
         console.warn('[SpeechHandler] Non-fatal recognition event:', event.error);
       };
 
@@ -351,7 +314,6 @@ export class SpeechHandler {
         console.log('[SpeechHandler] recognition.onend. isListeningActive:', this.isListeningActive, 'cloudBlocked:', this.isCloudSttBlocked);
 
         if (this.isListeningActive && !this.isCloudSttBlocked) {
-          // Seamless restart so user can speak multiple words/sentences without premature cut-off
           setTimeout(() => {
             if (this.isListeningActive && this.recognitionInstance && !this.isCloudSttBlocked) {
               try {
@@ -385,9 +347,6 @@ export class SpeechHandler {
     };
   }
 
-  /**
-   * Safely flushes buffered audio chunks from MediaRecorder and returns audio Blob.
-   */
   private static async flushAndGetAudioBlob(): Promise<Blob | undefined> {
     if (!this.mediaRecorder || this.mediaRecorder.state === 'inactive') {
       if (this.recordedChunks.length > 0) {
@@ -433,9 +392,6 @@ export class SpeechHandler {
     });
   }
 
-  /**
-   * Finalize and deliver accumulated transcript and recorded audio blob
-   */
   private static async finalizeAndSubmit(): Promise<void> {
     if (!this.isListeningActive) return;
     this.isListeningActive = false;
@@ -444,7 +400,6 @@ export class SpeechHandler {
     if (this.maxDurationTimer) clearTimeout(this.maxDurationTimer);
     if (this.volumeCheckRaf) cancelAnimationFrame(this.volumeCheckRaf);
 
-    // Stop Web Speech recognition
     if (this.recognitionInstance) {
       try {
         this.recognitionInstance.stop();
@@ -454,7 +409,6 @@ export class SpeechHandler {
 
     const audioBlob = await this.flushAndGetAudioBlob();
 
-    // Release microphone hardware tracks
     this.releaseMediaStream();
 
     const text = this.accumulatedTranscript.trim();
@@ -466,10 +420,6 @@ export class SpeechHandler {
     }
   }
 
-  /**
-   * Explicitly stop listening.
-   * If submitIfText is true, submits whatever has been captured so far.
-   */
   static async stopListening(submitIfText: boolean = true): Promise<{ text: string; audioBlob?: Blob }> {
     const wasActive = this.isListeningActive;
     this.isListeningActive = false;
@@ -526,10 +476,6 @@ export class SpeechHandler {
     return this.isSpeaking;
   }
 
-  /**
-   * Pre-warms Web Audio Context within a synchronous user gesture (click, tap, mic).
-   * Unlocks persistent audio playback permissions in Chrome, Edge, Safari, and Firefox.
-   */
   static prewarmAudio(): void {
     if (typeof window === 'undefined') return;
     try {
@@ -566,7 +512,6 @@ export class SpeechHandler {
   ): void {
     this.stopSpeaking();
 
-    // Clean text of markdown formatting (asterisks, hashtags, backticks, emojis, URLs)
     const cleanText = text
       .replace(/[*#_`~]/g, '')
       .replace(/https?:\/\/\S+/g, '')
@@ -576,20 +521,14 @@ export class SpeechHandler {
 
     const sessionId = this.activeSessionId;
 
-    // Detect actual language from the text content:
-    // If text contains ANY Devanagari characters, it is 100% Hindi and MUST be spoken in Hindi!
     const isDevanagari = /[\u0900-\u097F]/.test(cleanText);
     const targetLang: 'hi-IN' | 'en-IN' = isDevanagari ? 'hi-IN' : (lang || 'en-IN');
 
-    // 1. If Hindi: ALWAYS prioritize high-fidelity server TTS via Web Audio API.
-    // This produces authentic, natural Hindi accent and handles numbers & agricultural terms perfectly,
-    // avoiding the common Windows issue where native Hindi voices are completely absent.
     if (targetLang === 'hi-IN') {
       this.playViaAudioEndpoint(cleanText, 'hi', onStart, onEnd, rate, sessionId);
       return;
     }
 
-    // 2. If English: Try browser Web Speech API first (Microsoft David / Heera), fallback to server TTS
     if (this.isSynthesisSupported()) {
       this.speakWithWebSpeech(
         cleanText,
@@ -692,8 +631,6 @@ export class SpeechHandler {
           this.resumeInterval = null;
         }
 
-        // If canceled, interrupted, or session has advanced (e.g. stopped or switched language),
-        // DO NOT trigger the fallback or report error!
         if (
           e.error === 'interrupted' ||
           e.error === 'canceled' ||
@@ -751,7 +688,6 @@ export class SpeechHandler {
     const abortController = new AbortController();
     this.currentAbortController = abortController;
 
-    // 1. Primary: High-fidelity Web Audio API playback via /api/tts POST
     try {
       this.prewarmAudio();
 
@@ -783,7 +719,6 @@ export class SpeechHandler {
             const audioBuffer = await this.ttsAudioContext.decodeAudioData(arrayBuf);
             if (sessionId !== this.activeSessionId) return;
 
-            // Stop any existing buffer source before creating and starting a new one
             if (this.currentBufferSource) {
               try {
                 this.currentBufferSource.onended = null;
@@ -825,7 +760,6 @@ export class SpeechHandler {
 
     if (sessionId !== this.activeSessionId) return;
 
-    // 2. Secondary fallback: HTMLAudioElement
     try {
       const audioUrl = `/api/tts?lang=${lang}&text=${encodeURIComponent(text)}`;
       const audio = new Audio(audioUrl);
@@ -870,10 +804,8 @@ export class SpeechHandler {
   }
 
   static stopSpeaking(): void {
-    // 1. Invalidate session so any pending async fetches/decodes immediately abort
     this.activeSessionId++;
 
-    // 2. Abort active network fetch if any
     if (this.currentAbortController) {
       try {
         this.currentAbortController.abort();
@@ -881,7 +813,6 @@ export class SpeechHandler {
       this.currentAbortController = null;
     }
 
-    // 3. Stop and disconnect Web Audio BufferSource
     if (this.currentBufferSource) {
       try {
         this.currentBufferSource.onended = null;
@@ -891,7 +822,6 @@ export class SpeechHandler {
       this.currentBufferSource = null;
     }
 
-    // 4. Pause and reset HTMLAudioElement
     if (this.activeAudioElement) {
       try {
         this.activeAudioElement.onended = null;
@@ -903,7 +833,6 @@ export class SpeechHandler {
       this.activeAudioElement = null;
     }
 
-    // 5. Cancel Web Speech API utterance
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       if (this.resumeInterval) {
         clearInterval(this.resumeInterval);

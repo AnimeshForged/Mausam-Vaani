@@ -12,12 +12,10 @@ export async function askClimateCopilot(
   language: 'en' | 'hi' = 'hi'
 ): Promise<ChatMessage> {
   const isDevanagari = /[\u0900-\u097F]/.test(userQuery);
-  // When website language is English, honor English unless user explicitly typed in Devanagari script
   const queryLang: 'hi' | 'en' = language === 'en'
     ? (isDevanagari ? 'hi' : 'en')
     : 'hi';
 
-  // Check instant semantic cache (FR-8.3 & NFR-1 target <300ms)
   const cached = getCachedResponse(userQuery);
   if (cached) {
     const isHi = queryLang === 'hi';
@@ -36,7 +34,6 @@ export async function askClimateCopilot(
     };
   }
 
-  // First try /api/copilot if running in browser
   if (typeof window !== 'undefined') {
     try {
       const apiRes = await fetch('/api/copilot', {
@@ -114,7 +111,6 @@ export async function askClimateCopilot(
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
 
-      // Session context grounding
       const historyContext = history.slice(-4).map(m => `${m.sender}: ${m.text}`).join('\n');
       const isHi = queryLang === 'hi';
       const systemGrounding = `You are Mausam Vaani Climate Copilot & Senior Agronomist AI, grounded in ICAR (Indian Council of Agricultural Research) Package of Practices, Krishi Vigyan Kendra (KVK) guidelines, and Government Soil Health Card standards.
@@ -180,7 +176,6 @@ Return ONLY valid JSON.`;
     }
   }
 
-  // Intelligent domain fallback with conversational context awareness
   const lower = userQuery.toLowerCase();
   let textEn = '';
   let textHi = '';

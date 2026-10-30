@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
   const { userQuery = '', history, location, weather, language } = body;
 
   const isDevanagari = /[\u0900-\u097F]/.test(userQuery);
-  // If user requested English (language === 'en'), strictly keep 'en' unless the query contains actual Devanagari script
   const targetLanguage: 'hi' | 'en' = language === 'en'
     ? (isDevanagari ? 'hi' : 'en')
     : 'hi';

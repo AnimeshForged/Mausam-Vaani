@@ -1,6 +1,5 @@
 import { AirQualityInfo, ConsensusInfo, LocationInfo, WeatherCurrent, WeatherDaily, WeatherHourly } from '@/types';
 
-// WMO Weather code mapping
 export function getWeatherCondition(code: number, lang: 'en' | 'hi' = 'en') {
   const map: Record<number, { en: string; hi: string; icon: string }> = {
     0: { en: 'Clear Sky', hi: 'साफ़ आसमान', icon: 'wb_sunny' },
@@ -143,12 +142,10 @@ export async function fetchWeatherData(lat: number, lng: number): Promise<{
     const curr = data.current;
     const cond = getWeatherCondition(curr.weather_code);
 
-    // Determine current hour slot
     const hourlyTimes = data.hourly?.time || [];
     const currentHourIndex = new Date().getHours();
     const hourIdx = currentHourIndex < hourlyTimes.length ? currentHourIndex : 0;
 
-    // Genuine multi-model ensemble consensus cross-checking ECMWF IFS (0.25°) vs NOAA GFS
     let tempDelta = 0.2;
     let precipitationConsensus = true;
 
@@ -162,7 +159,6 @@ export async function fetchWeatherData(lat: number, lng: number): Promise<{
       precipitationConsensus = Math.abs(ecmwfPrecip - gfsPrecip) <= 25;
     }
 
-    // Calculate deterministic consensus score based on real meteorological delta
     const calculatedScore = Math.max(85, Math.min(99.4, 99.5 - (tempDelta * 4) - (precipitationConsensus ? 0 : 5)));
     const consensusScore = Number(calculatedScore.toFixed(1));
 
@@ -203,7 +199,6 @@ export async function fetchWeatherData(lat: number, lng: number): Promise<{
       updatedAt: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
     };
 
-    // Parse Hourly (next 24 hours)
     const hourly: WeatherHourly[] = [];
     
     for (let i = currentHourIndex; i < currentHourIndex + 24 && i < hourlyTimes.length; i++) {
@@ -225,7 +220,6 @@ export async function fetchWeatherData(lat: number, lng: number): Promise<{
       });
     }
 
-    // Parse Daily (next 7 days)
     const daily: WeatherDaily[] = [];
     const dailyTimes = data.daily?.time || [];
     const dayNamesEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

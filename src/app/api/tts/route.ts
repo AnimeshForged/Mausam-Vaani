@@ -1,12 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import https from 'https';
 
-/**
- * Server-side TTS Route for High-Fidelity Audio Synthesis
- * Provides crystal-clear Hindi ('hi') and English ('en') neural audio.
- * Includes parallel chunk synthesis, in-memory caching, Range requests, and dual GET/POST support.
- */
-
 const audioCache = new Map<string, Buffer>();
 const MAX_CACHE_ENTRIES = 120;
 
@@ -53,14 +47,12 @@ async function synthesizeAudio(cleanText: string, lang: 'hi' | 'en'): Promise<Bu
     return audioCache.get(cacheKey)!;
   }
 
-  // Split into natural sentence chunks respecting Hindi danda (।) and Western punctuation
   const rawSentences = cleanText.match(/[^।?!.\n]+[।?!.\n]?/g) || [cleanText];
   const chunks: string[] = [];
 
   for (const sent of rawSentences) {
     const s = sent.trim();
     if (!s) continue;
-    // Google TTS URL limit is ~180 chars per chunk
     if (s.length > 180) {
       const subChunks = s.match(/.{1,180}(\s|$)/g) || [s];
       for (const sub of subChunks) {
@@ -76,10 +68,8 @@ async function synthesizeAudio(cleanText: string, lang: 'hi' | 'en'): Promise<Bu
     throw new Error('No valid text to synthesize');
   }
 
-  // Limit to reasonable duration (first 10 chunks max ~50-60 sec)
   const activeChunks = chunks.slice(0, 10);
 
-  // Fetch in parallel for lightning-fast latency
   const audioBuffers = await Promise.all(
     activeChunks.map((chunk) => fetchTtsChunk(chunk, lang))
   );
@@ -90,7 +80,6 @@ async function synthesizeAudio(cleanText: string, lang: 'hi' | 'en'): Promise<Bu
     throw new Error('Failed to synthesize speech audio');
   }
 
-  // Store in cache
   if (audioCache.size >= MAX_CACHE_ENTRIES) {
     const firstKey = audioCache.keys().next().value;
     if (firstKey) audioCache.delete(firstKey);

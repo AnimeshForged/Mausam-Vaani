@@ -15,11 +15,9 @@ export default function ExplorerWorkSafety() {
   const { language, weather, location } = useApp();
   const t = translations[language];
 
-  // Active top view tab: Field Work Windows (FR-7.2), Tasks, Livestock THI, or Emergency
   const [activeView, setActiveView] = useState<WorkSafetyView>('windows');
   const [selectedTask, setSelectedTask] = useState<WorkTaskType>('field-labor');
 
-  // Dynamic Biomechanical and Atmospheric Telemetry
   const currentTemp = weather?.current?.temperature ?? 28;
   const currentHumidity = weather?.current?.relativeHumidity ?? 65;
 
@@ -32,7 +30,6 @@ export default function ExplorerWorkSafety() {
     return calculateHeatStressAndLivestockIndices(currentTemp, currentHumidity);
   }, [currentTemp, currentHumidity]);
 
-  // Diurnal 6-point THI timeline projection
   const hourlyLivestockForecast = useMemo(() => {
     const timeSlots = ['06:00', '09:00', '12:00', '15:00', '18:00', '21:00'];
     return timeSlots.map(hr => {
@@ -112,7 +109,6 @@ export default function ExplorerWorkSafety() {
     };
   }, [weather?.hourly, language]);
 
-  // Dynamic hourly schedule generated from live Open-Meteo telemetry
   const workSafetySchedule = useMemo<WorkSafetyHour[]>(() => {
     const shiftHours = ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'];
     const result: WorkSafetyHour[] = [];
@@ -121,13 +117,11 @@ export default function ExplorerWorkSafety() {
       const targetHourStr = shiftHours[i];
       const targetHourNum = parseInt(targetHourStr.split(':')[0], 10);
 
-      // Match corresponding hour from weather.hourly if available
       const matched = weather?.hourly?.find(h => {
         const hNum = parseInt(h.hour.split(':')[0], 10);
         return hNum === targetHourNum;
       });
 
-      // Ambient temperature calculation from live sensor/satellite forecast
       const temp = matched
         ? matched.temperature
         : Math.round(currentTemp + (targetHourNum >= 12 && targetHourNum <= 15 ? 4 : targetHourNum < 9 ? -4 : 0));
@@ -140,18 +134,15 @@ export default function ExplorerWorkSafety() {
       const wCode = matched ? matched.weatherCode : 0;
       const windSpd = matched ? matched.windSpeed : (weather?.current?.windSpeed ?? 14);
 
-      // Humidity variations across day
       const slotHumidity = Math.max(
         35,
         Math.min(95, Math.round(currentHumidity + (temp < 25 ? 15 : temp > 32 ? -15 : 0)))
       );
 
-      // Dynamic WBGT
       const e = (slotHumidity / 100) * 6.105 * Math.exp((17.27 * temp) / (237.7 + temp));
       const wbgt = Number((0.567 * temp + 0.393 * e + 3.94).toFixed(1));
       const heatIndex = Math.round(temp >= 26 ? temp + (slotHumidity > 60 ? (slotHumidity - 60) * 0.25 : 0) : temp);
 
-      // Safety status classification
       const isThunderstorm = [95, 96, 99].includes(wCode);
       const isHazardous = isThunderstorm || rainProb >= 65 || wbgt >= 31.5 || temp >= 39;
       const isCaution = !isHazardous && (rainProb >= 30 || wbgt >= 27.5 || uv >= 6.5 || temp >= 33 || windSpd >= 25);
@@ -312,7 +303,6 @@ export default function ExplorerWorkSafety() {
 
   return (
     <div className="flex flex-col w-full max-w-7xl mx-auto gap-space-lg">
-      {/* Top Header & Field Work Mode Switcher */}
       <section className="bg-surface-container-lowest p-space-lg rounded-3xl shadow-sm border border-surface-container-high flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
         <div className="flex flex-col">
           <div className="flex items-center gap-space-xs text-primary text-xs font-bold uppercase tracking-wider">
@@ -331,7 +321,6 @@ export default function ExplorerWorkSafety() {
           </p>
         </div>
 
-        {/* View Switcher Pill */}
         <div className="flex flex-wrap items-center gap-1 bg-surface-container p-1 rounded-2xl self-start lg:self-auto shrink-0 shadow-xs text-xs font-bold">
           <button
             type="button"
@@ -387,9 +376,7 @@ export default function ExplorerWorkSafety() {
         </div>
       </section>
 
-      {/* Real-time Field Work & Livestock Thermal Stress Bar (5 Metrics) */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-sm">
-        {/* Box 1: Livestock THI */}
         <div
           onClick={() => setActiveView('livestock')}
           className="bg-surface-container-lowest p-space-md rounded-2xl border border-surface-container-high hover:border-amber-500/50 shadow-xs flex flex-col justify-between cursor-pointer transition-all active:scale-[0.98]"
@@ -423,7 +410,6 @@ export default function ExplorerWorkSafety() {
           </span>
         </div>
 
-        {/* Box 2: WBGT Thermal Load */}
         <div className="bg-surface-container-lowest p-space-md rounded-2xl border border-surface-container-high shadow-xs flex flex-col justify-between">
           <div className="flex items-center justify-between text-on-surface-variant text-xs">
             <span className="font-bold">{language === 'hi' ? 'वेट-बल्ब तापमान (WBGT)' : 'WBGT Thermal Load'}</span>
@@ -471,7 +457,6 @@ export default function ExplorerWorkSafety() {
           </span>
         </div>
 
-        {/* Box 3: Field Work-Rest Ratio */}
         <div className="bg-surface-container-lowest p-space-md rounded-2xl border border-surface-container-high shadow-xs flex flex-col justify-between">
           <div className="flex items-center justify-between text-on-surface-variant text-xs">
             <span className="font-bold">{language === 'hi' ? 'कार्य-विश्राम चक्र' : 'Field Work-Rest Ratio'}</span>
@@ -488,7 +473,6 @@ export default function ExplorerWorkSafety() {
           </span>
         </div>
 
-        {/* Box 4: Hydration Directive */}
         <div className="bg-surface-container-lowest p-space-md rounded-2xl border border-surface-container-high shadow-xs flex flex-col justify-between">
           <div className="flex items-center justify-between text-on-surface-variant text-xs">
             <span className="font-bold">{language === 'hi' ? 'जल सेवन दर' : 'Hydration Directive'}</span>
@@ -505,7 +489,6 @@ export default function ExplorerWorkSafety() {
           </span>
         </div>
 
-        {/* Box 5: Lightning Alert */}
         <div className="bg-surface-container-lowest p-space-md rounded-2xl border border-surface-container-high shadow-xs flex flex-col justify-between">
           <div className="flex items-center justify-between text-on-surface-variant text-xs">
             <span className="font-bold">{language === 'hi' ? 'वज्रपात चेतावनी' : 'Lightning Alert'}</span>
@@ -553,7 +536,6 @@ export default function ExplorerWorkSafety() {
         </div>
       </section>
 
-      {/* SECTION 1: FIELD WORK WINDOWS (FR-7.2) TIMELINE MATRIX */}
       {activeView === 'windows' && (
         <LaborWorkWindows
           workSafetySchedule={workSafetySchedule}
@@ -561,7 +543,6 @@ export default function ExplorerWorkSafety() {
         />
       )}
 
-      {/* SECTION 2: TASK SPECIFIC SAFETY PROTOCOLS */}
       {activeView === 'tasks' && (
         <section className="bg-surface-container-lowest rounded-3xl p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-md animate-fadeIn">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
@@ -579,7 +560,6 @@ export default function ExplorerWorkSafety() {
             </span>
           </div>
 
-          {/* Task Tabs */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {(Object.keys(taskGuidance) as WorkTaskType[]).map(taskId => {
               const task = taskGuidance[taskId];
@@ -610,7 +590,6 @@ export default function ExplorerWorkSafety() {
             })}
           </div>
 
-          {/* Selected Task Directives Box */}
           <div className="bg-surface-container-low p-space-md rounded-2xl border border-primary/20 flex flex-col gap-space-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -645,7 +624,6 @@ export default function ExplorerWorkSafety() {
         </section>
       )}
 
-      {/* SECTION 3: HEAT STRESS & LIVESTOCK SAFETY INDEX (THI) */}
       {activeView === 'livestock' && (
         <LivestockThiCard
           language={language}
@@ -657,7 +635,6 @@ export default function ExplorerWorkSafety() {
         />
       )}
 
-      {/* SECTION 4: EMERGENCY RURAL SAFETY DIRECTIVES */}
       {activeView === 'emergency' && (
         <section className="grid grid-cols-1 md:grid-cols-2 gap-space-md animate-fadeIn">
           <div className="bg-surface-container-lowest p-space-md rounded-3xl border border-secondary/30 shadow-xs flex flex-col gap-2">

@@ -75,7 +75,6 @@ export default function ExplorerWeatherDashboard() {
     ],
   };
 
-  // Auto-detect matching region from current location
   const detectedRegion = React.useMemo(() => {
     const s = `${location.state || ''} ${location.name || ''}`.toLowerCase();
     if (s.includes('uttar pradesh') || s.includes('lucknow') || s.includes('up') || s.includes('kanpur') || s.includes('varanasi')) return 'Uttar Pradesh';
@@ -120,7 +119,6 @@ export default function ExplorerWeatherDashboard() {
 
   return (
     <div className="flex flex-col gap-space-lg w-full max-w-7xl mx-auto">
-      {/* Station Selector Bar with Region Filter */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm bg-surface-container-lowest p-space-sm rounded-2xl border border-surface-container-high shadow-xs">
         <div className="flex items-center gap-2">
           <span className="material-symbols-outlined text-primary text-[1.25rem]">cell_tower</span>
@@ -162,7 +160,6 @@ export default function ExplorerWeatherDashboard() {
         </div>
       </div>
 
-      {/* Sub-header Breadcrumb & Operational Mode Status Bar */}
       <div className="flex flex-wrap items-center justify-between gap-space-sm">
         <div className="flex items-center gap-space-xs text-on-surface-variant text-xs">
           <span className="font-label-sm uppercase tracking-wider text-outline font-semibold">
@@ -176,7 +173,6 @@ export default function ExplorerWeatherDashboard() {
           </span>
         </div>
 
-        {/* Live Telemetry Status Pill */}
         <div className="flex items-center gap-space-sm bg-surface-container-lowest px-space-md py-1 rounded-full shadow-xs border border-surface-container-high">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -203,14 +199,11 @@ export default function ExplorerWeatherDashboard() {
         </div>
       </div>
 
-      {/* Atmospheric Bento Hero: Weather Instrumentation Panel */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-surface-container-low via-surface-container to-surface-container-high p-space-lg md:p-space-xl shadow-md border border-surface-container-high">
-        {/* Ambient Decorative Gradient Spheres */}
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary-fixed-dim/30 blur-3xl pointer-events-none"></div>
         <div className="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-secondary-fixed/30 blur-3xl pointer-events-none"></div>
 
         <div className="relative z-10 flex flex-col gap-space-lg">
-          {/* Station Identity & Primary Consensus Strip */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
             <div className="flex flex-col">
               <div className="flex items-center gap-space-xs">
@@ -227,7 +220,6 @@ export default function ExplorerWeatherDashboard() {
               </p>
             </div>
 
-            {/* Multi-Source Consensus Validation Box (FR-2.3 & NFR-4) */}
             <div className="flex items-center gap-space-sm bg-surface-container-lowest/90 backdrop-blur-md px-space-md py-space-sm rounded-2xl shadow-sm self-start lg:self-auto border border-primary/20">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary">
                 <span className="material-symbols-outlined text-[1.25rem]">verified</span>
@@ -248,9 +240,7 @@ export default function ExplorerWeatherDashboard() {
             </div>
           </div>
 
-          {/* Metric Reading Core: Big Stat & Realtime Sensor Deck */}
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-center">
-            {/* Dominant Temperature Display */}
             <div className="xl:col-span-5 flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-start gap-space-md sm:gap-space-lg min-w-0">
               <div className="flex flex-col min-w-0">
                 <div className="flex items-start">
@@ -271,7 +261,6 @@ export default function ExplorerWeatherDashboard() {
                 </span>
               </div>
 
-              {/* Atmospheric Visual Icon */}
               <div className="flex flex-col items-center justify-center p-space-md rounded-2xl bg-surface-container-lowest/80 backdrop-blur shadow-xs shrink-0">
                 <span className="material-symbols-outlined text-[3rem] sm:text-[3.5rem] text-tertiary-container animate-pulse">
                   {weather.current.icon}
@@ -282,9 +271,7 @@ export default function ExplorerWeatherDashboard() {
               </div>
             </div>
 
-            {/* Secondary Instrument Cluster */}
             <div className="xl:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-space-sm min-w-0">
-              {/* Surface Wind */}
               <div className="bg-surface-container-lowest/90 backdrop-blur p-space-md rounded-2xl flex flex-col justify-between shadow-xs border border-surface-container-high min-w-0">
                 <div className="flex items-center justify-between text-on-surface-variant gap-1">
                   <span className="font-label-sm text-[0.68rem] uppercase tracking-wider font-semibold truncate">Surface Wind</span>
@@ -297,7 +284,6 @@ export default function ExplorerWeatherDashboard() {
                 </div>
               </div>
 
-              {/* Rel Humidity */}
               <div className="bg-surface-container-lowest/90 backdrop-blur p-space-md rounded-2xl flex flex-col justify-between shadow-xs border border-surface-container-high min-w-0">
                 <div className="flex items-center justify-between text-on-surface-variant gap-1">
                   <span className="font-label-sm text-[0.68rem] uppercase tracking-wider font-semibold truncate">Rel. Humidity</span>
@@ -309,7 +295,6 @@ export default function ExplorerWeatherDashboard() {
                 </div>
               </div>
 
-              {/* Barometer */}
               <div className="bg-surface-container-lowest/90 backdrop-blur p-space-md rounded-2xl flex flex-col justify-between shadow-xs border border-surface-container-high min-w-0">
                 <div className="flex items-center justify-between text-on-surface-variant gap-1">
                   <span className="font-label-sm text-[0.68rem] uppercase tracking-wider font-semibold truncate">Barometer</span>
@@ -322,7 +307,6 @@ export default function ExplorerWeatherDashboard() {
                 </div>
               </div>
 
-              {/* UV Index */}
               <div className="bg-surface-container-lowest/90 backdrop-blur p-space-md rounded-2xl flex flex-col justify-between shadow-xs border border-surface-container-high min-w-0">
                 <div className="flex items-center justify-between text-on-surface-variant gap-1">
                   <span className="font-label-sm text-[0.68rem] uppercase tracking-wider font-semibold truncate">UV Index</span>
@@ -339,7 +323,6 @@ export default function ExplorerWeatherDashboard() {
         </div>
       </div>
 
-      {/* Air Quality Index (AQI) & Stubble Burning / Dust Telemetry Panel (FR-AQI) */}
       {weather.airQuality && (
         <section className="bg-surface-container-lowest rounded-3xl p-space-md md:p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-md">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-sm border-b border-surface-container-high">
@@ -371,7 +354,6 @@ export default function ExplorerWeatherDashboard() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-center">
-            {/* Left 4 Cols: Big AQI Gauge & CPCB Scale */}
             <div className="lg:col-span-4 bg-surface-container-low p-space-md rounded-2xl flex flex-col justify-between border border-outline-variant/30">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-outline uppercase tracking-wider">
@@ -399,7 +381,6 @@ export default function ExplorerWeatherDashboard() {
                 </div>
               </div>
 
-              {/* AQI Range Visual Progress Bar */}
               <div className="w-full">
                 <div className="flex justify-between text-[0.65rem] text-outline font-semibold mb-1">
                   <span>0 (Good)</span>
@@ -418,7 +399,6 @@ export default function ExplorerWeatherDashboard() {
               </div>
             </div>
 
-            {/* Middle 5 Cols: Pollutant Sensors Matrix */}
             <div className="lg:col-span-5 grid grid-cols-2 sm:grid-cols-4 gap-2">
               <div className="bg-surface-container-low p-2.5 rounded-xl border border-outline-variant/30 flex flex-col justify-between">
                 <span className="text-[0.68rem] text-outline font-bold uppercase">PM 2.5</span>
@@ -457,7 +437,6 @@ export default function ExplorerWeatherDashboard() {
               </div>
             </div>
 
-            {/* Right 3 Cols: Stubble Burning / Agricultural Smoke Advisory */}
             <div className="lg:col-span-3 bg-surface-container-low p-space-md rounded-2xl border border-outline-variant/30 flex flex-col justify-between">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-outline uppercase tracking-wider flex items-center gap-1">
@@ -490,7 +469,6 @@ export default function ExplorerWeatherDashboard() {
         </section>
       )}
 
-      {/* Live Interactive Doppler Radar & Wind Streamlines Map */}
       <section className="flex flex-col gap-space-sm">
         <div className="flex flex-wrap items-center justify-between gap-space-xs">
           <div className="flex items-center gap-space-xs">
@@ -506,7 +484,6 @@ export default function ExplorerWeatherDashboard() {
         <InteractiveRadarMap />
       </section>
 
-      {/* 24-Hour Synoptic Hourly Strip */}
       <section className="bg-surface-container-lowest rounded-3xl p-space-md md:p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-sm">
         <div className="flex flex-wrap items-center justify-between gap-space-xs">
           <div className="flex items-center gap-space-xs">
@@ -557,7 +534,6 @@ export default function ExplorerWeatherDashboard() {
               </span>
               <span className="text-base font-bold">{h.temperature}°</span>
 
-              {/* Rain Chance Bar */}
               <div className="w-full mt-2 pt-2 border-t border-outline-variant/30 flex flex-col items-center">
                 <span className="text-[0.65rem] opacity-90">{h.precipitationProbability}% Rain</span>
                 <div className="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden mt-1">
@@ -572,7 +548,6 @@ export default function ExplorerWeatherDashboard() {
         </div>
       </section>
 
-      {/* 7-Day Synoptic Outlook Cards */}
       <section className="bg-surface-container-lowest rounded-3xl p-space-md md:p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-sm">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-space-xs">
@@ -616,7 +591,6 @@ export default function ExplorerWeatherDashboard() {
         </div>
       </section>
 
-      {/* Quick Navigation Cards to Explorer Tools */}
       <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
         <div
           onClick={() => setActiveExplorerTab('trends')}

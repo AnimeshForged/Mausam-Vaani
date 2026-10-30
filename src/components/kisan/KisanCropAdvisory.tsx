@@ -111,7 +111,6 @@ export default function KisanCropAdvisory() {
 
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto gap-space-lg">
-      {/* Hero Header Strip */}
       <section className="relative overflow-hidden rounded-3xl bg-surface-container-lowest shadow-sm p-space-lg md:p-space-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md border border-surface-container-high">
         <div className="flex flex-col gap-space-xs relative z-10 max-w-2xl min-w-0">
           <div className="inline-flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-primary-fixed text-on-primary-fixed self-start font-bold text-xs">
@@ -153,9 +152,7 @@ export default function KisanCropAdvisory() {
         </div>
       </section>
 
-      {/* Snapshot Deck (Soil + Season Snapshot & Satellite Analysis) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-stretch">
-        {/* Left 8 Cols: Soil & Season */}
         <div className="lg:col-span-8 bg-surface-container-lowest rounded-3xl p-space-md md:p-space-lg shadow-sm border border-surface-container-high flex flex-col justify-between">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-xs mb-space-sm">
             <div className="flex items-center gap-space-sm">
@@ -182,7 +179,6 @@ export default function KisanCropAdvisory() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-sm">
-            {/* Metric 1: Soil */}
             <div className="bg-surface-container-low rounded-2xl p-space-sm flex flex-col gap-1">
               <span className="font-label-sm text-xs text-outline">
                 {language === 'hi' ? 'मिट्टी का प्रकार' : 'Soil Type'}
@@ -195,7 +191,6 @@ export default function KisanCropAdvisory() {
               </span>
             </div>
 
-            {/* Metric 2: Season */}
             <div className="bg-surface-container-low rounded-2xl p-space-sm flex flex-col gap-1">
               <span className="font-label-sm text-xs text-outline">
                 {language === 'hi' ? 'सक्रिय चक्र' : 'Active Cycle'}
@@ -210,7 +205,6 @@ export default function KisanCropAdvisory() {
               </span>
             </div>
 
-            {/* Metric 3: Sowing Window */}
             <div className="bg-surface-container-low rounded-2xl p-space-sm flex flex-col gap-1">
               <span className="font-label-sm text-xs text-outline">
                 {language === 'hi' ? 'बुवाई खिड़की' : 'Sowing Window'}
@@ -225,7 +219,6 @@ export default function KisanCropAdvisory() {
           </div>
         </div>
 
-        {/* Right 4 Cols: Satellite & Soil Properties */}
         <div className="lg:col-span-4 bg-surface-container-lowest rounded-3xl p-space-md shadow-sm border border-surface-container-high flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="font-label-sm text-xs text-outline uppercase tracking-wider font-semibold">
@@ -272,7 +265,6 @@ export default function KisanCropAdvisory() {
         </div>
       </div>
 
-      {/* Recommended Crops Section & Carousel */}
       <section className="flex flex-col gap-space-sm">
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
@@ -288,7 +280,6 @@ export default function KisanCropAdvisory() {
                 : 'Ranked by market demand, drought tolerance, and soil compatibility'}
             </p>
 
-            {/* Category Filter Pills */}
             <div className="flex flex-wrap items-center gap-1.5 mt-2">
               {[
                 { id: 'all', hi: 'सभी फसलें', en: 'All Crops' },
@@ -332,7 +323,6 @@ export default function KisanCropAdvisory() {
           </div>
         </div>
 
-        {/* Carousel of Cards */}
         <div
           ref={carouselRef}
           className="flex gap-space-md overflow-x-auto pb-space-sm snap-x snap-mandatory scroll-smooth"
@@ -355,7 +345,6 @@ export default function KisanCropAdvisory() {
                   </span>
                 </div>
 
-                {/* Crop Image */}
                 <div className="relative w-full h-40 rounded-2xl overflow-hidden mb-space-sm bg-surface-container">
                   <Image
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -376,7 +365,6 @@ export default function KisanCropAdvisory() {
                   {crop.variety}
                 </span>
 
-                {/* Metric Summary Rows */}
                 <div className="space-y-2 bg-surface-container-low rounded-2xl p-space-sm mt-space-sm">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-on-surface-variant flex items-center gap-1">
@@ -419,7 +407,6 @@ export default function KisanCropAdvisory() {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="mt-space-md pt-1 flex items-center gap-space-xs">
                 <button
                   className={`flex-1 h-target-touch-kisan rounded-xl font-label-md text-xs font-bold flex items-center justify-center gap-space-xs transition-colors active:scale-95 ${
@@ -461,7 +448,6 @@ export default function KisanCropAdvisory() {
         </div>
       </section>
 
-      {/* Detailed Crop Modal */}
       {selectedCrop && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 backdrop-blur-sm p-4">
           <div className="bg-surface-container-lowest rounded-3xl shadow-2xl p-space-lg w-full max-w-lg border border-primary/20 max-h-[90vh] overflow-y-auto">

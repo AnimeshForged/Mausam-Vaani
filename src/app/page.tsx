@@ -6,14 +6,12 @@ import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import NetworkBanner from '@/components/NetworkBanner';
 
-// Kisan Mode Screens
 import KisanHome from '@/components/kisan/KisanHome';
 import KisanLandSetup from '@/components/kisan/KisanLandSetup';
 import KisanCropAdvisory from '@/components/kisan/KisanCropAdvisory';
 import KisanAlerts from '@/components/kisan/KisanAlerts';
 import KisanVoiceAssistant from '@/components/kisan/KisanVoiceAssistant';
 
-// Explorer Mode Screens
 import ExplorerWeatherDashboard from '@/components/explorer/ExplorerWeatherDashboard';
 import ExplorerClimateAnalytics from '@/components/explorer/ExplorerClimateAnalytics';
 import ExplorerAlertsCenter from '@/components/explorer/ExplorerAlertsCenter';
@@ -33,15 +31,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Universal Fixed Header */}
       <Header />
 
-      {/* Persistent Left Sidebar for Desktop */}
       <Sidebar />
 
-      {/* Main Content Area */}
       <div className="lg:pl-72 flex flex-col flex-1 pt-16 sm:pt-20 min-w-0">
-        {/* Network Degradation Warning Banner (FR-8.2) */}
         <NetworkBanner />
 
         <main className="w-full px-2.5 sm:px-space-md lg:px-space-lg py-3 sm:py-space-md lg:py-space-lg pb-24 sm:pb-28 lg:pb-space-2xl min-w-0">
@@ -66,7 +60,6 @@ export default function Home() {
         </main>
       </div>
 
-      {/* Mobile / Shrunk-Tab Sticky Bottom Navigation */}
       <div className="lg:hidden fixed bottom-0 inset-x-0 bg-surface-container-lowest/95 backdrop-blur-lg border-t border-surface-container-high pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] px-1.5 sm:px-3 z-40 flex items-center justify-around shadow-lg">
         {mode === 'kisan' ? (
           <>

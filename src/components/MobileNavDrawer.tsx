@@ -61,16 +61,13 @@ export default function MobileNavDrawer({
 
   return (
     <div className="fixed inset-0 z-50 lg:hidden flex">
-      {/* Backdrop */}
       <div
         className="fixed inset-0 bg-inverse-surface/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Slide-out Drawer Panel */}
       <div className="relative w-[85%] max-w-sm bg-surface-container-lowest h-full shadow-2xl flex flex-col justify-between overflow-y-auto z-10 border-r border-surface-container-high">
-        {/* Drawer Header */}
         <div className="p-4 border-b border-surface-container-high flex items-center justify-between bg-surface-container-low/50">
           <div className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-xs">
@@ -97,9 +94,7 @@ export default function MobileNavDrawer({
           </button>
         </div>
 
-        {/* Drawer Body Content */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {/* Active Location Card & Quick Switcher */}
           <div className="bg-surface-container-low rounded-2xl p-3 border border-outline-variant/30 flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <span className="text-[0.7rem] font-bold uppercase tracking-wider text-outline">
@@ -129,7 +124,6 @@ export default function MobileNavDrawer({
             </div>
           </div>
 
-          {/* Mode Switcher Buttons */}
           <div className="flex items-center bg-surface-container p-1 rounded-xl">
             <button
               className={`flex-1 py-1.5 px-2 rounded-lg font-bold text-xs flex items-center justify-center gap-1 transition-all ${
@@ -157,7 +151,6 @@ export default function MobileNavDrawer({
             </button>
           </div>
 
-          {/* Fast Voice Query Box */}
           <div className="bg-primary-fixed/30 border border-primary/20 rounded-2xl p-3 flex flex-col gap-2">
             <div className="flex items-center justify-between">
               <span className="text-[0.7rem] font-bold text-primary uppercase tracking-wide flex items-center gap-1">
@@ -179,7 +172,6 @@ export default function MobileNavDrawer({
             </button>
           </div>
 
-          {/* Navigation Links for Active Mode */}
           <div className="space-y-1">
             <div className="flex items-center justify-between px-2 py-1">
               <span className="text-[0.65rem] font-bold uppercase tracking-wider text-outline">
@@ -324,7 +316,6 @@ export default function MobileNavDrawer({
                   <span>{t.journeyPlanner}</span>
                 </button>
 
-                {/* Work Safety - Now completely accessible on mobile! */}
                 <button
                   onClick={() => navigateExplorer('work-safety')}
                   className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-left w-full text-xs font-semibold transition-all cursor-pointer ${
@@ -354,7 +345,6 @@ export default function MobileNavDrawer({
             )}
           </div>
 
-          {/* Quick Settings: Language & Network Mode */}
           <div className="pt-2 border-t border-surface-container-high space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-on-surface">
@@ -404,7 +394,6 @@ export default function MobileNavDrawer({
           </div>
         </div>
 
-        {/* Drawer Footer: Consensus Engine Badge */}
         <div className="p-4 border-t border-surface-container-high bg-surface-container-low/60">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-[1.25rem]">verified_user</span>

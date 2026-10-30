@@ -101,7 +101,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   const hasHydrated = useRef(false);
 
-  // Hydrate settings from localStorage on client mount (safe against SSR hydration mismatch)
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -146,7 +145,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Persist language to localStorage
   useEffect(() => {
     if (!hasHydrated.current || typeof window === 'undefined') return;
     try {
@@ -156,7 +154,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [language]);
 
-  // Persist location to localStorage
   useEffect(() => {
     if (!hasHydrated.current || typeof window === 'undefined') return;
     try {
@@ -166,7 +163,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [location]);
 
-  // Persist network mode to localStorage
   useEffect(() => {
     if (!hasHydrated.current || typeof window === 'undefined') return;
     try {
@@ -176,7 +172,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [networkMode]);
 
-  // Persist soilConfig to localStorage
   useEffect(() => {
     if (!hasHydrated.current || typeof window === 'undefined') return;
     try {
@@ -186,7 +181,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [soilConfig]);
 
-  // Persist speechRate to localStorage
   useEffect(() => {
     if (!hasHydrated.current || typeof window === 'undefined') return;
     try {
@@ -196,7 +190,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, [speechRate]);
 
-  // Detect Network Speed (FR-8.1 Network detection)
   useEffect(() => {
     if (typeof window !== 'undefined' && 'connection' in navigator) {
       const conn = (navigator as any).connection;
@@ -206,7 +199,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Fetch Weather Data
   const refreshWeather = useCallback(async () => {
     setIsLoadingWeather(true);
     try {
@@ -223,12 +215,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     refreshWeather();
   }, [refreshWeather]);
 
-  // Update Alerts dynamically when location or weather telemetry changes
   useEffect(() => {
     setAlerts(getAlertsForLocation(location, weather?.current));
   }, [location, weather]);
 
-  // Update Crop Recommendations when soilConfig changes
   useEffect(() => {
     getCropRecommendations(soilConfig, location.name).then(recs => {
       setCropRecommendations(recs);
@@ -250,12 +240,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setLanguage(prev => (prev === 'hi' ? 'en' : 'hi'));
   };
 
-  // Stop ongoing speech immediately whenever language is switched
   useEffect(() => {
     stopSpeech();
   }, [language]);
 
-  // Stop ongoing speech when switching tabs or modes
   useEffect(() => {
     stopSpeech();
   }, [activeKisanTab, activeExplorerTab, mode]);
@@ -268,16 +256,12 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   const playSpeech = (text: string, lang?: 'hi-IN' | 'en-IN', rate?: number) => {
-    // If under degraded mode, speech is paused per FR-8.2
     if (networkMode === 'degraded') return;
 
-    // Immediately stop any prior speech before beginning new utterance
     stopSpeech();
 
     SpeechHandler.prewarmAudio();
 
-    // Detect actual script from text:
-    // If text contains Devanagari characters, it is 100% Hindi and MUST be spoken in Hindi ('hi-IN')
     const hasDevanagari = /[\u0900-\u097F]/.test(text);
     const speechLang = hasDevanagari ? 'hi-IN' : (lang || 'en-IN');
 

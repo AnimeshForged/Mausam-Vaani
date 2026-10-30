@@ -31,9 +31,7 @@ function getRegionalTehsils(district: string, state: string): string[] {
 }
 
 export function calculateHeatStressAndLivestockIndices(temp: number = 31, humidity: number = 60) {
-  // THI formula for dairy cattle & buffaloes (NRC / Thom formulation)
   const thi = (1.8 * temp + 32) - (0.55 - 0.0055 * humidity) * (1.8 * temp - 26);
-  // Outdoor simplified Wet-Bulb Globe Temperature (WBGT) estimate
   const e = (humidity / 100) * 6.105 * Math.exp((17.27 * temp) / (237.7 + temp));
   const wbgt = Number((0.567 * temp + 0.393 * e + 3.94).toFixed(1));
 
@@ -412,21 +410,17 @@ export function getAlertsForLocation(
   const heatAlert = generateLivestockHeatAlert(district, state, temp, humidity);
   const alertsList: GovernmentAlert[] = [heatAlert];
 
-  // 1. Severe Convective / Thunderstorm / Hailstorm Condition (weather code 95-99, squall >= 50, violent showers)
   if (weatherCode >= 95 || windSpeed >= 50 || weatherCode === 82) {
     alertsList.unshift(generateSevereThunderstormAlert(district, state, windSpeed));
   }
-  // 2. High Wind Squalls without severe thunderstorm
   else if (windSpeed >= 32) {
     alertsList.unshift(generateHighWindSquallAlert(district, state, windSpeed));
   }
 
-  // 3. Washout & Heavy Rain / Ponding Risk
   if (precip > 0.5 || weatherCode === 61 || weatherCode === 63 || weatherCode === 65 || weatherCode === 80 || weatherCode === 81) {
     alertsList.push(generateWashoutAndDrainageAlert(district, state, precip, windSpeed));
   }
 
-  // 4. Default: If no severe weather and conditions are calm/favorable, include GKMS agromet operational advisory
   if (alertsList.length === 1) {
     alertsList.push(generateOptimalAgrometAdvisory(district, state));
   }

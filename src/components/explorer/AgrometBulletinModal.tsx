@@ -35,7 +35,6 @@ export default function AgrometBulletinModal({ isOpen, onClose }: AgrometBulleti
         role="dialog"
         aria-modal="true"
       >
-        {/* Header Action Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 bg-surface-container-low border-b border-surface-container-high">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
@@ -51,9 +50,7 @@ export default function AgrometBulletinModal({ isOpen, onClose }: AgrometBulleti
             </div>
           </div>
 
-          {/* Controls: Language toggle, Print, TXT, Close */}
           <div className="flex items-center gap-2 flex-wrap">
-            {/* Language switch */}
             <div className="flex items-center bg-surface-container rounded-full p-0.5 border border-surface-container-high">
               <button
                 type="button"
@@ -79,7 +76,6 @@ export default function AgrometBulletinModal({ isOpen, onClose }: AgrometBulleti
               </button>
             </div>
 
-            {/* Plain text download */}
             <button
               type="button"
               onClick={handleDownloadTxt}
@@ -90,7 +86,6 @@ export default function AgrometBulletinModal({ isOpen, onClose }: AgrometBulleti
               <span className="hidden sm:inline">Download .TXT</span>
             </button>
 
-            {/* Print / Save as PDF button */}
             <button
               type="button"
               onClick={handlePrint}
@@ -101,7 +96,6 @@ export default function AgrometBulletinModal({ isOpen, onClose }: AgrometBulleti
               <span>{isPrinting ? 'Preparing...' : 'Print / Save PDF'}</span>
             </button>
 
-            {/* Close button */}
             <button
               type="button"
               onClick={onClose}
@@ -113,7 +107,6 @@ export default function AgrometBulletinModal({ isOpen, onClose }: AgrometBulleti
           </div>
         </div>
 
-        {/* Bulletin Interactive Preview (Rendered HTML) */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-surface-container-lowest/50">
           <div className="max-w-3xl mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
             <div 
@@ -123,7 +116,6 @@ export default function AgrometBulletinModal({ isOpen, onClose }: AgrometBulleti
           </div>
         </div>
 
-        {/* Modal Footer Note */}
         <div className="px-5 py-2.5 bg-surface-container-low border-t border-surface-container-high flex flex-wrap items-center justify-between text-[11px] text-on-surface-variant">
           <span>💡 <strong>Tip:</strong> In the browser print dialog, choose &quot;Save as PDF&quot; under Destination to export an A4 document.</span>
           <span className="font-mono text-[10px] text-outline">Format: A4 Vector • GKMS-IMD Compliant</span>

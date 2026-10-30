@@ -6,10 +6,10 @@ import { useApp } from '@/context/AppContext';
 interface RegionalMonsoonBaseline {
   regionName: string;
   state: string;
-  lpaNormalMm: number; // 30-year IMD Long Period Average (1991-2020)
+  lpaNormalMm: number;
   currentRecordedMm: number;
   drySpellMaxDays: number;
-  heavyRainDays: number; // >65 mm
+  heavyRainDays: number;
   soilDepletionRate: string;
   monthlyData: {
     month: string;
@@ -116,7 +116,6 @@ const BASIN_BASELINES: Record<string, RegionalMonsoonBaseline> = {
 export default function MonsoonDeficitTracker() {
   const { location, language } = useApp();
 
-  // Match regional baseline from location
   const detectedState = useMemo(() => {
     const s = `${location.state || ''} ${location.name || ''}`.toLowerCase();
     if (s.includes('uttar pradesh') || s.includes('lucknow') || s.includes('kanpur') || s.includes('varanasi') || s.includes('up')) return 'Uttar Pradesh';
@@ -130,14 +129,12 @@ export default function MonsoonDeficitTracker() {
   const [activeRegionKey, setActiveRegionKey] = useState<string>(detectedState);
   const [selectedEpoch, setSelectedEpoch] = useState<'30y' | '10y'>('30y');
 
-  // Sync when location changes
   React.useEffect(() => {
     setActiveRegionKey(detectedState);
   }, [detectedState]);
 
   const baseline = BASIN_BASELINES[activeRegionKey] || BASIN_BASELINES['Madhya Pradesh'];
 
-  // Calculate IMD Official Departure and Category
   const departurePercent = useMemo(() => {
     const diff = baseline.currentRecordedMm - baseline.lpaNormalMm;
     return Number(((diff / baseline.lpaNormalMm) * 100).toFixed(1));
@@ -188,7 +185,6 @@ export default function MonsoonDeficitTracker() {
     };
   }, [departurePercent]);
 
-  // Compute cumulative progression points for SVG visual
   const cumulativePoints = useMemo(() => {
     let cumLpa = 0;
     let cumActual = 0;
@@ -208,7 +204,6 @@ export default function MonsoonDeficitTracker() {
 
   return (
     <section className="bg-surface-container-lowest rounded-3xl p-space-md md:p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-md">
-      {/* Header with Title and Region Switcher */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-sm pb-space-sm border-b border-surface-container">
         <div className="flex flex-col">
           <div className="flex items-center gap-space-xs">
@@ -226,7 +221,6 @@ export default function MonsoonDeficitTracker() {
           </p>
         </div>
 
-        {/* Region & Epoch Selector */}
         <div className="flex flex-wrap items-center gap-2 self-start lg:self-center">
           <select
             value={activeRegionKey}
@@ -261,9 +255,7 @@ export default function MonsoonDeficitTracker() {
         </div>
       </div>
 
-      {/* Top 4 Key Telemetry Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-sm">
-        {/* Metric 1: Recorded vs LPA */}
         <div className="bg-surface-container-low p-space-md rounded-2xl flex flex-col justify-between">
           <div className="flex items-center justify-between text-on-surface-variant">
             <span className="text-xs font-semibold uppercase tracking-wider">Cumulative Monsoon Rain</span>
@@ -278,7 +270,6 @@ export default function MonsoonDeficitTracker() {
               Departure: <b className={departurePercent >= 0 ? 'text-primary' : 'text-amber-700'}>{departurePercent > 0 ? `+${departurePercent}%` : `${departurePercent}%`}</b>
             </div>
           </div>
-          {/* Progress bar */}
           <div className="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden mt-2">
             <div
               className={`h-full rounded-full ${departurePercent < -19 ? 'bg-amber-600' : 'bg-primary'}`}
@@ -287,7 +278,6 @@ export default function MonsoonDeficitTracker() {
           </div>
         </div>
 
-        {/* Metric 2: Official IMD Category */}
         <div className={`p-space-md rounded-2xl flex flex-col justify-between border ${imdCategory.color}`}>
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold uppercase tracking-wider">IMD Status</span>
@@ -305,7 +295,6 @@ export default function MonsoonDeficitTracker() {
           </div>
         </div>
 
-        {/* Metric 3: Dry Spell & Drought Risk */}
         <div className="bg-surface-container-low p-space-md rounded-2xl flex flex-col justify-between">
           <div className="flex items-center justify-between text-on-surface-variant">
             <span className="text-xs font-semibold uppercase tracking-wider">Dry Spell Streak</span>
@@ -322,7 +311,6 @@ export default function MonsoonDeficitTracker() {
           </div>
         </div>
 
-        {/* Metric 4: Soil Reservoir Depletion Rate */}
         <div className="bg-surface-container-low p-space-md rounded-2xl flex flex-col justify-between">
           <div className="flex items-center justify-between text-on-surface-variant">
             <span className="text-xs font-semibold uppercase tracking-wider">Root-Zone Moisture Depletion</span>
@@ -337,7 +325,6 @@ export default function MonsoonDeficitTracker() {
         </div>
       </div>
 
-      {/* Interactive Cumulative Progression SVG Chart */}
       <div className="bg-surface-container-low rounded-2xl p-space-md border border-outline-variant/20 flex flex-col gap-space-sm">
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
           <span className="font-bold text-on-surface">
@@ -360,15 +347,12 @@ export default function MonsoonDeficitTracker() {
           </div>
         </div>
 
-        {/* SVG Cumulative Trajectory Curve */}
         <div className="w-full h-56 overflow-hidden relative">
           <svg className="w-full h-full" viewBox="0 0 800 200" preserveAspectRatio="none">
-            {/* Horizontal Grid lines */}
             <line x1="0" y1="40" x2="800" y2="40" stroke="#d5e0da" strokeWidth="1" strokeDasharray="3 3" />
             <line x1="0" y1="90" x2="800" y2="90" stroke="#d5e0da" strokeWidth="1" strokeDasharray="3 3" />
             <line x1="0" y1="140" x2="800" y2="140" stroke="#d5e0da" strokeWidth="1" strokeDasharray="3 3" />
 
-            {/* Normal Band Shaded Area (Between Lower Band 81% and Upper Band 119%) */}
             <polygon
               fill="rgba(25, 135, 84, 0.08)"
               points={`
@@ -383,7 +367,6 @@ export default function MonsoonDeficitTracker() {
               `}
             />
 
-            {/* 30-Year LPA Dashed Baseline */}
             <polyline
               fill="none"
               stroke="#707973"
@@ -394,7 +377,6 @@ export default function MonsoonDeficitTracker() {
                 .join(' ')}
             />
 
-            {/* Current Recorded Actuals Solid Line */}
             <polyline
               fill="none"
               stroke="#0f5238"
@@ -406,7 +388,6 @@ export default function MonsoonDeficitTracker() {
                 .join(' ')}
             />
 
-            {/* Interactive Data Point Markers */}
             {cumulativePoints.map((pt, i) => {
               const cx = 80 + i * 200 + (i === 3 ? 40 : 0);
               const cy = 190 - (pt.cumActual / 1100) * 160;
@@ -425,7 +406,6 @@ export default function MonsoonDeficitTracker() {
           </svg>
         </div>
 
-        {/* Monthly Breakdown Departure Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-outline-variant/20">
           {baseline.monthlyData.map((m, idx) => (
             <div key={idx} className="bg-surface-container-lowest p-2 rounded-xl flex flex-col items-center text-center">

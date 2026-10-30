@@ -1,5 +1,3 @@
-// Semantic & Normalized Query Cache (FR-8.3 & NFR-1)
-// Caches common query responses for near-instant (<300ms) turnaround
 
 interface CacheEntry {
   normalizedQuery: string;
@@ -18,7 +16,6 @@ export function normalizeQuery(query: string): string {
     .replace(/\s+/g, ' ');
 }
 
-// Pre-seeded normalized queries for instant live demo response
 const PRE_SEEDED_CACHE: Record<string, any> = {
   'कल बारिश होगी क्या': {
     text: 'कल दोपहर बाद 70% तेज बारिश और गरज चमक की संभावना है। सुबह 11 बजे तक मौसम अपेक्षाकृत साफ़ रहेगा।',
@@ -52,14 +49,12 @@ const PRE_SEEDED_CACHE: Record<string, any> = {
 export function getCachedResponse(query: string): any | null {
   const normalized = normalizeQuery(query);
   
-  // Check memory cache
   const entry = memoryCache.get(normalized);
   if (entry) {
     entry.hitCount += 1;
     return entry.response;
   }
 
-  // Check pre-seeded cache keys with partial matching
   for (const [key, val] of Object.entries(PRE_SEEDED_CACHE)) {
     if (normalized.includes(key) || key.includes(normalized)) {
       return val;

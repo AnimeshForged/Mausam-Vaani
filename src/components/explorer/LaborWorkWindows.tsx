@@ -39,7 +39,6 @@ export default function LaborWorkWindows({
           </p>
         </div>
 
-        {/* Filter Pills */}
         <div className="flex flex-wrap items-center gap-1.5 bg-surface-container p-1 rounded-full self-start md:self-auto text-xs shrink-0">
           {(['all', 'safe', 'caution', 'hazardous'] as const).map(f => (
             <button
@@ -58,7 +57,6 @@ export default function LaborWorkWindows({
         </div>
       </div>
 
-      {/* Timeline Grid */}
       <div className="space-y-space-xs mt-space-xs">
         {filteredSlots.map((slot, idx) => {
           const isSelected = selectedSlot?.hour === slot.hour;
@@ -128,7 +126,6 @@ export default function LaborWorkWindows({
         })}
       </div>
 
-      {/* Selected Slot Detailed Agronomic Protocol Modal/Box */}
       {selectedSlot && (
         <div className="p-space-md rounded-2xl bg-surface-container-low border border-primary/30 flex flex-col gap-2 animate-fadeIn">
           <div className="flex items-center justify-between">

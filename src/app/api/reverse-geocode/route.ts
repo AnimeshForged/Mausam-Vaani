@@ -1,12 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-/**
- * High-Accuracy Reverse Geocoding Route for GPS Location
- * Converts raw coordinates (e.g. 26.7676, 80.9462) to human-readable names
- * like "Vrindavan Yojna, Lucknow" instead of raw decimal numbers.
- */
-
-// In-memory cache to avoid duplicate reverse geocoding requests
 const geoCache = new Map<string, any>();
 
 export async function GET(req: NextRequest) {
@@ -31,7 +24,6 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // 1. Query OpenStreetMap Nominatim with proper User-Agent
     const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=en&addressdetails=1`;
     const res = await fetch(nominatimUrl, {
       headers: {
@@ -44,7 +36,6 @@ export async function GET(req: NextRequest) {
       const data = await res.json();
       const addr = data.address || {};
 
-      // Prioritize specific residential/colony/suburb name
       const locality =
         addr.suburb ||
         addr.neighbourhood ||
@@ -66,7 +57,6 @@ export async function GET(req: NextRequest) {
       const state = addr.state || 'India';
       const postcode = addr.postcode || '';
 
-      // Format place name: e.g. "Vrindavan, Mathura" or "Hazratganj, Lucknow"
       let formattedName = '';
       if (locality && locality.toLowerCase() !== city.toLowerCase()) {
         formattedName = `${locality}, ${city}`;
@@ -76,7 +66,7 @@ export async function GET(req: NextRequest) {
 
       const result = {
         name: formattedName,
-        nameHi: formattedName, // will be transliterated or matched
+        nameHi: formattedName,
         locality: locality || city,
         city: city,
         district: city,
@@ -84,7 +74,7 @@ export async function GET(req: NextRequest) {
         postcode: postcode,
         lat: Number(lat.toFixed(4)),
         lng: Number(lng.toFixed(4)),
-        elevation: 120, // default Gangetic/Alluvial baseline, updated below
+        elevation: 120,
       };
 
       geoCache.set(cacheKey, result);
@@ -94,7 +84,6 @@ export async function GET(req: NextRequest) {
     console.warn('[ReverseGeocode] Nominatim failed, trying BigDataCloud fallback:', nomErr);
   }
 
-  // 2. Fallback: BigDataCloud free client API
   try {
     const bdcUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`;
     const res = await fetch(bdcUrl);
@@ -124,7 +113,6 @@ export async function GET(req: NextRequest) {
     console.warn('[ReverseGeocode] BigDataCloud fallback failed:', bdcErr);
   }
 
-  // Generic fallback if network offline
   const fallback = {
     name: `GPS Point (${lat.toFixed(2)}°N, ${lng.toFixed(2)}°E)`,
     nameHi: `GPS स्थान (${lat.toFixed(2)}°N, ${lng.toFixed(2)}°E)`,

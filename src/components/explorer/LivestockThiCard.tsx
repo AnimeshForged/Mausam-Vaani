@@ -262,7 +262,6 @@ export default function LivestockThiCard({
 
   return (
     <section className="bg-surface-container-lowest rounded-3xl p-space-md sm:p-space-lg shadow-sm border border-amber-500/30 flex flex-col gap-space-lg animate-fadeIn">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm border-b border-surface-container-high pb-4">
         <div>
           <div className="flex items-center gap-2">
@@ -301,7 +300,6 @@ export default function LivestockThiCard({
         </div>
       </div>
 
-      {/* Diurnal 6-Point Hourly THI Forecast Progression */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-on-surface uppercase tracking-wider">
@@ -352,7 +350,6 @@ export default function LivestockThiCard({
         </div>
       </div>
 
-      {/* Species Selector Tabs */}
       <div className="flex flex-col gap-2">
         <span className="text-xs font-bold text-on-surface uppercase tracking-wider">
           {language === 'hi' ? 'पशु प्रजाति चुनें (Species Thermal Sensitivity):' : 'Select Farm Species for Tailored Directives:'}
@@ -396,9 +393,7 @@ export default function LivestockThiCard({
         </div>
       </div>
 
-      {/* Active Species Detailed Dossier Card */}
       <div className="bg-surface-container-low rounded-2xl p-space-md border border-amber-500/20 flex flex-col gap-space-md">
-        {/* Header row with impact metrics */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-sm border-b border-surface-container pb-3">
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
@@ -430,9 +425,7 @@ export default function LivestockThiCard({
           </div>
         </div>
 
-        {/* 3 Columns: Symptoms, Housing Adaptations, Nutrition */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md">
-          {/* Symptoms */}
           <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-surface-container-high flex flex-col gap-2">
             <div className="flex items-center gap-2 text-rose-600 font-bold text-xs">
               <span className="material-symbols-outlined text-[1.125rem]">vital_signs</span>
@@ -448,7 +441,6 @@ export default function LivestockThiCard({
             </div>
           </div>
 
-          {/* Housing & Microclimate */}
           <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-surface-container-high flex flex-col gap-2">
             <div className="flex items-center gap-2 text-primary font-bold text-xs">
               <span className="material-symbols-outlined text-[1.125rem]">roofing</span>
@@ -464,7 +456,6 @@ export default function LivestockThiCard({
             </div>
           </div>
 
-          {/* Nutrition & Buffering */}
           <div className="bg-surface-container-lowest p-3.5 rounded-2xl border border-surface-container-high flex flex-col gap-2">
             <div className="flex items-center gap-2 text-amber-600 font-bold text-xs">
               <span className="material-symbols-outlined text-[1.125rem]">medication</span>
@@ -482,7 +473,6 @@ export default function LivestockThiCard({
         </div>
       </div>
 
-      {/* Interactive THI Scenario Simulator & Veterinary Emergency */}
       <ThiScenarioSimulator
         language={language}
         defaultTemp={currentTemp}

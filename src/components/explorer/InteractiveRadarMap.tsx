@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useApp } from '@/context/AppContext';
 
-// Comprehensive Doppler Weather Radar (DWR) station database across India
 const IMD_RADAR_STATIONS = [
   { id: 'LKO-DWR', name: 'Lucknow (Amausi Hub)', lat: 26.8467, lng: 80.9462, band: 'S-Band Doppler (EEC)', rangeKm: 250, qpeRangeKm: 100, state: 'Uttar Pradesh' },
   { id: 'DEL-DWR', name: 'New Delhi (Palam Station)', lat: 28.6139, lng: 77.2090, band: 'C-Band Doppler (BEL)', rangeKm: 250, qpeRangeKm: 100, state: 'Delhi NCR' },
@@ -32,14 +31,12 @@ export default function InteractiveRadarMap() {
   const markersLayerRef = useRef<any>(null);
   const activeMarkerRef = useRef<any>(null);
 
-  // Radar frames & animation state
   const [radarFrames, setRadarFrames] = useState<RadarFrame[]>([]);
   const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
   const [radarHost, setRadarHost] = useState<string>('https://tilecache.rainviewer.com');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [radarOpacity, setRadarOpacity] = useState<number>(0.75);
 
-  // Layer toggles
   const [showRadar, setShowRadar] = useState<boolean>(true);
   const [showWind, setShowWind] = useState<boolean>(true);
   const [showRadarRings, setShowRadarRings] = useState<boolean>(true);
@@ -49,7 +46,6 @@ export default function InteractiveRadarMap() {
   const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
   const [isTouchLocked, setIsTouchLocked] = useState<boolean>(true);
 
-  // Detect touch-capable devices on client mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -57,7 +53,6 @@ export default function InteractiveRadarMap() {
     }
   }, []);
 
-  // Fetch Live RainViewer radar frames
   useEffect(() => {
     let isMounted = true;
     async function loadRainViewerData() {
@@ -78,7 +73,6 @@ export default function InteractiveRadarMap() {
         }
       } catch (e) {
         console.warn('Live radar feed fallback:', e);
-        // Resilient fallback timestamps (last 50 mins in 10-min increments)
         const now = Math.floor(Date.now() / 1000);
         const fallback = [-40, -30, -20, -10, 0].map(mins => ({
           time: now + mins * 60,
@@ -92,14 +86,13 @@ export default function InteractiveRadarMap() {
     }
 
     loadRainViewerData();
-    const interval = setInterval(loadRainViewerData, 5 * 60 * 1000); // refresh every 5 min
+    const interval = setInterval(loadRainViewerData, 5 * 60 * 1000);
     return () => {
       isMounted = false;
       clearInterval(interval);
     };
   }, []);
 
-  // Initialize Leaflet Map
   useEffect(() => {
     if (typeof window === 'undefined' || !mapContainerRef.current) return;
 
@@ -110,7 +103,6 @@ export default function InteractiveRadarMap() {
       if (isCancelled || !mapContainerRef.current) return;
       L = leafletModule.default || leafletModule;
 
-      // Fix leaflet default icon path
       delete (L.Icon.Default.prototype as any)._getIconUrl;
       L.Icon.Default.mergeOptions({
         iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
@@ -132,7 +124,6 @@ export default function InteractiveRadarMap() {
 
       L.control.zoom({ position: 'topright' }).addTo(map);
 
-      // Base tile layer (100% Free & Open - Zero API Key Required, No Watermarks)
       let baseTileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
       let tileOptions: any = {
         maxZoom: 19,
@@ -165,13 +156,11 @@ export default function InteractiveRadarMap() {
 
       const baseLayer = L.tileLayer(baseTileUrl, tileOptions).addTo(map);
 
-      // Layer groups
       const ringsGroup = L.layerGroup().addTo(map);
       const markersGroup = L.layerGroup().addTo(map);
       ringsLayerRef.current = ringsGroup;
       markersLayerRef.current = markersGroup;
 
-      // User location pulsing marker
       const userIcon = L.divIcon({
         className: 'user-radar-pin',
         html: `
@@ -196,7 +185,6 @@ export default function InteractiveRadarMap() {
         .addTo(map);
       activeMarkerRef.current = userMarker;
 
-      // Populate DWR Radar stations
       IMD_RADAR_STATIONS.forEach(stn => {
         const isSelected = selectedStation?.id === stn.id;
         const stationIcon = L.divIcon({
@@ -229,9 +217,7 @@ export default function InteractiveRadarMap() {
 
         markersGroup.addLayer(stnMarker);
 
-        // Add Doppler Range Rings
         if (showRadarRings) {
-          // 250km surveillance ring
           const ring250 = L.circle([stn.lat, stn.lng], {
             radius: stn.rangeKm * 1000,
             color: '#1b8755',
@@ -240,7 +226,6 @@ export default function InteractiveRadarMap() {
             fillColor: '#1b8755',
             fillOpacity: 0.02,
           });
-          // 100km QPE ring
           const ring100 = L.circle([stn.lat, stn.lng], {
             radius: stn.qpeRangeKm * 1000,
             color: '#2d6a4f',
@@ -269,10 +254,8 @@ export default function InteractiveRadarMap() {
         mapInstanceRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- Leaflet map instance is created on mount/theme change; dynamic updates are handled in dedicated effects below.
   }, [mapTheme, showRadarRings, isTouchDevice]);
 
-  // Synchronize mobile gesture locking to prevent page scrolling interception
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
@@ -286,7 +269,6 @@ export default function InteractiveRadarMap() {
     }
   }, [isTouchLocked, isTouchDevice, isFullscreen]);
 
-  // Recalculate leaflet tile layout on fullscreen transition
   useEffect(() => {
     if (mapInstanceRef.current) {
       const timer = setTimeout(() => {
@@ -296,7 +278,6 @@ export default function InteractiveRadarMap() {
     }
   }, [isFullscreen]);
 
-  // Update map center when user location changes
   useEffect(() => {
     if (!mapInstanceRef.current || !location) return;
     mapInstanceRef.current.panTo([location.lat, location.lng], { animate: true, duration: 1.2 });
@@ -305,7 +286,6 @@ export default function InteractiveRadarMap() {
     }
   }, [location]);
 
-  // Update Live Radar Tile Layer on current frame change
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map || radarFrames.length === 0 || !showRadar) {
@@ -337,7 +317,6 @@ export default function InteractiveRadarMap() {
     });
   }, [radarFrames, currentFrameIndex, radarHost, showRadar, radarOpacity]);
 
-  // Animation player for radar timeline
   useEffect(() => {
     if (!isPlaying || radarFrames.length === 0) return;
 
@@ -348,7 +327,6 @@ export default function InteractiveRadarMap() {
     return () => clearInterval(timer);
   }, [isPlaying, radarFrames.length]);
 
-  // Wind Particle Streamlines Overlay (HTML5 Canvas)
   useEffect(() => {
     if (!showWind || !canvasRef.current || !mapContainerRef.current) return;
 
@@ -366,10 +344,8 @@ export default function InteractiveRadarMap() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Particle vector setup based on real weather windSpeed and windDirection
     const windSpeedKmH = weather.current.windSpeed || 14;
     const windDirDeg = weather.current.windDirection || 270;
-    // Mathematical angle in radians (wind compass indicates where wind comes from, vectors point where it flows)
     const flowAngleRad = ((windDirDeg + 180) % 360) * (Math.PI / 180);
     const speedMagnitude = Math.max(0.8, Math.min(4.5, windSpeedKmH / 7));
 
@@ -387,7 +363,6 @@ export default function InteractiveRadarMap() {
     }
 
     const render = () => {
-      // Fade previous particle trails
       ctx.fillStyle = 'rgba(10, 25, 20, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -397,7 +372,6 @@ export default function InteractiveRadarMap() {
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
-        // Slight micro-turbulence
         const turbAngle = flowAngleRad + (Math.sin(p.age * 0.08) * 0.15);
         const vx = Math.cos(turbAngle) * speedMagnitude * p.speedOffset;
         const vy = Math.sin(turbAngle) * speedMagnitude * p.speedOffset;
@@ -405,7 +379,6 @@ export default function InteractiveRadarMap() {
         const nextX = p.x + vx;
         const nextY = p.y + vy;
 
-        // Particle alpha curve (fade in, peak, fade out)
         const lifeRatio = p.age / p.maxAge;
         const alpha = Math.sin(lifeRatio * Math.PI) * 0.65;
 
@@ -419,7 +392,6 @@ export default function InteractiveRadarMap() {
         p.y = nextY;
         p.age++;
 
-        // Reset particle if out of bounds or expired
         if (p.age >= p.maxAge || p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) {
           p.x = Math.random() * canvas.width;
           p.y = Math.random() * canvas.height;
@@ -439,7 +411,6 @@ export default function InteractiveRadarMap() {
     };
   }, [showWind, weather]);
 
-  // Current frame timestamp label formatted to IST
   const currentFrameTimeStr = useMemo(() => {
     if (radarFrames.length === 0 || !radarFrames[currentFrameIndex]) return 'Live Telemetry';
     const d = new Date(radarFrames[currentFrameIndex].time * 1000);
@@ -452,10 +423,8 @@ export default function InteractiveRadarMap() {
         isFullscreen ? 'fixed inset-0 z-50 rounded-none h-screen' : 'h-[460px] sm:h-[540px] md:h-[580px]'
       }`}
     >
-      {/* Map Element Container */}
       <div ref={mapContainerRef} className="w-full h-full bg-[#121c18]" />
 
-      {/* Wind Streamlines Canvas Overlay */}
       {showWind && (
         <canvas
           ref={canvasRef}
@@ -464,7 +433,6 @@ export default function InteractiveRadarMap() {
         />
       )}
 
-      {/* Mobile Gesture Trap Prevention Overlay (Tapping enables interaction; swiping scrolls page) */}
       {isTouchDevice && isTouchLocked && !isFullscreen && (
         <div
           onClick={() => setIsTouchLocked(false)}
@@ -484,9 +452,7 @@ export default function InteractiveRadarMap() {
         </div>
       )}
 
-      {/* Top Floating Telemetry & Control Bar */}
       <div className="absolute top-3 left-3 right-3 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
-        {/* Active Radar Station & Live Frame Indicator */}
         <div className="flex items-center gap-2 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-md border border-outline-variant/30 pointer-events-auto">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -518,9 +484,7 @@ export default function InteractiveRadarMap() {
           </div>
         </div>
 
-        {/* Quick Map Controls */}
         <div className="flex items-center gap-1.5 bg-surface-container-lowest/90 backdrop-blur-md p-1 rounded-2xl shadow-md border border-outline-variant/30 pointer-events-auto">
-          {/* Radar Toggle */}
           <button
             onClick={() => setShowRadar(!showRadar)}
             className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
@@ -533,7 +497,6 @@ export default function InteractiveRadarMap() {
             <span className="hidden sm:inline">Radar</span>
           </button>
 
-          {/* Wind Streamlines Toggle */}
           <button
             onClick={() => setShowWind(!showWind)}
             className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
@@ -546,7 +509,6 @@ export default function InteractiveRadarMap() {
             <span className="hidden sm:inline">Wind ({weather.current.windSpeed} km/h)</span>
           </button>
 
-          {/* Radar Rings Toggle */}
           <button
             onClick={() => setShowRadarRings(!showRadarRings)}
             className={`px-2.5 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
@@ -559,7 +521,6 @@ export default function InteractiveRadarMap() {
             <span className="hidden sm:inline">Stations</span>
           </button>
 
-          {/* Map Theme Toggle (100% Keyless, Zero Watermark) */}
           <select
             value={mapTheme}
             onChange={(e) => setMapTheme(e.target.value as any)}
@@ -571,7 +532,6 @@ export default function InteractiveRadarMap() {
             <option value="osm">Street Map</option>
           </select>
 
-          {/* Recenter View on Current Location */}
           <button
             onClick={() => {
               if (mapInstanceRef.current && location) {
@@ -585,7 +545,6 @@ export default function InteractiveRadarMap() {
             <span className="material-symbols-outlined text-[1.125rem]">my_location</span>
           </button>
 
-          {/* Fullscreen Expand */}
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
             className="p-1.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer"
@@ -597,7 +556,6 @@ export default function InteractiveRadarMap() {
             </span>
           </button>
 
-          {/* Mobile Pan Lock/Unlock Toggle */}
           {isTouchDevice && !isFullscreen && (
             <button
               onClick={() => setIsTouchLocked(!isTouchLocked)}
@@ -622,9 +580,7 @@ export default function InteractiveRadarMap() {
         </div>
       </div>
 
-      {/* Bottom Floating Playback & Reflectivity Bar */}
       <div className="absolute bottom-3 left-3 right-3 z-20 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pointer-events-none">
-        {/* Time Playback Controls */}
         <div className="flex items-center gap-2 bg-surface-container-lowest/95 backdrop-blur-md px-3 py-2 rounded-2xl shadow-lg border border-outline-variant/30 pointer-events-auto">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
@@ -637,7 +593,6 @@ export default function InteractiveRadarMap() {
             </span>
           </button>
 
-          {/* Step Back */}
           <button
             onClick={() => setCurrentFrameIndex(prev => (prev - 1 + radarFrames.length) % radarFrames.length)}
             className="p-1 text-on-surface-variant hover:text-on-surface active:scale-95 cursor-pointer"
@@ -647,7 +602,6 @@ export default function InteractiveRadarMap() {
             <span className="material-symbols-outlined text-[1rem]">fast_rewind</span>
           </button>
 
-          {/* Timeline Range Slider */}
           <div className="flex items-center gap-1.5 min-w-[70px] sm:min-w-[150px] flex-1">
             <input
               type="range"
@@ -662,7 +616,6 @@ export default function InteractiveRadarMap() {
             />
           </div>
 
-          {/* Step Forward */}
           <button
             onClick={() => setCurrentFrameIndex(prev => (prev + 1) % radarFrames.length)}
             className="p-1 text-on-surface-variant hover:text-on-surface active:scale-95 cursor-pointer"
@@ -677,7 +630,6 @@ export default function InteractiveRadarMap() {
           </span>
         </div>
 
-        {/* Doppler Reflectivity dBZ Scale Legend */}
         <div className="flex flex-col gap-1 bg-surface-container-lowest/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-outline-variant/30 pointer-events-auto">
           <div className="flex items-center justify-between text-[0.65rem] font-bold text-on-surface-variant">
             <span>15 dBZ (Light)</span>

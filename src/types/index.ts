@@ -9,7 +9,7 @@ export interface LocationInfo {
   state: string;
   lat: number;
   lng: number;
-  elevation: number; // in meters MSL
+  elevation: number;
 }
 
 export interface WeatherCurrent {
@@ -27,10 +27,10 @@ export interface WeatherCurrent {
   surfacePressure: number;
   uvIndex: number;
   uvLabel: string;
-  soilMoisture: number; // percentage
-  solarIrradiance: number; // W/m²
-  evapotranspiration: number; // mm/day
-  vaporPressureDeficit: number; // kPa
+  soilMoisture: number;
+  solarIrradiance: number;
+  evapotranspiration: number;
+  vaporPressureDeficit: number;
   updatedAt: string;
 }
 
@@ -79,11 +79,11 @@ export interface AirQualityInfo {
 }
 
 export interface ConsensusInfo {
-  confidenceScore: number; // e.g. 98.4
+  confidenceScore: number;
   confidenceLevel: 'High' | 'Moderate' | 'Low';
   primarySource: string;
   secondarySource: string;
-  temperatureDelta: number; // e.g. ±0.2°C
+  temperatureDelta: number;
   precipitationConsensus: boolean;
   statusTextEn: string;
   statusTextHi: string;
@@ -111,7 +111,6 @@ export interface SoilConfig {
   landArea: number;
   landUnit: 'acres' | 'bigha';
   photoUrl?: string;
-  // Soil Health Card (soilhealth.dac.gov.in) & ICAR Benchmark Parameters
   nitrogenStatus?: string;
   phosphorusStatus?: string;
   potassiumStatus?: string;
@@ -134,7 +133,7 @@ export interface CropRecommendation {
   category: 'primary' | 'safe' | 'alternative';
   sowingWindowEn: string;
   sowingWindowHi: string;
-  waterDemandLevel: number; // 1 to 5
+  waterDemandLevel: number;
   waterDemandLabelEn: string;
   waterDemandLabelHi: string;
   estimatedYieldEn: string;
@@ -142,7 +141,7 @@ export interface CropRecommendation {
   riskBadgeEn: string;
   riskBadgeHi: string;
   riskLevel: 'low' | 'medium' | 'high';
-  soilMatchScore: number; // e.g. 96%
+  soilMatchScore: number;
   rationaleEn: string;
   rationaleHi: string;
   audioSpeechText: string;
@@ -151,7 +150,6 @@ export interface CropRecommendation {
   marketTrendEn: string;
   marketTrendHi: string;
   imageUrl: string;
-  // ICAR Package of Practices & Soil Health Card (SHC) Guidelines
   icarNorms?: {
     npkRatio: string;
     seedTreatment: string;
@@ -196,7 +194,7 @@ export interface WorkSafetyHour {
   safetyLabelEn: string;
   safetyLabelHi: string;
   temperature: number;
-  wbgt: number; // Wet-Bulb Globe Temp
+  wbgt: number;
   heatIndex: number;
   uvIndex: number;
   rainChance: number;

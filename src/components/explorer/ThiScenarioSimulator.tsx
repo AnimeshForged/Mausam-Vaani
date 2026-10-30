@@ -24,7 +24,6 @@ export default function ThiScenarioSimulator({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
-      {/* Interactive Scenario Simulator */}
       <div className="lg:col-span-7 bg-surface-container-lowest rounded-2xl p-space-md border border-surface-container-high flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -39,7 +38,6 @@ export default function ThiScenarioSimulator({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-          {/* Temp Slider */}
           <div className="flex flex-col gap-1">
             <div className="flex justify-between text-xs font-semibold text-on-surface">
               <span>{language === 'hi' ? 'तापमान' : 'Temperature'}</span>
@@ -59,7 +57,6 @@ export default function ThiScenarioSimulator({
             </div>
           </div>
 
-          {/* Humidity Slider */}
           <div className="flex flex-col gap-1">
             <div className="flex justify-between text-xs font-semibold text-on-surface">
               <span>{language === 'hi' ? 'आर्द्रता' : 'Relative Humidity'}</span>
@@ -80,7 +77,6 @@ export default function ThiScenarioSimulator({
           </div>
         </div>
 
-        {/* Simulated Result Pill */}
         <div className="bg-surface-container-low p-3 rounded-xl flex items-center justify-between mt-1">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-on-surface">
@@ -107,7 +103,6 @@ export default function ThiScenarioSimulator({
         </div>
       </div>
 
-      {/* Veterinary Emergency Protocol Card */}
       <div className="lg:col-span-5 bg-surface-container-lowest rounded-2xl p-space-md border border-rose-500/30 flex flex-col justify-between gap-3">
         <div className="flex items-center gap-2 text-rose-600 font-bold text-xs sm:text-sm">
           <span className="material-symbols-outlined text-[1.25rem]">emergency</span>

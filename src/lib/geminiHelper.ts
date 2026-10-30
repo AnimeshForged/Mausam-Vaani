@@ -1,6 +1,5 @@
 import { GoogleGenerativeAI, GenerateContentResult } from '@google/generative-ai';
 
-// Ordered candidate list for high availability and future deprecation resilience
 export const CANDIDATE_GEMINI_MODELS: string[] = Array.from(
   new Set(
     [
@@ -12,11 +11,6 @@ export const CANDIDATE_GEMINI_MODELS: string[] = Array.from(
   )
 );
 
-/**
- * Executes generateContent trying candidate models in sequence.
- * If a model fails (e.g. 404 deprecated or temporarily unavailable),
- * it seamlessly advances to the next candidate model.
- */
 export async function generateContentWithFallback(
   genAI: GoogleGenerativeAI,
   contents: Parameters<ReturnType<GoogleGenerativeAI['getGenerativeModel']>['generateContent']>[0]
@@ -37,9 +31,6 @@ export async function generateContentWithFallback(
   throw lastError || new Error('All Gemini candidate models failed.');
 }
 
-/**
- * Strips markdown code block wrappers (```json ... ```) safely.
- */
 export function cleanJsonString(raw: string): string {
   if (!raw) return '';
   return raw

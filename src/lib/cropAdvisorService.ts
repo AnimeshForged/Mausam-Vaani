@@ -15,7 +15,6 @@ export const STANDARD_SOIL_TYPES = [
     drainageRate: 'धीमा जल रिसाव',
     ph: 7.4,
     organicContent: 'अति उर्वर (High Organic C >0.75%)',
-    // Soil Health Card (soilhealth.dac.gov.in) Benchmarks
     nitrogenStatus: 'Medium (310 kg/ha N)',
     phosphorusStatus: 'Medium (38 kg/ha P2O5)',
     potassiumStatus: 'High (340 kg/ha K2O)',
@@ -36,7 +35,6 @@ export const STANDARD_SOIL_TYPES = [
     drainageRate: 'संतुलित निकास',
     ph: 7.1,
     organicContent: 'संतुलित कार्बन (0.62% OC)',
-    // Soil Health Card (soilhealth.dac.gov.in) Benchmarks
     nitrogenStatus: 'Medium (295 kg/ha N)',
     phosphorusStatus: 'Medium (32 kg/ha P2O5)',
     potassiumStatus: 'Medium (220 kg/ha K2O)',
@@ -57,7 +55,6 @@ export const STANDARD_SOIL_TYPES = [
     drainageRate: 'अति तीव्र निकास',
     ph: 6.5,
     organicContent: 'मध्यम-कम (0.44% OC)',
-    // Soil Health Card (soilhealth.dac.gov.in) Benchmarks
     nitrogenStatus: 'Low (210 kg/ha N)',
     phosphorusStatus: 'Low (18 kg/ha P2O5)',
     potassiumStatus: 'Medium (165 kg/ha K2O)',
@@ -78,7 +75,6 @@ export const STANDARD_SOIL_TYPES = [
     drainageRate: 'उत्तम निकास',
     ph: 7.2,
     organicContent: 'मध्यम उर्वर (0.54% OC)',
-    // Soil Health Card (soilhealth.dac.gov.in) Benchmarks
     nitrogenStatus: 'Low-to-Medium (240 kg/ha N)',
     phosphorusStatus: 'Medium (28 kg/ha P2O5)',
     potassiumStatus: 'Medium (195 kg/ha K2O)',
@@ -446,7 +442,6 @@ export async function diagnoseSoilFromPhoto(imageBase64: string): Promise<{
   recommendationNote: string;
   isApproximate: true;
 }> {
-  // First try /api/diagnose-soil if running in browser
   if (typeof window !== 'undefined') {
     try {
       const apiRes = await fetch('/api/diagnose-soil', {

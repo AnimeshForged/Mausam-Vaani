@@ -21,7 +21,6 @@ export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-20 bottom-0 w-72 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.03)] z-40 flex flex-col justify-between pt-space-md pb-space-lg overflow-y-auto border-r border-surface-container-high hidden lg:flex">
       <div className="flex flex-col gap-space-md px-space-md">
-        {/* Voice Trigger Fast Box */}
         <div className="bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-space-2xs border border-outline-variant/30">
           <div className="flex items-center justify-between">
             <span className="font-label-sm text-label-sm text-primary font-bold uppercase tracking-wide">
@@ -45,7 +44,6 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* Kisan Views Navigation Section */}
         <div className="flex flex-col gap-space-2xs">
           <div className="flex items-center justify-between px-space-sm mb-1">
             <span className="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">
@@ -148,7 +146,6 @@ export default function Sidebar() {
           </nav>
         </div>
 
-        {/* Explorer Suite Navigation Section */}
         <div className="flex flex-col gap-space-2xs mt-space-xs">
           <div className="flex items-center justify-between px-space-sm mb-1">
             <span className="font-label-sm text-label-sm font-semibold uppercase tracking-wider text-outline">
@@ -258,7 +255,6 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Consensus Engine Status Pill */}
       <div className="px-space-md mt-space-md">
         <div className="bg-surface-container-low rounded-xl p-space-sm flex items-start gap-space-xs border border-outline-variant/30">
           <span className="material-symbols-outlined text-primary text-[1.125rem] mt-0.5">verified_user</span>

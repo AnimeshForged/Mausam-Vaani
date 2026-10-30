@@ -172,7 +172,6 @@ export default function KisanLandSetup() {
 
   return (
     <div className="flex flex-col w-full max-w-6xl mx-auto gap-space-lg">
-      {/* Top Banner with Instruction Listen & Voice Buttons */}
       <section className="bg-surface-container-lowest rounded-2xl p-space-md md:p-space-lg shadow-sm border border-surface-container-high flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-md">
         <div className="flex items-start gap-space-md max-w-2xl min-w-0">
           <div className="w-14 h-14 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shrink-0 shadow-sm">
@@ -231,9 +230,7 @@ export default function KisanLandSetup() {
         </div>
       </section>
 
-      {/* Main Grid: Soil Selector (8 cols) & Land Parameters (4 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-        {/* Left 8 Cols: Soil Selection Cards & AI Camera Scanner */}
         <div className="lg:col-span-8 flex flex-col gap-space-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-space-xs">
@@ -247,7 +244,6 @@ export default function KisanLandSetup() {
             </span>
           </div>
 
-          {/* 2x2 Soil Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-space-md">
             {STANDARD_SOIL_TYPES.map(soil => {
               const isSelected = soilConfig.soilType === soil.id;
@@ -261,7 +257,6 @@ export default function KisanLandSetup() {
                       : 'border-surface-container-high hover:border-primary/40'
                   }`}
                 >
-                  {/* Selected check badge */}
                   <div
                     className={`absolute top-space-md right-space-md z-10 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
                       isSelected ? 'bg-primary text-on-primary' : 'bg-surface-container-high text-outline opacity-40'
@@ -270,7 +265,6 @@ export default function KisanLandSetup() {
                     <span className="material-symbols-outlined text-[1.25rem]">check</span>
                   </div>
 
-                  {/* Soil Image */}
                   <div className="w-full h-40 rounded-xl overflow-hidden relative mb-space-sm bg-surface-container">
                     <Image
                       className="w-full h-full object-cover"
@@ -308,7 +302,6 @@ export default function KisanLandSetup() {
             })}
           </div>
 
-          {/* AI Camera Diagnostic Card (FR-4.3 Soil Photo Upload & Assessment) */}
           <div className="bg-surface-container-low rounded-2xl p-space-lg shadow-sm border border-outline-variant/30">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-space-md">
               <div className="flex items-center gap-space-md">
@@ -364,7 +357,6 @@ export default function KisanLandSetup() {
               </div>
             </div>
 
-            {/* AI Diagnosis Result Box */}
             {scanMessage && (
               <div className="mt-space-md bg-surface-container-lowest p-space-md rounded-xl border border-primary/20 flex flex-col gap-1 animate-fadeIn">
                 <div className="flex items-center justify-between">
@@ -386,9 +378,7 @@ export default function KisanLandSetup() {
           </div>
         </div>
 
-        {/* Right 4 Cols: Season, Irrigation Water Source, Land Area */}
         <div className="lg:col-span-4 flex flex-col gap-space-md">
-          {/* Active Season Badge Card */}
           <div className="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm border border-surface-container-high flex flex-col gap-space-sm">
             <div className="flex items-center justify-between">
               <span className="font-label-sm text-xs font-bold text-outline uppercase tracking-wider">
@@ -413,7 +403,6 @@ export default function KisanLandSetup() {
               </div>
             </div>
 
-            {/* Soil Wetness Progress Bar */}
             <div className="bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 <span className="font-label-sm text-xs text-on-surface-variant font-medium">
@@ -432,7 +421,6 @@ export default function KisanLandSetup() {
             </div>
           </div>
 
-          {/* Water Source Selector */}
           <div className="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm border border-surface-container-high flex flex-col gap-space-sm">
             <div className="flex items-center justify-between">
               <h3 className="font-headline-sm text-base font-bold text-on-surface">
@@ -449,7 +437,6 @@ export default function KisanLandSetup() {
             </p>
 
             <div className="flex flex-col gap-space-xs">
-              {/* Tubewell */}
               <button
                 className={`w-full min-h-[3.25rem] p-space-sm rounded-xl flex items-center justify-between transition-all text-left border ${
                   soilConfig.waterSource === 'tubewell'
@@ -475,7 +462,6 @@ export default function KisanLandSetup() {
                 </span>
               </button>
 
-              {/* Canal */}
               <button
                 className={`w-full min-h-[3.25rem] p-space-sm rounded-xl flex items-center justify-between transition-all text-left border ${
                   soilConfig.waterSource === 'canal'
@@ -501,7 +487,6 @@ export default function KisanLandSetup() {
                 </span>
               </button>
 
-              {/* Rainfed */}
               <button
                 className={`w-full min-h-[3.25rem] p-space-sm rounded-xl flex items-center justify-between transition-all text-left border ${
                   soilConfig.waterSource === 'rainfed'
@@ -529,7 +514,6 @@ export default function KisanLandSetup() {
             </div>
           </div>
 
-          {/* Quick Field Size Preset */}
           <div className="bg-surface-container-low rounded-2xl p-space-md flex flex-col gap-space-xs border border-outline-variant/30">
             <span className="font-label-sm text-xs font-bold text-on-surface">
               {language === 'hi' ? 'खेत का कुल रकबा (Land Area)' : 'Total Land Area'}
@@ -572,7 +556,6 @@ export default function KisanLandSetup() {
         </div>
       </div>
 
-      {/* Giant Sticky Bottom Master Action Bar */}
       <section className="sticky bottom-4 z-30">
         <div className="max-w-4xl mx-auto bg-surface-container-lowest/95 backdrop-blur-xl p-space-md rounded-2xl shadow-xl flex flex-col sm:flex-row items-center justify-between gap-space-md border border-primary/20">
           <div className="flex items-center gap-space-sm">

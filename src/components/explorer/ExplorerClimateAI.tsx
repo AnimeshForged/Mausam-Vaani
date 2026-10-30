@@ -171,7 +171,6 @@ export default function ExplorerClimateAI() {
 
   return (
     <div className="flex flex-col w-full max-w-7xl mx-auto gap-space-lg">
-      {/* Header & Telemetry System Status */}
       <section className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-3xl shadow-sm border border-surface-container-high">
         <div className="flex flex-col gap-space-2xs">
           <div className="flex flex-wrap items-center gap-space-xs text-xs">
@@ -210,12 +209,9 @@ export default function ExplorerClimateAI() {
         </div>
       </section>
 
-      {/* Main 12-Column Chat Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
-        {/* Left 8 Cols: Active Chat Stream */}
         <div className="lg:col-span-8 flex flex-col gap-space-md">
           <div className="bg-surface-container-lowest rounded-3xl shadow-sm p-space-lg border border-surface-container-high flex flex-col gap-space-md min-h-[500px]">
-            {/* Active Topic Banner */}
             <div className="flex flex-wrap items-center justify-between gap-space-xs p-space-sm bg-surface-container-low rounded-2xl border border-outline-variant/30">
               <div className="flex items-center gap-space-xs">
                 <span className="material-symbols-outlined text-primary text-[1.25rem]">topic</span>
@@ -251,7 +247,6 @@ export default function ExplorerClimateAI() {
               </div>
             </div>
 
-            {/* Chat Stream Messages */}
             <div className="flex flex-col gap-space-md flex-1 overflow-y-auto">
               {messages.map(m => (
                 <div key={m.id} className="flex flex-col gap-1">
@@ -321,7 +316,6 @@ export default function ExplorerClimateAI() {
                           </div>
                         </div>
 
-                        {/* Verdict Callout Banner */}
                         {m.verdictCallout && (
                           <div className="bg-secondary-container/20 rounded-2xl p-space-sm flex items-start gap-space-sm border border-secondary/20">
                             <span className="material-symbols-outlined text-secondary text-[1.25rem] shrink-0 mt-0.5">
@@ -338,12 +332,10 @@ export default function ExplorerClimateAI() {
                           </div>
                         )}
 
-                        {/* Text Explanation */}
                         <div className="bg-surface-container-low p-space-md rounded-2xl text-xs sm:text-sm text-on-surface leading-relaxed border border-outline-variant/20 whitespace-pre-line">
                           {language === 'hi' && m.textHi ? m.textHi : m.text}
                         </div>
 
-                        {/* Parametric Flight Matrix Table */}
                         {m.tableData && (
                           <div className="overflow-x-auto bg-surface-container-low rounded-2xl p-space-xs border border-outline-variant/30">
                             <table className="w-full text-left text-xs">
@@ -386,7 +378,6 @@ export default function ExplorerClimateAI() {
               )}
             </div>
 
-            {/* Prompt Input Form Strip */}
             <div className="pt-space-sm border-t border-surface-container-high flex flex-col gap-space-xs">
               <div className="flex items-center gap-space-xs bg-surface-container-low rounded-2xl p-space-xs border border-outline-variant/30 focus-within:ring-2 focus-within:ring-primary">
                 <input
@@ -419,7 +410,6 @@ export default function ExplorerClimateAI() {
                 </button>
               </div>
 
-              {/* Quick Inquiry Pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
                 <span className="text-[0.7rem] text-outline font-bold shrink-0">Follow-ups:</span>
                 {[
@@ -443,7 +433,6 @@ export default function ExplorerClimateAI() {
           </div>
         </div>
 
-        {/* Right 4 Cols: Model Capabilities & Live Session Parameters */}
         <div className="lg:col-span-4 flex flex-col gap-space-md">
           <div className="bg-surface-container-lowest rounded-3xl p-space-lg shadow-sm border border-surface-container-high flex flex-col gap-space-sm">
             <span className="text-xs font-bold text-primary uppercase tracking-wider">
