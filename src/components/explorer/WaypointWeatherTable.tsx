@@ -63,7 +63,7 @@ export default function WaypointWeatherTable({
                     <td className="py-3 px-3 font-bold text-on-surface whitespace-nowrap">
                       {seg.name}
                     </td>
-                    <td className="py-3 px-3 text-primary font-semibold whitespace-nowrap">
+                    <td className="py-3 px-3 text-primary font-mono font-semibold whitespace-nowrap">
                       {seg.eta}
                     </td>
                     <td className="py-3 px-3 whitespace-nowrap">
@@ -74,7 +74,7 @@ export default function WaypointWeatherTable({
                         <span className="text-on-surface font-medium">{seg.condition}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-3 font-extrabold text-on-surface whitespace-nowrap">
+                    <td className="py-3 px-3 font-mono font-bold text-on-surface whitespace-nowrap">
                       {seg.temperature}°C
                     </td>
                     <td className="py-3 px-3 whitespace-nowrap">
@@ -90,13 +90,13 @@ export default function WaypointWeatherTable({
                         {seg.surfaceStatus}
                       </span>
                     </td>
-                    <td className="py-3 px-3 font-semibold text-on-surface whitespace-nowrap">
-                      <span className={seg.windGustKm >= 38 ? 'text-secondary font-bold' : ''}>
+                    <td className="py-3 px-3 font-mono text-on-surface whitespace-nowrap">
+                      <span className={seg.windGustKm >= 38 ? 'text-secondary font-bold' : 'font-medium'}>
                         {seg.windGustKm} km/h
                       </span>
                     </td>
-                    <td className="py-3 px-3 font-semibold text-on-surface whitespace-nowrap">
-                      <span className={seg.visibilityKm < 3 ? 'text-secondary font-bold' : ''}>
+                    <td className="py-3 px-3 font-mono text-on-surface whitespace-nowrap">
+                      <span className={seg.visibilityKm < 3 ? 'text-secondary font-bold' : 'font-medium'}>
                         {seg.visibilityKm} km
                       </span>
                     </td>

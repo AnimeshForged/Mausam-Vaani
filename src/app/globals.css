@@ -21,12 +21,17 @@
     padding: 0;
     background-color: #f2fcf6;
     color: #141d1a;
-    font-family: var(--font-noto-sans), var(--font-plus-jakarta), sans-serif;
+    font-family: var(--font-manrope), var(--font-noto-devanagari), system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
     touch-action: manipulation;
   }
 
-    h1, h2, h3, h4, h5, h6, p, span, a, label, button {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-outfit), var(--font-noto-devanagari), system-ui, sans-serif;
+    letter-spacing: -0.015em;
+  }
+
+  h1, h2, h3, h4, h5, h6, p, span, a, label, button {
     overflow-wrap: break-word;
   }
 
@@ -104,5 +109,10 @@
 
 .radar-dark-tiles {
   filter: invert(100%) hue-rotate(180deg) brightness(88%) contrast(92%) saturate(80%);
+}
+
+.font-data-metric, .font-mono {
+  font-feature-settings: 'tnum' on, 'zero' on;
+  font-variant-numeric: tabular-nums;
 }
 

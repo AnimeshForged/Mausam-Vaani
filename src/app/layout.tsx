@@ -1,19 +1,33 @@
 import type { Metadata, Viewport } from 'next';
-import { Noto_Sans, Plus_Jakarta_Sans } from 'next/font/google';
+import { Outfit, Manrope, JetBrains_Mono, Noto_Sans_Devanagari } from 'next/font/google';
 import './globals.css';
 import { AppProvider } from '@/context/AppContext';
 
-const notoSans = Noto_Sans({
-  subsets: ['latin', 'devanagari'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-noto-sans',
+const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-outfit',
   display: 'swap',
 });
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const manrope = Manrope({
   subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
-  variable: '--font-plus-jakarta',
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-manrope',
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+});
+
+const notoSansDevanagari = Noto_Sans_Devanagari({
+  subsets: ['devanagari'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-noto-devanagari',
   display: 'swap',
 });
 
@@ -26,8 +40,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Mausam Vaani — AI-Powered Multilingual Weather & Agri-Advisory Platform',
-  description: 'AI-Powered Multilingual Weather & Agri-Advisory Platform (SIH 2026 PS SIH26068)',
+  title: 'Mausam Vaani — Multimodal Weather & Agri-Advisory Platform',
+  description: 'Multimodal Weather & Agri-Advisory Platform',
   icons: {
     icon: '/images/logo.png',
   },
@@ -39,7 +53,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${notoSans.variable} ${plusJakartaSans.variable}`}>
+    <html lang="en" className={`${outfit.variable} ${manrope.variable} ${jetbrainsMono.variable} ${notoSansDevanagari.variable}`}>
       <body className="bg-background text-on-surface antialiased min-h-screen">
         <AppProvider>
           {children}

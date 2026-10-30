@@ -293,7 +293,7 @@ export default function LivestockThiCard({
               {language === 'hi' ? 'वर्तमान औसत THI' : 'Current Agro THI'}
             </span>
             <div className="flex items-baseline gap-1">
-              <span className="text-xl font-black text-on-surface">{livestockIndices.thi}</span>
+              <span className="text-xl font-mono font-black text-on-surface">{livestockIndices.thi}</span>
               <span className="text-xs font-bold text-on-surface-variant">THI</span>
             </div>
           </div>
@@ -325,11 +325,11 @@ export default function LivestockThiCard({
               }`}
             >
               <div className="flex items-center justify-between text-xs font-extrabold text-on-surface">
-                <span>{slot.hour}</span>
-                <span className="text-[0.7rem] font-semibold text-on-surface-variant">{slot.temp}°C</span>
+                <span className="font-mono">{slot.hour}</span>
+                <span className="text-[0.7rem] font-mono font-semibold text-on-surface-variant">{slot.temp}°C</span>
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-lg font-black text-on-surface">{slot.thi}</span>
+                <span className="text-lg font-mono font-black text-on-surface">{slot.thi}</span>
                 <span className="text-[0.65rem] font-bold text-on-surface-variant">THI</span>
               </div>
               <span
