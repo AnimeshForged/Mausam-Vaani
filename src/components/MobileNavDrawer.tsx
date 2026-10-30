@@ -70,11 +70,8 @@ export default function MobileNavDrawer({
       <div className="relative w-[85%] max-w-sm bg-surface-container-lowest h-full shadow-2xl flex flex-col justify-between overflow-y-auto z-10 border-r border-surface-container-high">
         <div className="p-4 border-b border-surface-container-high flex items-center justify-between bg-surface-container-low/50">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-xs">
-              <span className="material-symbols-outlined text-[1.35rem]">cloud_sync</span>
-            </div>
             <div className="flex flex-col">
-              <span className="font-bold text-sm text-primary leading-tight">
+              <span className="font-bold text-base text-primary leading-tight">
                 {language === 'hi' ? 'मौसम वाणी' : 'Mausam Vaani'}
               </span>
               <span className="text-[0.65rem] text-outline uppercase font-semibold">

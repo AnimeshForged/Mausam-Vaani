@@ -136,14 +136,11 @@ export default function Header() {
                 else setActiveExplorerTab('current-weather');
               }}
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm shrink-0">
-                <span className="material-symbols-outlined text-[1.25rem] sm:text-[1.5rem]">cloud_sync</span>
-              </div>
               <div className="flex items-baseline gap-1 sm:gap-space-xs min-w-0">
-                <span className="font-headline-sm text-xs sm:text-sm lg:text-base text-primary tracking-tight font-bold truncate hidden min-[440px]:inline">
+                <span className="font-headline-sm text-sm sm:text-base lg:text-lg text-primary tracking-tight font-bold truncate">
                   {language === 'hi' ? 'मौसम वाणी' : 'Mausam Vaani'}
                 </span>
-                <span className="font-label-sm text-[0.65rem] sm:text-label-sm text-outline uppercase tracking-wider font-semibold hidden xl:inline shrink-0">
+                <span className="font-label-sm text-[0.65rem] sm:text-label-sm text-outline uppercase tracking-wider font-semibold hidden sm:inline shrink-0">
                   {language === 'hi' ? 'Mausam Vaani' : 'मौसम वाणी'}
                 </span>
               </div>
